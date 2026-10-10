@@ -2,6 +2,9 @@
   "name": "erp-mvp",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=18 <25"
+  },
   "dependencies": {
     "axios": "^1.7.2",
     "bcryptjs": "^3.0.3",
