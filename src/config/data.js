@@ -2,7 +2,7 @@ export const company = {
   name: 'ERP MULTI-SECTORIEL',
   legal: 'ERP MULTI-SECTORIEL',
   tagline: 'MVP de gestion intégrée multi-sectorielle',
-  description: "MVP de l'ERP Multi-Sectoriel : plateforme de gestion intégrée couvrant plusieurs secteurs d'activité. Projet initialisé, en attente du cahier des charges.",
+  description: "MVP de l'ERP Multi-Sectoriel : plateforme de gestion intégrée couvrant plusieurs secteurs d'activité.",
   address: 'République Démocratique du Congo',
   phone: '+243 000 000 000',
   email: 'contact@erp.cd',
