@@ -3,13 +3,14 @@ import type { ReactNode } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import {
   FiMenu, FiX, FiSun, FiMoon, FiLogOut, FiChevronRight, FiChevronDown,
+  FiChevronsLeft, FiChevronsRight,
 } from 'react-icons/fi';
 import { navItems } from '../../app/router/nav';
 import config from '../../app/config/config';
 import { useAuth } from '../../app/providers/AuthContext';
 import { roleLabel, sectorLabel } from '../utils/labels';
 
-function SideNav({ onNavigate }: { onNavigate: () => void }) {
+function SideNav({ onNavigate, collapsed, onToggle }: { onNavigate: () => void; collapsed: boolean; onToggle: () => void }) {
   const { user, hasRole } = useAuth();
   const location = useLocation();
 
@@ -19,6 +20,8 @@ function SideNav({ onNavigate }: { onNavigate: () => void }) {
       items: group.items.filter((item) => !item.roles || hasRole(item.roles)),
     }))
     .filter((group) => group.items.length);
+
+  const allItems = groups.flatMap((group) => group.items);
 
   const activeGroup = groups.find((g) => g.items.some((i) => i.path === location.pathname))?.label;
   const [openGroups, setOpenGroups] = useState<string[]>(() =>
@@ -36,73 +39,115 @@ function SideNav({ onNavigate }: { onNavigate: () => void }) {
 
   const initials = (user?.full_name || 'U').split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase();
 
+  const itemClass = (isActive: boolean) =>
+    `flex items-center rounded text-sm font-medium transition-colors ${
+      collapsed ? 'justify-center px-0 py-2.5' : 'gap-3 px-3 py-2'
+    } ${
+      isActive
+        ? 'bg-primary text-white shadow-btn'
+        : 'text-body dark:text-body-dark hover:bg-gray2 dark:hover:bg-white/5 hover:text-black dark:hover:text-white'
+    }`;
+
   return (
     <div className="flex flex-col h-full">
-      <Link to="/" className="flex items-center gap-3 h-16 px-5 flex-shrink-0 border-b border-stroke dark:border-white/10">
+      <Link
+        to="/"
+        className={`flex items-center h-16 flex-shrink-0 border-b border-stroke dark:border-white/10 ${
+          collapsed ? 'justify-center px-2' : 'gap-3 px-5'
+        }`}
+      >
         <img src="/images/logo-mark.svg" alt={config.APP_NAME} className="h-8 w-8" />
-        <span className="text-lg font-extrabold tracking-tight text-black dark:text-white">
-          ERP<span className="text-primary dark:text-primary-light">MVP</span>
-        </span>
+        {!collapsed && (
+          <span className="text-lg font-extrabold tracking-tight text-black dark:text-white">
+            ERP<span className="text-primary dark:text-primary-light">MVP</span>
+          </span>
+        )}
       </Link>
 
       <nav className="nav-scroll flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {groups.map((group) => {
-          const isOpen = openGroups.includes(group.label);
-          const hasActive = group.items.some((i) => i.path === location.pathname);
-          return (
-            <div key={group.label}>
-              <button
-                type="button"
-                onClick={() => toggle(group.label)}
-                className={`w-full flex items-center justify-between gap-2 rounded px-3 py-2 text-[11px] font-semibold uppercase tracking-widest transition-colors ${
-                  hasActive ? 'text-black dark:text-white' : 'text-body dark:text-body-dark hover:text-black dark:hover:text-white'
-                }`}
-              >
-                <span className="truncate">{group.label}</span>
-                <FiChevronDown className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${isOpen ? '' : '-rotate-90'}`} />
-              </button>
-              {isOpen && (
-                <div className="mt-0.5 space-y-0.5 pb-1">
-                  {group.items.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <NavLink
-                        key={item.path}
-                        to={item.path}
-                        end={item.path === '/app'}
-                        onClick={onNavigate}
-                        className={({ isActive }) =>
-                          `flex items-center gap-3 rounded px-3 py-2 text-sm font-medium transition-colors ${
-                            isActive
-                              ? 'bg-primary text-white shadow-btn'
-                              : 'text-body dark:text-body-dark hover:bg-gray2 dark:hover:bg-white/5 hover:text-black dark:hover:text-white'
-                          }`
-                        }
-                      >
-                        <Icon className="w-4 h-4 flex-shrink-0" />
-                        <span className="truncate">{item.label}</span>
-                      </NavLink>
-                    );
-                  })}
+        {collapsed
+          ? allItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  end={item.path === '/app'}
+                  onClick={onNavigate}
+                  title={item.label}
+                  className={({ isActive }) => itemClass(isActive)}
+                >
+                  <Icon className="w-5 h-5 flex-shrink-0" />
+                </NavLink>
+              );
+            })
+          : groups.map((group) => {
+              const isOpen = openGroups.includes(group.label);
+              const hasActive = group.items.some((i) => i.path === location.pathname);
+              return (
+                <div key={group.label}>
+                  <button
+                    type="button"
+                    onClick={() => toggle(group.label)}
+                    className={`w-full flex items-center justify-between gap-2 rounded px-3 py-2 text-[11px] font-semibold uppercase tracking-widest transition-colors ${
+                      hasActive ? 'text-black dark:text-white' : 'text-body dark:text-body-dark hover:text-black dark:hover:text-white'
+                    }`}
+                  >
+                    <span className="truncate">{group.label}</span>
+                    <FiChevronDown className={`w-3.5 h-3.5 flex-shrink-0 transition-transform ${isOpen ? '' : '-rotate-90'}`} />
+                  </button>
+                  {isOpen && (
+                    <div className="mt-0.5 space-y-0.5 pb-1">
+                      {group.items.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                          <NavLink
+                            key={item.path}
+                            to={item.path}
+                            end={item.path === '/app'}
+                            onClick={onNavigate}
+                            className={({ isActive }) => itemClass(isActive)}
+                          >
+                            <Icon className="w-4 h-4 flex-shrink-0" />
+                            <span className="truncate">{item.label}</span>
+                          </NavLink>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          );
-        })}
+              );
+            })}
       </nav>
 
-      <div className="flex-shrink-0 px-3 py-3 border-t border-stroke dark:border-white/10">
-        <div className="flex items-center gap-3 rounded px-2 py-1.5">
-          <div className="h-9 w-9 rounded bg-primary/15 text-primary flex items-center justify-center text-xs font-bold flex-shrink-0">
+      <div className="flex-shrink-0 px-3 py-3 border-t border-stroke dark:border-white/10 space-y-2">
+        <button
+          type="button"
+          onClick={onToggle}
+          title={collapsed ? 'Agrandir le menu' : 'Réduire le menu'}
+          className={`hidden lg:flex w-full items-center rounded py-2 text-sm font-medium text-body dark:text-body-dark hover:bg-gray2 dark:hover:bg-white/5 hover:text-black dark:hover:text-white transition-colors ${
+            collapsed ? 'justify-center px-0' : 'gap-3 px-3'
+          }`}
+        >
+          {collapsed ? <FiChevronsRight className="w-4 h-4 flex-shrink-0" /> : <FiChevronsLeft className="w-4 h-4 flex-shrink-0" />}
+          {!collapsed && <span>Réduire</span>}
+        </button>
+        <div className={`flex items-center rounded ${collapsed ? 'justify-center' : 'gap-3'} px-2 py-1.5`}>
+          <div
+            className="h-9 w-9 rounded bg-primary/15 text-primary flex items-center justify-center text-xs font-bold flex-shrink-0"
+            title={user?.full_name || ''}
+          >
             {initials}
           </div>
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-black dark:text-white truncate">{user?.full_name}</p>
-            <p className="text-xs text-body dark:text-body-dark truncate">
-              {roleLabel(user?.role)}
-              {user?.sector ? ` · ${sectorLabel(user.sector)}` : ''}
-            </p>
-          </div>
+          {!collapsed && (
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-black dark:text-white truncate">{user?.full_name}</p>
+              <p className="text-xs text-body dark:text-body-dark truncate">
+                {roleLabel(user?.role)}
+                {user?.sector ? ` · ${sectorLabel(user.sector)}` : ''}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -111,6 +156,7 @@ function SideNav({ onNavigate }: { onNavigate: () => void }) {
 
 export default function DashboardLayout({ children }: { children?: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => localStorage.getItem('sidebar-collapsed') === 'true');
   const [dark, setDark] = useState(() => {
     const saved = localStorage.getItem('theme');
     return saved ? saved === 'dark' : true;
@@ -123,9 +169,16 @@ export default function DashboardLayout({ children }: { children?: ReactNode }) 
     localStorage.setItem('theme', dark ? 'dark' : 'light');
   }, [dark]);
 
+  React.useEffect(() => {
+    localStorage.setItem('sidebar-collapsed', String(collapsed));
+  }, [collapsed]);
+
   const close = () => setSidebarOpen(false);
 
-  const sidebar = <SideNav onNavigate={close} />;
+  const sidebar = (
+    <SideNav onNavigate={close} collapsed={collapsed} onToggle={() => setCollapsed((c) => !c)} />
+  );
+  const mobileSidebar = <SideNav onNavigate={close} collapsed={false} onToggle={() => {}} />;
 
   const title = navItems
     .flatMap((g) => g.items)
@@ -133,11 +186,11 @@ export default function DashboardLayout({ children }: { children?: ReactNode }) 
 
   return (
     <div className="min-h-screen flex bg-gray2 dark:bg-black">
-      <aside className="hidden lg:flex w-64 flex-shrink-0 lg:sticky lg:top-0 lg:h-screen bg-white dark:bg-[#0E1219] border-r border-stroke dark:border-transparent">{sidebar}</aside>
+      <aside className={`hidden lg:flex flex-shrink-0 lg:sticky lg:top-0 lg:h-screen bg-white dark:bg-[#0E1219] border-r border-stroke dark:border-transparent transition-[width] duration-200 ${collapsed ? 'w-20' : 'w-64'}`}>{sidebar}</aside>
 
       {sidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
-          <aside className="w-72 h-full bg-white dark:bg-[#0E1219] border-r border-stroke dark:border-transparent">{sidebar}</aside>
+          <aside className="w-72 h-full bg-white dark:bg-[#0E1219] border-r border-stroke dark:border-transparent">{mobileSidebar}</aside>
           <button className="flex-1 bg-black/60" aria-label="Fermer le menu" onClick={close} />
         </div>
       )}
