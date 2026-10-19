@@ -11,6 +11,7 @@ import {
   FiSettings,
   FiGrid,
   FiTrendingUp,
+  FiTrendingDown,
   FiBook,
   FiUserCheck,
   FiLink,
@@ -19,6 +20,12 @@ import {
   FiAward,
   FiFileText,
   FiUser,
+  FiTool,
+  FiPackage,
+  FiRepeat,
+  FiShoppingCart,
+  FiShoppingBag,
+  FiLayers,
 } from 'react-icons/fi';
 import type { IconType } from 'react-icons';
 import type { NavGroup, Role } from '../../common/types';
@@ -31,7 +38,13 @@ export const rolesPer: Record<string, Role[]> = {
   schoolTeaching: ['admin', 'school_manager', 'director', 'teacher'],
   schoolFinance: ['admin', 'school_manager', 'director', 'accountant'],
   schoolSettings: ['admin', 'school_manager', 'director'],
-  farm: ['admin', 'farm_manager'],
+  farm: ['admin', 'farm_manager', 'farm_director', 'agronomist', 'warehouse_keeper', 'farm_accountant', 'sales_agent'],
+  farmOps: ['admin', 'farm_manager', 'farm_director', 'agronomist'],
+  farmStock: ['admin', 'farm_manager', 'farm_director', 'warehouse_keeper', 'agronomist'],
+  farmPurchases: ['admin', 'farm_manager', 'farm_director', 'warehouse_keeper', 'farm_accountant'],
+  farmSales: ['admin', 'farm_manager', 'farm_director', 'sales_agent'],
+  farmFinance: ['admin', 'farm_manager', 'farm_director', 'farm_accountant'],
+  farmSettings: ['admin', 'farm_manager', 'farm_director'],
   mine: ['admin', 'mine_director'],
 };
 
@@ -80,8 +93,49 @@ export const navItems: NavGroup[] = [
   {
     label: 'Module Ferme',
     items: [
-      { label: 'Parcelles & Cultures', path: '/app/ferme/parcelles', icon: FiMap, roles: rolesPer.farm },
-      { label: 'Élevage', path: '/app/ferme/elevage', icon: FiLifeBuoy, roles: rolesPer.farm },
+      { label: 'Tableau de bord Ferme', path: '/app/ferme', icon: FiHome, roles: rolesPer.farm },
+      { label: 'Fermes', path: '/app/ferme/fermes', icon: FiHome, roles: rolesPer.farmOps },
+      { label: 'Parcelles', path: '/app/ferme/parcelles', icon: FiMap, roles: rolesPer.farmOps },
+      { label: 'Saisons', path: '/app/ferme/saisons', icon: FiCalendar, roles: rolesPer.farmOps },
+      { label: 'Cultures', path: '/app/ferme/cultures', icon: FiBook, roles: rolesPer.farmOps },
+      { label: 'Planification', path: '/app/ferme/planification', icon: FiClipboard, roles: rolesPer.farmOps },
+    ],
+  },
+  {
+    label: 'Ferme — Production',
+    items: [
+      { label: 'Travaux agricoles', path: '/app/ferme/travaux', icon: FiTool, roles: rolesPer.farmOps },
+      { label: 'Récoltes', path: '/app/ferme/recoltes', icon: FiTrendingUp, roles: rolesPer.farmOps },
+      { label: 'Lots', path: '/app/ferme/lots', icon: FiPackage, roles: rolesPer.farmStock },
+    ],
+  },
+  {
+    label: 'Ferme — Stock',
+    items: [
+      { label: 'Entrepôts', path: '/app/ferme/entrepots', icon: FiHome, roles: rolesPer.farmStock },
+      { label: 'Stock', path: '/app/ferme/stock', icon: FiPackage, roles: rolesPer.farmStock },
+      { label: 'Mouvements', path: '/app/ferme/mouvements', icon: FiRepeat, roles: rolesPer.farmStock },
+    ],
+  },
+  {
+    label: 'Ferme — Achats',
+    items: [
+      { label: 'Fournisseurs', path: '/app/ferme/fournisseurs', icon: FiTruck, roles: rolesPer.farmPurchases },
+      { label: 'Achats', path: '/app/ferme/achats', icon: FiShoppingCart, roles: rolesPer.farmPurchases },
+    ],
+  },
+  {
+    label: 'Ferme — Ventes',
+    items: [
+      { label: 'Clients', path: '/app/ferme/clients', icon: FiUsers, roles: rolesPer.farmSales },
+      { label: 'Ventes', path: '/app/ferme/ventes', icon: FiShoppingBag, roles: rolesPer.farmSales },
+    ],
+  },
+  {
+    label: 'Ferme — Finance',
+    items: [
+      { label: 'Dépenses', path: '/app/ferme/depenses', icon: FiTrendingDown, roles: rolesPer.farmFinance },
+      { label: 'Revenus', path: '/app/ferme/revenus', icon: FiTrendingUp, roles: rolesPer.farmFinance },
     ],
   },
   {
@@ -117,7 +171,24 @@ export const pageTitles: Record<string, string> = {
   '/app/ecole/bulletins': 'Bulletins',
   '/app/ecole/paiements': 'Paiements & Frais',
   '/app/ecole/parametres': 'Paramètres établissement',
-  '/app/ferme/parcelles': 'Parcelles & Cultures',
+  '/app/ferme': 'Tableau de bord Ferme',
+  '/app/ferme/fermes': 'Fermes',
+  '/app/ferme/parcelles': 'Parcelles',
+  '/app/ferme/saisons': 'Saisons agricoles',
+  '/app/ferme/cultures': 'Cultures',
+  '/app/ferme/planification': 'Planification des cultures',
+  '/app/ferme/travaux': 'Travaux agricoles',
+  '/app/ferme/recoltes': 'Récoltes',
+  '/app/ferme/lots': 'Lots de production',
+  '/app/ferme/entrepots': 'Entrepôts',
+  '/app/ferme/stock': 'Stock agricole',
+  '/app/ferme/mouvements': 'Mouvements de stock',
+  '/app/ferme/fournisseurs': 'Fournisseurs',
+  '/app/ferme/achats': 'Achats',
+  '/app/ferme/clients': 'Clients',
+  '/app/ferme/ventes': 'Ventes',
+  '/app/ferme/depenses': 'Dépenses',
+  '/app/ferme/revenus': 'Revenus',
   '/app/ferme/elevage': 'Élevage',
   '/app/mine/production': 'Production & Tonnage',
   '/app/mine/engins': 'Flotte d’engins',
@@ -128,5 +199,5 @@ export const pageTitles: Record<string, string> = {
 export const allIcons: Record<string, IconType> = {
   FiHome, FiUsers, FiBookOpen, FiCalendar, FiDollarSign, FiMap, FiLifeBuoy, FiTruck, FiAlertTriangle,
   FiSettings, FiGrid, FiTrendingUp, FiBook, FiUserCheck, FiLink, FiCheckSquare, FiClipboard, FiAward,
-  FiFileText, FiUser,
+  FiFileText, FiUser, FiTool, FiPackage, FiRepeat, FiShoppingCart, FiShoppingBag, FiLayers, FiTrendingDown,
 };

@@ -14,6 +14,11 @@ const config: AppConfig = {
   SCHOOL_FORGE_API_KEY: import.meta.env.VITE_SCHOOL_FORGE_API_KEY || '',
   SCHOOL_FORGE_ENABLED: import.meta.env.VITE_SCHOOL_FORGE_ENABLED === 'true' || false,
   SCHOOL_FORGE_AUTH_ENABLED: import.meta.env.VITE_SCHOOL_FORGE_AUTH_ENABLED === 'true' || false,
+  FARM_FORGE_URL: import.meta.env.VITE_FARM_FORGE_URL || '',
+  FARM_FORGE_PROJECT_KEY: import.meta.env.VITE_FARM_FORGE_PROJECT_KEY || '',
+  FARM_FORGE_API_KEY: import.meta.env.VITE_FARM_FORGE_API_KEY || '',
+  FARM_FORGE_ENABLED: import.meta.env.VITE_FARM_FORGE_ENABLED === 'true' || false,
+  FARM_FORGE_AUTH_ENABLED: import.meta.env.VITE_FARM_FORGE_AUTH_ENABLED === 'true' || false,
 };
 
 export const resolveUploadUrl = (path?: string): string => {

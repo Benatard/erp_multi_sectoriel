@@ -124,4 +124,10 @@ export const schoolForgeApi = createForgeApi({
   apiKey: config.SCHOOL_FORGE_API_KEY,
 });
 
+export const farmForgeApi = createForgeApi({
+  url: config.FARM_FORGE_URL || config.FORGE_URL,
+  projectKey: config.FARM_FORGE_PROJECT_KEY,
+  apiKey: config.FARM_FORGE_API_KEY,
+});
+
 export default forgeApi.client;

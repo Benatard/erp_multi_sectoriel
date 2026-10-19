@@ -24,6 +24,11 @@ export const demoUsers: DemoUser[] = [
   { id: '00000000-0000-0000-0000-000000000006', full_name: 'Julienne Mbayo', email: 'secretaire@aelimu.cd', password_hash: DEMO_PASSWORD_HASH, role: 'secretary', sector: 'school', phone: '+243 810 000 006', is_active: true },
   { id: '00000000-0000-0000-0000-000000000007', full_name: 'Didier Kabwe', email: 'comptable@aelimu.cd', password_hash: DEMO_PASSWORD_HASH, role: 'accountant', sector: 'school', phone: '+243 810 000 007', is_active: true },
   { id: '00000000-0000-0000-0000-000000000008', full_name: 'Jean Kabeya', email: 'jean.kabeya@aelimu.cd', password_hash: DEMO_PASSWORD_HASH, role: 'teacher', sector: 'school', phone: '+243 811 200 001', is_active: true, teacher_id: 'd0000000-0000-0000-0000-000000000001' },
+  { id: '00000000-0000-0000-0000-000000000009', full_name: 'Léonard Mutombo', email: 'directeur.ferme@ferme.cd', password_hash: DEMO_PASSWORD_HASH, role: 'farm_director', sector: 'farm', phone: '+243 812 300 001', is_active: true },
+  { id: '00000000-0000-0000-0000-00000000000a', full_name: 'Alice Ngoy', email: 'agronome@ferme.cd', password_hash: DEMO_PASSWORD_HASH, role: 'agronomist', sector: 'farm', phone: '+243 812 300 002', is_active: true },
+  { id: '00000000-0000-0000-0000-00000000000b', full_name: 'Benoît Kasongo', email: 'magasinier@ferme.cd', password_hash: DEMO_PASSWORD_HASH, role: 'warehouse_keeper', sector: 'farm', phone: '+243 812 300 003', is_active: true },
+  { id: '00000000-0000-0000-0000-00000000000c', full_name: 'Chantal Mbayo', email: 'compta.ferme@ferme.cd', password_hash: DEMO_PASSWORD_HASH, role: 'farm_accountant', sector: 'farm', phone: '+243 812 300 004', is_active: true },
+  { id: '00000000-0000-0000-0000-00000000000d', full_name: 'Serge Kabila', email: 'commercial@ferme.cd', password_hash: DEMO_PASSWORD_HASH, role: 'sales_agent', sector: 'farm', phone: '+243 812 300 005', is_active: true },
 ];
 
 export const demoCollections: Record<string, DbRow[]> = {
@@ -146,12 +151,101 @@ export const demoCollections: Record<string, DbRow[]> = {
     { id: '90000000-0000-0000-0000-000000000904', student_id: '10000000-0000-0000-0000-000000000104', academic_year: '2025-2026', term_phase: '2025-2026 / Trimestre 1', amount: 350.0, method: null, reference: null, paid_at: null, status: 'late' },
     { id: '90000000-0000-0000-0000-000000000905', student_id: '10000000-0000-0000-0000-000000000105', academic_year: '2025-2026', term_phase: '2025-2026 / Trimestre 1', amount: 350.0, method: null, reference: null, paid_at: null, status: 'pending' },
   ],
+  farm_farms: [
+    { id: 'f1000000-0000-0000-0000-000000000001', name: 'Ferme Kolwezi', code: 'FERM-001', address: 'Kolwezi, Lualaba', location: 'Kolwezi', area_ha: 80, manager: 'Jean Kazadi', farm_type: 'vegetal', gps: '-10.716, 25.466', phone: '+243 810 000 100', email: 'kolwezi@ferme.cd', status: 'active', notes: null },
+    { id: 'f1000000-0000-0000-0000-000000000002', name: 'Ferme Likasi', code: 'FERM-002', address: 'Likasi, Haut-Katanga', location: 'Likasi', area_ha: 45, manager: 'Léonard Mutombo', farm_type: 'mixte', gps: '-10.983, 26.733', phone: '+243 810 000 101', email: 'likasi@ferme.cd', status: 'active', notes: null },
+    { id: 'f1000000-0000-0000-0000-000000000003', name: 'Ferme Lubumbashi', code: 'FERM-003', address: 'Lubumbashi, Haut-Katanga', location: 'Lubumbashi', area_ha: 25, manager: 'Alice Ngoy', farm_type: 'maraichage', gps: '-11.660, 27.480', phone: '+243 810 000 102', email: 'lubumbashi@ferme.cd', status: 'active', notes: null },
+  ],
   farm_plots: [
-    { id: '00000000-0000-0000-0000-000000000401', name: 'Parcelle Nord', area_ha: 2.5, crop_type: 'Maïs', sowing_date: '2025-09-10', harvest_date: '2026-01-15', status: 'growing', notes: 'Rotation après soja' },
-    { id: '00000000-0000-0000-0000-000000000402', name: 'Parcelle Est', area_ha: 1.2, crop_type: 'Manioc', sowing_date: '2025-08-01', harvest_date: '2026-08-01', status: 'growing', notes: null },
-    { id: '00000000-0000-0000-0000-000000000403', name: 'Parcelle Ouest', area_ha: 3.0, crop_type: 'Riz', sowing_date: null, harvest_date: null, status: 'prepared', notes: 'Irrigation à installer' },
-    { id: '00000000-0000-0000-0000-000000000404', name: 'Serre A', area_ha: 0.4, crop_type: 'Tomates', sowing_date: '2025-10-05', harvest_date: '2026-01-20', status: 'growing', notes: 'Cultures sous serre' },
-    { id: '00000000-0000-0000-0000-000000000405', name: 'Parcelle Sud', area_ha: 2.0, crop_type: 'Maïs', sowing_date: '2025-03-01', harvest_date: '2025-08-10', status: 'harvested', notes: 'Rendement 3,2 t/ha' },
+    { id: '00000000-0000-0000-0000-000000000401', name: 'Parcelle A01', code: 'P-A01', farm_id: 'f1000000-0000-0000-0000-000000000001', farm_name: 'Ferme Kolwezi', area_ha: 2, location: 'Zone nord', soil_type: 'Latéritique', status: 'growing', current_crop: 'Maïs', previous_crop: 'Soja', manager: 'Alice Ngoy', gps: '-10.71, 25.46', notes: 'Rotation après soja' },
+    { id: '00000000-0000-0000-0000-000000000402', name: 'Parcelle B01', code: 'P-B01', farm_id: 'f1000000-0000-0000-0000-000000000001', farm_name: 'Ferme Kolwezi', area_ha: 1.2, location: 'Zone est', soil_type: 'Sableux', status: 'growing', current_crop: 'Manioc', previous_crop: 'Maïs', manager: 'Alice Ngoy', gps: null, notes: null },
+    { id: '00000000-0000-0000-0000-000000000403', name: 'Parcelle C01', code: 'P-C01', farm_id: 'f1000000-0000-0000-0000-000000000001', farm_name: 'Ferme Kolwezi', area_ha: 3, location: 'Zone ouest', soil_type: 'Limoneux', status: 'prepared', current_crop: 'Riz', previous_crop: null, manager: null, gps: null, notes: 'Irrigation à installer' },
+    { id: '00000000-0000-0000-0000-000000000404', name: 'Serre A', code: 'P-SER-A', farm_id: 'f1000000-0000-0000-0000-000000000003', farm_name: 'Ferme Lubumbashi', area_ha: 0.4, location: 'Bloc serres', soil_type: 'Humifère', status: 'growing', current_crop: 'Tomates', previous_crop: null, manager: 'Alice Ngoy', gps: null, notes: 'Cultures sous serre' },
+    { id: '00000000-0000-0000-0000-000000000405', name: 'Parcelle D01', code: 'P-D01', farm_id: 'f1000000-0000-0000-0000-000000000002', farm_name: 'Ferme Likasi', area_ha: 2, location: 'Zone sud', soil_type: 'Argileux', status: 'harvested', current_crop: 'Maïs', previous_crop: 'Arachide', manager: null, gps: null, notes: 'Rendement 3,2 t/ha' },
+  ],
+  farm_seasons: [
+    { id: '5a000000-0000-0000-0000-000000000001', name: 'Maïs 2026-2027', start_date: '2026-10-01', end_date: '2027-03-30', objectives: 'Produire 8 t de maïs sur 2 ha (Parcelle A01).', budget: 5000, status: 'active', notes: null },
+    { id: '5a000000-0000-0000-0000-000000000002', name: 'Campagne 2025-2026', start_date: '2025-10-01', end_date: '2026-03-30', objectives: 'Campagne précédente clôturée.', budget: 4200, status: 'closed', notes: null },
+  ],
+  farm_crops: [
+    { id: '5b000000-0000-0000-0000-000000000001', name: 'Maïs', code: 'MAIS', variety: 'Hybride XYZ-01', cycle: 'annuel', duration_days: 120, expected_yield: 4, unit: 't', status: 'active', notes: null },
+    { id: '5b000000-0000-0000-0000-000000000002', name: 'Haricot', code: 'HAR', variety: 'Variété locale', cycle: 'saisonnier', duration_days: 90, expected_yield: 2, unit: 't', status: 'active', notes: null },
+    { id: '5b000000-0000-0000-0000-000000000003', name: 'Manioc', code: 'MAN', variety: 'Amélioré', cycle: 'long', duration_days: 300, expected_yield: 15, unit: 't', status: 'active', notes: null },
+    { id: '5b000000-0000-0000-0000-000000000004', name: 'Tomates', code: 'TOM', variety: 'Roma', cycle: 'court', duration_days: 80, expected_yield: 20, unit: 't', status: 'active', notes: null },
+    { id: '5b000000-0000-0000-0000-000000000005', name: 'Riz', code: 'RIZ', variety: 'NERICA', cycle: 'saisonnier', duration_days: 110, expected_yield: 3, unit: 't', status: 'active', notes: null },
+    { id: '5b000000-0000-0000-0000-000000000006', name: 'Soja', code: 'SOJ', variety: 'TGX', cycle: 'saisonnier', duration_days: 100, expected_yield: 2.5, unit: 't', status: 'active', notes: null },
+  ],
+  farm_crop_plans: [
+    { id: '5c000000-0000-0000-0000-000000000001', season_id: '5a000000-0000-0000-0000-000000000001', season_name: 'Maïs 2026-2027', plot_id: '00000000-0000-0000-0000-000000000401', plot_name: 'Parcelle A01', crop_id: '5b000000-0000-0000-0000-000000000001', crop_name: 'Maïs', area_ha: 2, variety: 'Hybride XYZ-01', planned_sowing: '2026-10-10', planned_harvest: '2027-03-15', expected_yield: 8, manager: 'Alice Ngoy', status: 'planned', notes: null },
+    { id: '5c000000-0000-0000-0000-000000000002', season_id: '5a000000-0000-0000-0000-000000000001', season_name: 'Maïs 2026-2027', plot_id: '00000000-0000-0000-0000-000000000402', plot_name: 'Parcelle B01', crop_id: '5b000000-0000-0000-0000-000000000002', crop_name: 'Haricot', area_ha: 1, variety: 'Variété locale', planned_sowing: '2026-10-15', planned_harvest: '2027-01-20', expected_yield: 2, manager: 'Alice Ngoy', status: 'planned', notes: null },
+    { id: '5c000000-0000-0000-0000-000000000003', season_id: '5a000000-0000-0000-0000-000000000002', season_name: 'Campagne 2025-2026', plot_id: '00000000-0000-0000-0000-000000000405', plot_name: 'Parcelle D01', crop_id: '5b000000-0000-0000-0000-000000000001', crop_name: 'Maïs', area_ha: 2, variety: 'Hybride XYZ-01', planned_sowing: '2025-10-01', planned_harvest: '2026-03-10', expected_yield: 8, manager: 'Jean Kazadi', status: 'completed', notes: null },
+  ],
+  farm_activities: [
+    { id: '5d000000-0000-0000-0000-000000000001', activity_date: '2026-10-01', season_id: '5a000000-0000-0000-0000-000000000001', plot_id: '00000000-0000-0000-0000-000000000401', plot_name: 'Parcelle A01', crop: 'Maïs', activity_type: 'preparation', workers: 6, equipment: 'Tracteur TR-001', quantity: null, unit: null, cost: 250, manager: 'Alice Ngoy', status: 'done', notes: null },
+    { id: '5d000000-0000-0000-0000-000000000002', activity_date: '2026-10-10', season_id: '5a000000-0000-0000-0000-000000000001', plot_id: '00000000-0000-0000-0000-000000000401', plot_name: 'Parcelle A01', crop: 'Maïs', activity_type: 'semis', workers: 4, equipment: null, quantity: 200, unit: 'kg', cost: 300, manager: 'Alice Ngoy', status: 'done', notes: null },
+    { id: '5d000000-0000-0000-0000-000000000003', activity_date: '2026-10-25', season_id: '5a000000-0000-0000-0000-000000000001', plot_id: '00000000-0000-0000-0000-000000000401', plot_name: 'Parcelle A01', crop: 'Maïs', activity_type: 'fertilisation', workers: 3, equipment: null, quantity: 50, unit: 'kg', cost: 350, manager: 'Alice Ngoy', status: 'done', notes: 'Première fertilisation' },
+    { id: '5d000000-0000-0000-0000-000000000004', activity_date: '2026-11-15', season_id: '5a000000-0000-0000-0000-000000000001', plot_id: '00000000-0000-0000-0000-000000000401', plot_name: 'Parcelle A01', crop: 'Maïs', activity_type: 'desherbage', workers: 5, equipment: null, quantity: null, unit: null, cost: 120, manager: 'Alice Ngoy', status: 'done', notes: null },
+    { id: '5d000000-0000-0000-0000-000000000005', activity_date: '2026-11-20', season_id: '5a000000-0000-0000-0000-000000000001', plot_id: '00000000-0000-0000-0000-000000000401', plot_name: 'Parcelle A01', crop: 'Maïs', activity_type: 'irrigation', workers: 2, equipment: 'Motopompe', quantity: 5000, unit: 'L', cost: 100, manager: 'Alice Ngoy', status: 'done', notes: null },
+  ],
+  farm_harvests: [
+    { id: '5e000000-0000-0000-0000-000000000001', harvest_date: '2026-03-12', season_id: '5a000000-0000-0000-0000-000000000002', plot_id: '00000000-0000-0000-0000-000000000405', plot_name: 'Parcelle D01', crop: 'Maïs', quantity: 7500, unit: 'kg', expected: 8000, quality: 'good', status: 'in_stock', notes: 'Écart -500 kg vs prévision' },
+    { id: '5e000000-0000-0000-0000-000000000002', harvest_date: '2026-08-05', season_id: '5a000000-0000-0000-0000-000000000002', plot_id: '00000000-0000-0000-0000-000000000403', plot_name: 'Parcelle C01', crop: 'Riz', quantity: 2500, unit: 'kg', expected: 3000, quality: 'average', status: 'sold', notes: null },
+  ],
+  farm_lots: [
+    { id: '5f000000-0000-0000-0000-000000000001', code: 'LOT-MAIS-2027-001', product: 'Maïs', quantity: 2500, unit: 'kg', harvest_id: '5e000000-0000-0000-0000-000000000001', plot_id: '00000000-0000-0000-0000-000000000405', plot_name: 'Parcelle D01', quality: 'good', production_date: '2026-03-12', warehouse_id: '6a000000-0000-0000-0000-000000000001', status: 'available', notes: null },
+    { id: '5f000000-0000-0000-0000-000000000002', code: 'LOT-MAIS-2027-002', product: 'Maïs', quantity: 3000, unit: 'kg', harvest_id: '5e000000-0000-0000-0000-000000000001', plot_id: '00000000-0000-0000-0000-000000000405', plot_name: 'Parcelle D01', quality: 'good', production_date: '2026-03-12', warehouse_id: '6a000000-0000-0000-0000-000000000001', status: 'sold', notes: null },
+    { id: '5f000000-0000-0000-0000-000000000003', code: 'LOT-RIZ-2026-001', product: 'Riz', quantity: 2500, unit: 'kg', harvest_id: '5e000000-0000-0000-0000-000000000002', plot_id: '00000000-0000-0000-0000-000000000403', plot_name: 'Parcelle C01', quality: 'average', production_date: '2026-08-05', warehouse_id: '6a000000-0000-0000-0000-000000000001', status: 'sold', notes: null },
+  ],
+  farm_warehouses: [
+    { id: '6a000000-0000-0000-0000-000000000001', name: 'Entrepôt central', code: 'ENT-001', location: 'Bloc A', manager: 'Benoît Kasongo', capacity: 20000, status: 'active', notes: null },
+    { id: '6a000000-0000-0000-0000-000000000002', name: 'Magasin intrants', code: 'ENT-002', location: 'Bloc B', manager: 'Benoît Kasongo', capacity: 5000, status: 'active', notes: null },
+  ],
+  farm_inventory: [
+    { id: '6b000000-0000-0000-0000-000000000001', name: 'Maïs grain', code: 'PROD-MAIS', category: 'harvested', unit: 'kg', quantity: 5500, reorder_level: 1000, unit_cost: 0.8, warehouse_id: '6a000000-0000-0000-0000-000000000001', lot_code: 'LOT-MAIS-2027-001', status: 'ok', notes: null },
+    { id: '6b000000-0000-0000-0000-000000000002', name: 'Engrais NPK', code: 'INT-NPK', category: 'input', unit: 'kg', quantity: 450, reorder_level: 100, unit_cost: 1.2, warehouse_id: '6a000000-0000-0000-0000-000000000002', lot_code: null, status: 'ok', notes: null },
+    { id: '6b000000-0000-0000-0000-000000000003', name: 'Semence maïs hybride', code: 'SEM-MAIS', category: 'seed', unit: 'kg', quantity: 50, reorder_level: 50, unit_cost: 2.5, warehouse_id: '6a000000-0000-0000-0000-000000000002', lot_code: null, status: 'low_stock', notes: null },
+    { id: '6b000000-0000-0000-0000-000000000004', name: 'Pesticide', code: 'INT-PEST', category: 'input', unit: 'L', quantity: 40, reorder_level: 20, unit_cost: 8, warehouse_id: '6a000000-0000-0000-0000-000000000002', lot_code: null, status: 'ok', notes: null },
+    { id: '6b000000-0000-0000-0000-000000000005', name: 'Aliment volaille', code: 'ALIM-VOL', category: 'feed', unit: 'kg', quantity: 80, reorder_level: 100, unit_cost: 0.5, warehouse_id: '6a000000-0000-0000-0000-000000000002', lot_code: null, status: 'low_stock', notes: null },
+    { id: '6b000000-0000-0000-0000-000000000006', name: 'Pièces tracteur', code: 'PCS-TR', category: 'spare', unit: 'unité', quantity: 0, reorder_level: 5, unit_cost: 25, warehouse_id: '6a000000-0000-0000-0000-000000000002', lot_code: null, status: 'out_of_stock', notes: null },
+  ],
+  farm_inventory_movements: [
+    { id: '6c000000-0000-0000-0000-000000000001', movement_date: '2026-09-15', movement_type: 'in', item_id: '6b000000-0000-0000-0000-000000000002', item_name: 'Engrais NPK', lot_id: null, quantity: 500, unit: 'kg', unit_cost: 1.2, reason: 'Achat initial', plot_id: null, warehouse_id: '6a000000-0000-0000-0000-000000000002', reference: 'ACH-000001', notes: null },
+    { id: '6c000000-0000-0000-0000-000000000002', movement_date: '2026-10-25', movement_type: 'out', item_id: '6b000000-0000-0000-0000-000000000002', item_name: 'Engrais NPK', lot_id: null, quantity: 50, unit: 'kg', unit_cost: 1.2, reason: 'Fertilisation parcelle A01', plot_id: '00000000-0000-0000-0000-000000000401', warehouse_id: '6a000000-0000-0000-0000-000000000002', reference: null, notes: null },
+    { id: '6c000000-0000-0000-0000-000000000003', movement_date: '2026-10-10', movement_type: 'out', item_id: '6b000000-0000-0000-0000-000000000003', item_name: 'Semence maïs hybride', lot_id: null, quantity: 200, unit: 'kg', unit_cost: 2.5, reason: 'Semis parcelle A01', plot_id: '00000000-0000-0000-0000-000000000401', warehouse_id: '6a000000-0000-0000-0000-000000000002', reference: null, notes: null },
+    { id: '6c000000-0000-0000-0000-000000000004', movement_date: '2026-04-20', movement_type: 'loss', item_id: '6b000000-0000-0000-0000-000000000001', item_name: 'Maïs grain', lot_id: '5f000000-0000-0000-0000-000000000001', quantity: 100, unit: 'kg', unit_cost: 0.8, reason: 'Humidité', plot_id: null, warehouse_id: '6a000000-0000-0000-0000-000000000001', reference: null, notes: null },
+    { id: '6c000000-0000-0000-0000-000000000005', movement_date: '2026-03-12', movement_type: 'in', item_id: '6b000000-0000-0000-0000-000000000001', item_name: 'Maïs grain', lot_id: '5f000000-0000-0000-0000-000000000001', quantity: 2500, unit: 'kg', unit_cost: 0.8, reason: 'Récolte lot LOT-MAIS-2027-001', plot_id: '00000000-0000-0000-0000-000000000405', warehouse_id: '6a000000-0000-0000-0000-000000000001', reference: null, notes: null },
+  ],
+  farm_suppliers: [
+    { id: '6d000000-0000-0000-0000-000000000001', name: 'Agro Plus', category: 'seeds', phone: '+243 990 100 001', email: 'contact@agroplus.cd', address: 'Kolwezi', payment_terms: '30 jours', status: 'active', notes: null },
+    { id: '6d000000-0000-0000-0000-000000000002', name: 'Agri Intrants SARL', category: 'inputs', phone: '+243 990 100 002', email: 'ventes@agri-intrants.cd', address: 'Lubumbashi', payment_terms: 'Comptant', status: 'active', notes: null },
+    { id: '6d000000-0000-0000-0000-000000000003', name: 'VetCare', category: 'vet', phone: '+243 990 100 003', email: 'info@vetcare.cd', address: 'Likasi', payment_terms: '15 jours', status: 'active', notes: null },
+  ],
+  farm_purchases: [
+    { id: '6e000000-0000-0000-0000-000000000001', reference: 'ACH-000001', purchase_date: '2026-09-15', supplier_id: '6d000000-0000-0000-0000-000000000002', supplier_name: 'Agri Intrants SARL', product: 'Engrais NPK', quantity: 500, unit: 'kg', unit_price: 1.2, total: 600, status: 'received', payment_status: 'paid', notes: null },
+    { id: '6e000000-0000-0000-0000-000000000002', reference: 'ACH-000002', purchase_date: '2026-09-05', supplier_id: '6d000000-0000-0000-0000-000000000001', supplier_name: 'Agro Plus', product: 'Semence maïs hybride', quantity: 250, unit: 'kg', unit_price: 2.5, total: 625, status: 'received', payment_status: 'partial', notes: null },
+    { id: '6e000000-0000-0000-0000-000000000003', reference: 'ACH-000003', purchase_date: '2026-11-01', supplier_id: '6d000000-0000-0000-0000-000000000003', supplier_name: 'VetCare', product: 'Vaccin volaille', quantity: 20, unit: 'unité', unit_price: 10, total: 200, status: 'ordered', payment_status: 'unpaid', notes: null },
+  ],
+  farm_customers: [
+    { id: '6f000000-0000-0000-0000-000000000001', name: 'Supermarché XYZ', customer_type: 'supermarket', phone: '+243 991 200 001', email: 'achats@xyz.cd', address: 'Kolwezi', payment_terms: 'Comptant', status: 'active', notes: null },
+    { id: '6f000000-0000-0000-0000-000000000002', name: 'Restaurant Le Baobab', customer_type: 'restaurant', phone: '+243 991 200 002', email: 'lebaobab@mail.cd', address: 'Likasi', payment_terms: 'Comptant', status: 'active', notes: null },
+    { id: '6f000000-0000-0000-0000-000000000003', name: 'Grossiste Kilimandjaro', customer_type: 'wholesaler', phone: '+243 991 200 003', email: 'kilimandjaro@mail.cd', address: 'Lubumbashi', payment_terms: '30 jours', status: 'active', notes: null },
+  ],
+  farm_sales: [
+    { id: '7a000000-0000-0000-0000-000000000001', reference: 'VTE-000001', sale_date: '2026-03-20', customer_id: '6f000000-0000-0000-0000-000000000001', customer_name: 'Supermarché XYZ', product: 'Maïs', lot_code: 'LOT-MAIS-2027-002', quantity: 2000, unit: 'kg', unit_price: 0.8, total: 1600, status: 'delivered', payment_status: 'paid', delivery_date: '2026-03-22', notes: null },
+    { id: '7a000000-0000-0000-0000-000000000002', reference: 'VTE-000002', sale_date: '2026-04-02', customer_id: '6f000000-0000-0000-0000-000000000003', customer_name: 'Grossiste Kilimandjaro', product: 'Maïs', lot_code: 'LOT-MAIS-2027-001', quantity: 3000, unit: 'kg', unit_price: 0.75, total: 2250, status: 'delivered', payment_status: 'partial', delivery_date: '2026-04-05', notes: null },
+    { id: '7a000000-0000-0000-0000-000000000003', reference: 'VTE-000003', sale_date: '2026-08-10', customer_id: '6f000000-0000-0000-0000-000000000002', customer_name: 'Restaurant Le Baobab', product: 'Riz', lot_code: 'LOT-RIZ-2026-001', quantity: 500, unit: 'kg', unit_price: 1.1, total: 550, status: 'confirmed', payment_status: 'unpaid', delivery_date: null, notes: null },
+  ],
+  farm_expenses: [
+    { id: '7b000000-0000-0000-0000-000000000001', expense_date: '2026-09-15', category: 'seeds', season_id: '5a000000-0000-0000-0000-000000000001', plot_id: '00000000-0000-0000-0000-000000000401', crop: 'Maïs', description: 'Achat semences maïs', amount: 625, supplier_id: '6d000000-0000-0000-0000-000000000001', payment_method: 'bank', notes: null },
+    { id: '7b000000-0000-0000-0000-000000000002', expense_date: '2026-09-15', category: 'fertilizers', season_id: '5a000000-0000-0000-0000-000000000001', plot_id: '00000000-0000-0000-0000-000000000401', crop: 'Maïs', description: 'Achat engrais NPK', amount: 600, supplier_id: '6d000000-0000-0000-0000-000000000002', payment_method: 'bank', notes: null },
+    { id: '7b000000-0000-0000-0000-000000000003', expense_date: '2026-10-01', category: 'labor', season_id: '5a000000-0000-0000-0000-000000000001', plot_id: '00000000-0000-0000-0000-000000000401', crop: 'Maïs', description: 'Main-d’œuvre préparation du sol', amount: 250, supplier_id: null, payment_method: 'cash', notes: null },
+    { id: '7b000000-0000-0000-0000-000000000004', expense_date: '2026-10-25', category: 'fuel', season_id: '5a000000-0000-0000-0000-000000000001', plot_id: '00000000-0000-0000-0000-000000000401', crop: 'Maïs', description: 'Carburant tracteur', amount: 150, supplier_id: null, payment_method: 'cash', notes: null },
+    { id: '7b000000-0000-0000-0000-000000000005', expense_date: '2026-11-20', category: 'irrigation', season_id: '5a000000-0000-0000-0000-000000000001', plot_id: '00000000-0000-0000-0000-000000000401', crop: 'Maïs', description: 'Frais irrigation', amount: 100, supplier_id: null, payment_method: 'cash', notes: null },
+  ],
+  farm_incomes: [
+    { id: '7c000000-0000-0000-0000-000000000001', income_date: '2026-03-20', category: 'sales', season_id: '5a000000-0000-0000-0000-000000000002', source: 'Supermarché XYZ', description: 'Vente 2 t de maïs', amount: 1600, payment_method: 'bank', notes: null },
+    { id: '7c000000-0000-0000-0000-000000000002', income_date: '2026-04-02', category: 'sales', season_id: '5a000000-0000-0000-0000-000000000002', source: 'Grossiste Kilimandjaro', description: 'Vente 3 t de maïs', amount: 2250, payment_method: 'mobile', notes: null },
+    { id: '7c000000-0000-0000-0000-000000000003', income_date: '2026-08-10', category: 'sales', season_id: '5a000000-0000-0000-0000-000000000002', source: 'Restaurant Le Baobab', description: 'Vente riz', amount: 550, payment_method: 'cash', notes: null },
   ],
   farm_livestock: [
     { id: '00000000-0000-0000-0000-000000000501', tag_code: 'BOV-001', species: 'Bovins', breed: 'Zébu', quantity: 25, birth_date: '2020-06-15', health_status: 'healthy', last_checkup: '2025-10-01', notes: 'Troupeau principal' },
@@ -191,6 +285,11 @@ export const plainPassword = (user: { email: string }): string | undefined => {
     'secretaire@aelimu.cd': 'Passer@123',
     'comptable@aelimu.cd': 'Passer@123',
     'jean.kabeya@aelimu.cd': 'Passer@123',
+    'directeur.ferme@ferme.cd': 'Passer@123',
+    'agronome@ferme.cd': 'Passer@123',
+    'magasinier@ferme.cd': 'Passer@123',
+    'compta.ferme@ferme.cd': 'Passer@123',
+    'commercial@ferme.cd': 'Passer@123',
   };
   return map[user.email];
 };

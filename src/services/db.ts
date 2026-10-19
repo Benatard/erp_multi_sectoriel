@@ -1,17 +1,23 @@
 import config from '../app/config/config';
-import { forgeApi, schoolForgeApi } from './forge';
+import { forgeApi, schoolForgeApi, farmForgeApi } from './forge';
 import { demoCollections } from './demoData';
 import type { DbRow, ListOptions } from '../common/types';
 
 const SCHOOL_TABLE_PREFIX = 'school_';
+const FARM_TABLE_PREFIX = 'farm_';
 
 const isSchoolTable = (table: string): boolean => table.startsWith(SCHOOL_TABLE_PREFIX);
+const isFarmTable = (table: string): boolean => table.startsWith(FARM_TABLE_PREFIX);
 
 const schoolForgeReady = (): boolean =>
   config.SCHOOL_FORGE_ENABLED && !!config.SCHOOL_FORGE_PROJECT_KEY && !!config.SCHOOL_FORGE_API_KEY;
 
+const farmForgeReady = (): boolean =>
+  config.FARM_FORGE_ENABLED && !!config.FARM_FORGE_PROJECT_KEY && !!config.FARM_FORGE_API_KEY;
+
 const resolveForge = (table: string) => {
   if (isSchoolTable(table)) return schoolForgeReady() ? schoolForgeApi : null;
+  if (isFarmTable(table)) return farmForgeReady() ? farmForgeApi : null;
   if (config.FORGE_ENABLED && !!config.FORGE_API_KEY) return forgeApi;
   return null;
 };
@@ -42,6 +48,8 @@ export const db = {
   isForge: (): boolean => config.FORGE_ENABLED && !!config.FORGE_API_KEY,
 
   isSchoolForge: (): boolean => schoolForgeReady(),
+
+  isFarmForge: (): boolean => farmForgeReady(),
 
   list: async (table: string, options: ListOptions = {}): Promise<DbRow[]> => {
     const forge = resolveForge(table);

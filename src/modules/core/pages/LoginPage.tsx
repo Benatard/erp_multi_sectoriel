@@ -53,7 +53,12 @@ const MODULES: ModuleDef[] = [
     subtitle: 'Agriculture',
     icon: FiMap,
     roles: [
-      { value: 'farm_manager', desc: 'Parcelles, cultures, cheptel', accent: 'bg-amber-500/10 text-amber-600 ring-amber-500/20' },
+      { value: 'farm_manager', desc: 'Pilotage global de l’exploitation', accent: 'bg-amber-500/10 text-amber-600 ring-amber-500/20' },
+      { value: 'farm_director', desc: 'Direction et stratégie agricole', accent: 'bg-amber-500/10 text-amber-600 ring-amber-500/20' },
+      { value: 'agronomist', desc: 'Cultures, parcelles, activités', accent: 'bg-lime-500/10 text-lime-600 ring-lime-500/20' },
+      { value: 'warehouse_keeper', desc: 'Stock, lots, entrepôts', accent: 'bg-sky-500/10 text-sky-600 ring-sky-500/20' },
+      { value: 'farm_accountant', desc: 'Achats, dépenses, revenus', accent: 'bg-violet-500/10 text-violet-600 ring-violet-500/20' },
+      { value: 'sales_agent', desc: 'Clients et ventes', accent: 'bg-emerald-500/10 text-emerald-600 ring-emerald-500/20' },
     ],
   },
   {

@@ -1,106 +1,83 @@
 import React, { useMemo } from 'react';
-import { FiMap, FiPlus, FiCheckCircle, FiLayers } from 'react-icons/fi';
-import PageMeta from '../../../common/components/PageMeta';
-import PageHeader from '../../../common/components/PageHeader';
-import StatCard from '../../../common/components/StatCard';
-import DataTable from '../../../common/components/DataTable';
-import Modal from '../../../common/components/Modal';
-import ConfirmDialog from '../../../common/components/ConfirmDialog';
-import { TextField, SelectField, DateField, NumberField, TextareaField } from '../../../common/components/fields';
+import { FiMap, FiCheckCircle, FiLayers, FiGrid } from 'react-icons/fi';
+import FarmCrudPage from '../components/FarmCrudPage';
 import StatusBadge from '../../../common/components/StatusBadge';
-import { formatDate, formatNumber } from '../../../common/utils/labels';
+import { TextField, SelectField, NumberField, TextareaField } from '../../../common/components/fields';
+import { formatNumber } from '../../../common/utils/labels';
 import usePlots from '../hooks/usePlots';
-import { CROPS } from '../utils/constants';
+import useFarms from '../hooks/useFarms';
+import { CROPS, SOIL_TYPES, PLOT_STATUSES } from '../utils/constants';
 import type { Column } from '../../../common/types';
 import type { Plot } from '../types';
 
 export default function PlotsPage() {
   const crud = usePlots();
+  const farms = useFarms();
 
   const stats = useMemo(() => ({
     total: crud.rows.length,
     area: crud.rows.reduce((s, p) => s + Number(p.area_ha || 0), 0),
     growing: crud.rows.filter((p) => p.status === 'growing' || p.status === 'sown').length,
-    harvested: crud.rows.filter((p) => p.status === 'harvested').length,
+    fallow: crud.rows.filter((p) => p.status === 'fallow').length,
   }), [crud.rows]);
 
   const columns: Column<Plot>[] = [
     { key: 'name', label: 'Parcelle', render: (r) => <span className="font-semibold text-dark dark:text-white">{r.name}</span> },
+    { key: 'code', label: 'Code', render: (r) => r.code || '—' },
+    { key: 'farm_name', label: 'Ferme', render: (r) => r.farm_name || '—' },
     { key: 'area_ha', label: 'Surface (ha)', render: (r) => formatNumber(r.area_ha) },
-    { key: 'crop_type', label: 'Culture', render: (r) => r.crop_type || '—' },
-    { key: 'sowing_date', label: 'Date de semis', render: (r) => formatDate(r.sowing_date) },
-    { key: 'harvest_date', label: 'Récolte prévue', render: (r) => formatDate(r.harvest_date) },
+    { key: 'current_crop', label: 'Culture actuelle', render: (r) => r.current_crop || '—' },
+    { key: 'previous_crop', label: 'Culture précédente', render: (r) => r.previous_crop || '—' },
     { key: 'status', label: 'Statut', render: (r) => <StatusBadge status={r.status} /> },
   ];
 
-  const f: Partial<Plot> = crud.form || {};
-
   return (
-    <div className="space-y-6">
-      <PageMeta title="Parcelles & Cultures" />
-      <PageHeader title="Parcelles & cultures" subtitle="Suivi des zones de culture : surface, type de culture, semis, statut de la récolte.">
-        <button className="btn-primary-root" onClick={() => crud.openCreate({ status: 'prepared', area_ha: 0 })}>
-          <FiPlus className="w-4 h-4" /> Nouvelle parcelle
-        </button>
-      </PageHeader>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-        <StatCard icon={FiMap} label="Parcelles" value={stats.total} />
-        <StatCard icon={FiLayers} label="Surface totale (ha)" value={formatNumber(stats.area)} />
-        <StatCard icon={FiCheckCircle} label="En culture" value={stats.growing} hint="Semées / en croissance" />
-        <StatCard icon={FiLayers} label="Récoltées" value={stats.harvested} />
-      </div>
-
-      <DataTable
-        columns={columns}
-        rows={crud.rows}
-        loading={crud.loading}
-        onEdit={crud.openEdit}
-        onDelete={crud.askDelete}
-        emptyTitle="Aucune parcelle"
-      />
-
-      <Modal
-        open={!!crud.form}
-        title={crud.editingId ? 'Modifier la parcelle' : 'Nouvelle parcelle'}
-        onClose={crud.close}
-        footer={
-          <>
-            <button onClick={crud.close} className="btn-outline-root !px-5 !py-2.5">Annuler</button>
-            <button onClick={crud.save} disabled={crud.saving} className="btn-primary-root !px-5 !py-2.5">
-              {crud.saving ? 'Enregistrement…' : 'Enregistrer'}
-            </button>
-          </>
-        }
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <TextField label="Nom" required value={f.name || ''} onChange={(e) => crud.setField('name', e.target.value)} placeholder="Ex : Parcelle Nord" />
-          <NumberField label="Surface (ha)" required value={f.area_ha ?? ''} onChange={(e) => crud.setField('area_ha', Number(e.target.value))} placeholder="2.5" />
-          <SelectField label="Type de culture" value={f.crop_type || ''} onChange={(e) => crud.setField('crop_type', e.target.value)}
-            placeholder="—" options={CROPS.map((c) => ({ value: c, label: c }))} />
-          <SelectField label="Statut" required value={f.status || 'prepared'} onChange={(e) => crud.setField('status', e.target.value)}
-            options={[
-              { value: 'prepared', label: 'Préparée' },
-              { value: 'sown', label: 'Semée' },
-              { value: 'growing', label: 'En croissance' },
-              { value: 'harvested', label: 'Récoltée' },
-              { value: 'fallow', label: 'Jachère' },
-            ]} />
-          <DateField label="Date de semis" value={f.sowing_date || ''} onChange={(e) => crud.setField('sowing_date', e.target.value)} />
-          <DateField label="Date de récolte" value={f.harvest_date || ''} onChange={(e) => crud.setField('harvest_date', e.target.value)} />
+    <FarmCrudPage<Plot>
+      metaTitle="Parcelles"
+      title="Parcelles & sites"
+      subtitle="Découpage des fermes en parcelles : superficie, type de sol, culture et historique."
+      createLabel="Nouvelle parcelle"
+      crud={crud}
+      columns={columns}
+      defaults={{ status: 'prepared', area_ha: 0 }}
+      searchable={['name', 'code', 'farm_name', 'current_crop']}
+      searchPlaceholder="Rechercher une parcelle…"
+      emptyTitle="Aucune parcelle"
+      deleteMessage={(r) => `Supprimer la parcelle « ${r.name} » ?`}
+      stats={[
+        { icon: FiGrid, label: 'Parcelles', value: stats.total },
+        { icon: FiLayers, label: 'Surface totale (ha)', value: formatNumber(stats.area) },
+        { icon: FiCheckCircle, label: 'En culture', value: stats.growing, hint: 'Semées / en croissance' },
+        { icon: FiMap, label: 'En jachère', value: stats.fallow },
+      ]}
+      renderForm={(f, setField) => (
+        <>
+          <TextField label="Nom" required value={f.name || ''} onChange={(e) => setField('name', e.target.value)} placeholder="Parcelle A01" />
+          <TextField label="Code" value={f.code || ''} onChange={(e) => setField('code', e.target.value)} placeholder="P-A01" />
+          <SelectField
+            label="Ferme"
+            value={f.farm_id || ''}
+            onChange={(e) => {
+              const farm = farms.rows.find((x) => x.id === e.target.value);
+              setField('farm_id', e.target.value || null);
+              setField('farm_name', farm?.name || null);
+            }}
+            placeholder="—"
+            options={farms.rows.map((x) => ({ value: x.id, label: x.name }))}
+          />
+          <NumberField label="Superficie (ha)" value={f.area_ha ?? ''} onChange={(e) => setField('area_ha', Number(e.target.value))} placeholder="2" />
+          <SelectField label="Type de sol" value={f.soil_type || ''} onChange={(e) => setField('soil_type', e.target.value)} placeholder="—" options={SOIL_TYPES} />
+          <SelectField label="Statut" value={f.status || 'prepared'} onChange={(e) => setField('status', e.target.value)} options={PLOT_STATUSES} />
+          <SelectField label="Culture actuelle" value={f.current_crop || ''} onChange={(e) => setField('current_crop', e.target.value)} placeholder="—" options={CROPS.map((c) => ({ value: c, label: c }))} />
+          <SelectField label="Culture précédente" value={f.previous_crop || ''} onChange={(e) => setField('previous_crop', e.target.value)} placeholder="—" options={CROPS.map((c) => ({ value: c, label: c }))} />
+          <TextField label="Localisation" value={f.location || ''} onChange={(e) => setField('location', e.target.value)} placeholder="Zone nord" />
+          <TextField label="Responsable" value={f.manager || ''} onChange={(e) => setField('manager', e.target.value)} placeholder="Nom" />
+          <TextField label="Coordonnées GPS" value={f.gps || ''} onChange={(e) => setField('gps', e.target.value)} placeholder="-10.71, 25.46" />
           <div className="sm:col-span-2">
-            <TextareaField label="Notes" value={f.notes || ''} onChange={(e) => crud.setField('notes', e.target.value)} placeholder="Observations, rotation, rendements…" />
+            <TextareaField label="Notes" value={f.notes || ''} onChange={(e) => setField('notes', e.target.value)} placeholder="Observations, rotation, rendements…" />
           </div>
-        </div>
-      </Modal>
-
-      <ConfirmDialog
-        open={!!crud.pendingDelete}
-        message="Supprimer cette parcelle ?"
-        onClose={crud.cancelDelete}
-        onConfirm={crud.confirmDelete}
-        loading={crud.deleting}
-      />
-    </div>
+        </>
+      )}
+    />
   );
 }

@@ -9,11 +9,18 @@ export type Role =
   | 'accountant'
   | 'teacher'
   | 'farm_manager'
+  | 'farm_director'
+  | 'agronomist'
+  | 'warehouse_keeper'
+  | 'farm_accountant'
+  | 'sales_agent'
   | 'mine_director';
 
 export type SchoolRole = 'school_manager' | 'director' | 'secretary' | 'accountant' | 'teacher';
 
-export type AuthSource = 'global' | 'school';
+export type FarmRole = 'farm_manager' | 'farm_director' | 'agronomist' | 'warehouse_keeper' | 'farm_accountant' | 'sales_agent';
+
+export type AuthSource = 'global' | 'school' | 'farm';
 
 export type Sector = 'core' | 'school' | 'farm' | 'mine';
 
@@ -110,4 +117,9 @@ export interface AppConfig {
   SCHOOL_FORGE_API_KEY: string;
   SCHOOL_FORGE_ENABLED: boolean;
   SCHOOL_FORGE_AUTH_ENABLED: boolean;
+  FARM_FORGE_URL: string;
+  FARM_FORGE_PROJECT_KEY: string;
+  FARM_FORGE_API_KEY: string;
+  FARM_FORGE_ENABLED: boolean;
+  FARM_FORGE_AUTH_ENABLED: boolean;
 }

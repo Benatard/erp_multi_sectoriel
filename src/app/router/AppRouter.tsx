@@ -24,8 +24,24 @@ import ReportCardsPage from '../../modules/school/report-cards/pages/ReportCards
 import PaymentsPage from '../../modules/school/payments/pages/PaymentsPage';
 import SchoolSettingsPage from '../../modules/school/settings/pages/SchoolSettingsPage';
 
+import FarmDashboardPage from '../../modules/farm/pages/FarmDashboardPage';
+import FarmsPage from '../../modules/farm/pages/FarmsPage';
 import PlotsPage from '../../modules/farm/pages/PlotsPage';
-import LivestockPage from '../../modules/farm/pages/LivestockPage';
+import SeasonsPage from '../../modules/farm/pages/SeasonsPage';
+import CropsPage from '../../modules/farm/pages/CropsPage';
+import CropPlansPage from '../../modules/farm/pages/CropPlansPage';
+import ActivitiesPage from '../../modules/farm/pages/ActivitiesPage';
+import HarvestsPage from '../../modules/farm/pages/HarvestsPage';
+import LotsPage from '../../modules/farm/pages/LotsPage';
+import WarehousesPage from '../../modules/farm/pages/WarehousesPage';
+import InventoryPage from '../../modules/farm/pages/InventoryPage';
+import InventoryMovementsPage from '../../modules/farm/pages/InventoryMovementsPage';
+import SuppliersPage from '../../modules/farm/pages/SuppliersPage';
+import PurchasesPage from '../../modules/farm/pages/PurchasesPage';
+import CustomersPage from '../../modules/farm/pages/CustomersPage';
+import SalesPage from '../../modules/farm/pages/SalesPage';
+import ExpensesPage from '../../modules/farm/pages/ExpensesPage';
+import IncomesPage from '../../modules/farm/pages/IncomesPage';
 import ProductionPage from '../../modules/mine/pages/ProductionPage';
 import EquipmentPage from '../../modules/mine/pages/EquipmentPage';
 import IncidentsPage from '../../modules/mine/pages/IncidentsPage';
@@ -71,14 +87,24 @@ export default function App() {
       {schoolRoute('/app/ecole/paiements', rolesPer.schoolFinance, <PaymentsPage />)}
       {schoolRoute('/app/ecole/parametres', rolesPer.schoolSettings, <SchoolSettingsPage />)}
 
-      <Route
-        path="/app/ferme/parcelles"
-        element={<ProtectedRoute roles={rolesPer.farm}>{dashboard(<PlotsPage />)}</ProtectedRoute>}
-      />
-      <Route
-        path="/app/ferme/elevage"
-        element={<ProtectedRoute roles={rolesPer.farm}>{dashboard(<LivestockPage />)}</ProtectedRoute>}
-      />
+      {schoolRoute('/app/ferme', rolesPer.farm, <FarmDashboardPage />)}
+      {schoolRoute('/app/ferme/fermes', rolesPer.farmOps, <FarmsPage />)}
+      {schoolRoute('/app/ferme/parcelles', rolesPer.farmOps, <PlotsPage />)}
+      {schoolRoute('/app/ferme/saisons', rolesPer.farmOps, <SeasonsPage />)}
+      {schoolRoute('/app/ferme/cultures', rolesPer.farmOps, <CropsPage />)}
+      {schoolRoute('/app/ferme/planification', rolesPer.farmOps, <CropPlansPage />)}
+      {schoolRoute('/app/ferme/travaux', rolesPer.farmOps, <ActivitiesPage />)}
+      {schoolRoute('/app/ferme/recoltes', rolesPer.farmOps, <HarvestsPage />)}
+      {schoolRoute('/app/ferme/lots', rolesPer.farmStock, <LotsPage />)}
+      {schoolRoute('/app/ferme/entrepots', rolesPer.farmStock, <WarehousesPage />)}
+      {schoolRoute('/app/ferme/stock', rolesPer.farmStock, <InventoryPage />)}
+      {schoolRoute('/app/ferme/mouvements', rolesPer.farmStock, <InventoryMovementsPage />)}
+      {schoolRoute('/app/ferme/fournisseurs', rolesPer.farmPurchases, <SuppliersPage />)}
+      {schoolRoute('/app/ferme/achats', rolesPer.farmPurchases, <PurchasesPage />)}
+      {schoolRoute('/app/ferme/clients', rolesPer.farmSales, <CustomersPage />)}
+      {schoolRoute('/app/ferme/ventes', rolesPer.farmSales, <SalesPage />)}
+      {schoolRoute('/app/ferme/depenses', rolesPer.farmFinance, <ExpensesPage />)}
+      {schoolRoute('/app/ferme/revenus', rolesPer.farmFinance, <IncomesPage />)}
 
       <Route
         path="/app/mine/production"

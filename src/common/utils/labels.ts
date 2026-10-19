@@ -11,6 +11,11 @@ export const roleLabel = (role?: string): string => {
       accountant: 'Comptable',
       teacher: 'Enseignant',
       farm_manager: "Chef d'Exploitation Ferme",
+      farm_director: 'Directeur Ferme',
+      agronomist: 'Agronome',
+      warehouse_keeper: 'Magasinier',
+      farm_accountant: 'Comptable Ferme',
+      sales_agent: 'Commercial',
       mine_director: 'Directeur Mine',
     } as Record<string, string>)[key] || key
   );
@@ -138,6 +143,42 @@ const STATUS_MAP: Record<string, StatusInfo> = {
   safety: { label: 'Sécurité', tone: 'danger' },
   environment: { label: 'Environnement', tone: 'warning' },
   equipment: { label: 'Équipement', tone: 'info' },
+  // ferme — statuts génériques
+  cancelled: { label: 'Annulé', tone: 'neutral' },
+  in_progress: { label: 'En cours', tone: 'info' },
+  completed: { label: 'Terminé', tone: 'success' },
+  done: { label: 'Réalisé', tone: 'success' },
+  // ferme — plans de culture
+  confirmed: { label: 'Confirmé', tone: 'info' },
+  delivered: { label: 'Livré', tone: 'success' },
+  // ferme — récoltes
+  in_stock: { label: 'En stock', tone: 'info' },
+  consumed: { label: 'Consommé', tone: 'neutral' },
+  // ferme — lots
+  available: { label: 'Disponible', tone: 'success' },
+  reserved: { label: 'Réservé', tone: 'warning' },
+  sold: { label: 'Vendu', tone: 'info' },
+  expired: { label: 'Expiré', tone: 'danger' },
+  // ferme — stock
+  ok: { label: 'Suffisant', tone: 'success' },
+  low_stock: { label: 'Stock faible', tone: 'warning' },
+  out_of_stock: { label: 'Épuisé', tone: 'danger' },
+  // ferme — mouvements
+  in: { label: 'Entrée', tone: 'success' },
+  out: { label: 'Sortie', tone: 'info' },
+  loss: { label: 'Perte', tone: 'danger' },
+  transfer: { label: 'Transfert', tone: 'neutral' },
+  internal_use: { label: 'Usage interne', tone: 'neutral' },
+  // ferme — achats / ventes
+  ordered: { label: 'Commandé', tone: 'info' },
+  received: { label: 'Réceptionné', tone: 'success' },
+  partial: { label: 'Partiel', tone: 'warning' },
+  unpaid: { label: 'Impayé', tone: 'danger' },
+  // ferme — qualité
+  excellent: { label: 'Excellente', tone: 'success' },
+  good: { label: 'Bonne', tone: 'success' },
+  average: { label: 'Moyenne', tone: 'warning' },
+  poor: { label: 'Faible', tone: 'danger' },
 };
 
 export const statusInfo = (key: string): StatusInfo => STATUS_MAP[key] || { label: key, tone: 'neutral' };

@@ -78,7 +78,7 @@ export default function DashboardPage() {
       key: 'farm',
       title: 'Module Ferme',
       icon: FiMap,
-      visible: hasRole(['admin', 'farm_manager']),
+      visible: hasRole(['admin', 'farm_manager', 'farm_director', 'agronomist', 'warehouse_keeper', 'farm_accountant', 'sales_agent']),
       cards: [
         { label: 'Surface cultivée (ha)', value: formatNumber(stats.area), icon: FiMap },
         { label: 'Cheptel (têtes)', value: formatNumber(stats.heads, 0), icon: FiLifeBuoy },
@@ -187,7 +187,7 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {(db.isForge() || db.isSchoolForge()) && (
+      {(db.isForge() || db.isSchoolForge() || db.isFarmForge()) && (
         <div className="space-y-1">
           {db.isForge() && (
             <p className="text-xs text-body dark:text-body-dark">
@@ -197,6 +197,11 @@ export default function DashboardPage() {
           {db.isSchoolForge() && (
             <p className="text-xs text-body dark:text-body-dark">
               Module École : Forge Console dédié ({config.SCHOOL_FORGE_PROJECT_KEY || ''}) — données live.
+            </p>
+          )}
+          {db.isFarmForge() && (
+            <p className="text-xs text-body dark:text-body-dark">
+              Module Ferme : Forge Console dédié ({config.FARM_FORGE_PROJECT_KEY || ''}) — données live.
             </p>
           )}
         </div>
