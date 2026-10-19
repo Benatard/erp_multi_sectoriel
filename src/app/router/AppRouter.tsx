@@ -30,13 +30,14 @@ import ProductionPage from '../../modules/mine/pages/ProductionPage';
 import EquipmentPage from '../../modules/mine/pages/EquipmentPage';
 import IncidentsPage from '../../modules/mine/pages/IncidentsPage';
 import { rolesPer } from './nav';
+import type { Role } from '../../common/types';
 
 const dashboard = (element: ReactNode) => (
   <DashboardLayout>{element}</DashboardLayout>
 );
 
-const schoolRoute = (path: string, element: ReactNode) => (
-  <Route path={path} element={<ProtectedRoute roles={rolesPer.school}>{dashboard(element)}</ProtectedRoute>} />
+const schoolRoute = (path: string, roles: Role[], element: ReactNode) => (
+  <Route path={path} element={<ProtectedRoute roles={roles}>{dashboard(element)}</ProtectedRoute>} />
 );
 
 export default function App() {
@@ -54,21 +55,21 @@ export default function App() {
         }
       />
 
-      {schoolRoute('/app/ecole', <SchoolDashboardPage />)}
-      {schoolRoute('/app/ecole/eleves', <StudentsPage />)}
-      {schoolRoute('/app/ecole/inscriptions', <EnrollmentsPage />)}
-      {schoolRoute('/app/ecole/parents', <ParentsPage />)}
-      {schoolRoute('/app/ecole/annees', <AcademicYearsPage />)}
-      {schoolRoute('/app/ecole/classes', <ClassesPage />)}
-      {schoolRoute('/app/ecole/matieres', <SubjectsPage />)}
-      {schoolRoute('/app/ecole/enseignants', <TeachersPage />)}
-      {schoolRoute('/app/ecole/affectations', <AssignmentsPage />)}
-      {schoolRoute('/app/ecole/presences', <AttendancePage />)}
-      {schoolRoute('/app/ecole/evaluations', <AssessmentsPage />)}
-      {schoolRoute('/app/ecole/notes', <GradebookPage />)}
-      {schoolRoute('/app/ecole/bulletins', <ReportCardsPage />)}
-      {schoolRoute('/app/ecole/paiements', <PaymentsPage />)}
-      {schoolRoute('/app/ecole/parametres', <SchoolSettingsPage />)}
+      {schoolRoute('/app/ecole', rolesPer.school, <SchoolDashboardPage />)}
+      {schoolRoute('/app/ecole/eleves', rolesPer.schoolManage, <StudentsPage />)}
+      {schoolRoute('/app/ecole/inscriptions', rolesPer.schoolManage, <EnrollmentsPage />)}
+      {schoolRoute('/app/ecole/parents', rolesPer.schoolManage, <ParentsPage />)}
+      {schoolRoute('/app/ecole/annees', rolesPer.schoolStructure, <AcademicYearsPage />)}
+      {schoolRoute('/app/ecole/classes', rolesPer.schoolStructure, <ClassesPage />)}
+      {schoolRoute('/app/ecole/matieres', rolesPer.schoolStructure, <SubjectsPage />)}
+      {schoolRoute('/app/ecole/enseignants', rolesPer.schoolStructure, <TeachersPage />)}
+      {schoolRoute('/app/ecole/affectations', rolesPer.schoolStructure, <AssignmentsPage />)}
+      {schoolRoute('/app/ecole/presences', rolesPer.schoolTeaching, <AttendancePage />)}
+      {schoolRoute('/app/ecole/evaluations', rolesPer.schoolTeaching, <AssessmentsPage />)}
+      {schoolRoute('/app/ecole/notes', rolesPer.schoolTeaching, <GradebookPage />)}
+      {schoolRoute('/app/ecole/bulletins', rolesPer.schoolManage, <ReportCardsPage />)}
+      {schoolRoute('/app/ecole/paiements', rolesPer.schoolFinance, <PaymentsPage />)}
+      {schoolRoute('/app/ecole/parametres', rolesPer.schoolSettings, <SchoolSettingsPage />)}
 
       <Route
         path="/app/ferme/parcelles"

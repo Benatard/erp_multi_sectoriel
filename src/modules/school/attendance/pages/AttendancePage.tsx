@@ -8,6 +8,7 @@ import useAttendance from '../hooks/useAttendance';
 import useStudents from '../../students/hooks/useStudents';
 import useSubjects from '../../subjects/hooks/useSubjects';
 import useClasses from '../../classes/hooks/useClasses';
+import useTeacherScope from '../../hooks/useTeacherScope';
 import { ATTENDANCE_STATUSES } from '../../utils/constants';
 import type { Tone } from '../../../../common/types';
 import type { Column } from '../../../../common/types';
@@ -39,10 +40,21 @@ export default function AttendancePage() {
   const students = useStudents();
   const subjects = useSubjects();
   const classes = useClasses();
+  const scope = useTeacherScope();
 
   const studentName = (id?: string | null) => students.rows.find((s) => s.id === id)?.full_name || '—';
   const subjectName = (id?: string | null) => subjects.rows.find((s) => s.id === id)?.name || '—';
-  const classOptions = classes.rows.length ? classes.rows.map((c) => ({ value: c.name, label: c.name })) : [];
+  const scopedStudents = scope.isTeacher
+    ? students.rows.filter((s) => scope.classNames.includes(s.class_name || ''))
+    : students.rows;
+  const subjectOptions = scope.isTeacher
+    ? scope.subjectOptions
+    : subjects.rows.map((s) => ({ value: s.id, label: s.name }));
+  const classOptions = scope.isTeacher
+    ? scope.classOptions
+    : classes.rows.length
+      ? classes.rows.map((c) => ({ value: c.name, label: c.name }))
+      : [];
 
   const stats = useMemo(() => ({
     total: crud.rows.length,
@@ -83,12 +95,12 @@ export default function AttendancePage() {
         <>
           <SelectField label="Élève" required value={f.student_id || ''} onChange={(e) => setField('student_id', e.target.value)}
             placeholder="Sélectionner un élève"
-            options={students.rows.map((s) => ({ value: s.id, label: `${s.full_name} (${s.matricule})` }))} />
+            options={scopedStudents.map((s) => ({ value: s.id, label: `${s.full_name} (${s.matricule})` }))} />
           <SelectField label="Classe" value={f.class_name || ''} onChange={(e) => setField('class_name', e.target.value)}
             placeholder="Sélectionner une classe" options={classOptions} />
           <SelectField label="Matière" value={f.subject_id || ''} onChange={(e) => setField('subject_id', e.target.value)}
             placeholder="Sélectionner une matière"
-            options={subjects.rows.map((s) => ({ value: s.id, label: s.name }))} />
+            options={subjectOptions} />
           <DateField label="Date" required value={f.attendance_date || ''} onChange={(e) => setField('attendance_date', e.target.value)} />
           <SelectField label="Statut" required value={f.status || 'present'} onChange={(e) => setField('status', e.target.value)} options={ATTENDANCE_STATUSES} />
           <TextField label="Observation" value={f.note || ''} onChange={(e) => setField('note', e.target.value)} placeholder="Ex : certificat médical" />

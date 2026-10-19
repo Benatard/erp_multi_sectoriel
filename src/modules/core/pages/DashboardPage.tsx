@@ -67,7 +67,7 @@ export default function DashboardPage() {
       key: 'school',
       title: 'Module École',
       icon: FiUsers,
-      visible: hasRole(['admin', 'school_manager']),
+      visible: hasRole(['admin', 'school_manager', 'director', 'secretary', 'accountant', 'teacher']),
       cards: [
         { label: 'Élèves inscrits', value: stats.students, icon: FiUsers },
         { label: 'Encaissé (scolarité)', value: formatCurrency(stats.collected), icon: FiDollarSign },
@@ -132,7 +132,7 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
         <StatCard icon={FiCheckCircle} label={config.APP_NAME || 'Système'} value="3 modules actifs" hint="École · Ferme · Mine" />
-        <StatCard icon={FiLoader} label="Socle commun (ERP Core)" value="4 rôles" hint="Admin + 3 rôles métiers" />
+        <StatCard icon={FiLoader} label="Socle commun (ERP Core)" value="8 rôles" hint="Admin, directions et personnel" />
         <StatCard icon={FiUsers} label="Élèves" value={stats.students} hint="Module École" />
         <StatCard icon={FiTrendingUp} label="Production (t)" value={formatNumber(stats.tonnage)} hint="Module Mine" />
       </div>

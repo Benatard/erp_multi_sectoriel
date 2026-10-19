@@ -12,6 +12,7 @@ export interface DemoUser {
   sector: Sector;
   phone: string;
   is_active: boolean;
+  teacher_id?: string | null;
 }
 
 export const demoUsers: DemoUser[] = [
@@ -19,6 +20,10 @@ export const demoUsers: DemoUser[] = [
   { id: '00000000-0000-0000-0000-000000000002', full_name: 'Marie Kabila', email: 'ecole@erp.cd', password_hash: DEMO_PASSWORD_HASH, role: 'school_manager', sector: 'school', phone: '+243 810 000 002', is_active: true },
   { id: '00000000-0000-0000-0000-000000000003', full_name: 'Jean Kazadi', email: 'ferme@erp.cd', password_hash: DEMO_PASSWORD_HASH, role: 'farm_manager', sector: 'farm', phone: '+243 810 000 003', is_active: true },
   { id: '00000000-0000-0000-0000-000000000004', full_name: 'Paul Mwamba', email: 'mine@erp.cd', password_hash: DEMO_PASSWORD_HASH, role: 'mine_director', sector: 'mine', phone: '+243 810 000 004', is_active: true },
+  { id: '00000000-0000-0000-0000-000000000005', full_name: 'Émile Kasongo', email: 'directeur@aelimu.cd', password_hash: DEMO_PASSWORD_HASH, role: 'director', sector: 'school', phone: '+243 810 000 005', is_active: true },
+  { id: '00000000-0000-0000-0000-000000000006', full_name: 'Julienne Mbayo', email: 'secretaire@aelimu.cd', password_hash: DEMO_PASSWORD_HASH, role: 'secretary', sector: 'school', phone: '+243 810 000 006', is_active: true },
+  { id: '00000000-0000-0000-0000-000000000007', full_name: 'Didier Kabwe', email: 'comptable@aelimu.cd', password_hash: DEMO_PASSWORD_HASH, role: 'accountant', sector: 'school', phone: '+243 810 000 007', is_active: true },
+  { id: '00000000-0000-0000-0000-000000000008', full_name: 'Jean Kabeya', email: 'jean.kabeya@aelimu.cd', password_hash: DEMO_PASSWORD_HASH, role: 'teacher', sector: 'school', phone: '+243 811 200 001', is_active: true, teacher_id: 'd0000000-0000-0000-0000-000000000001' },
 ];
 
 export const demoCollections: Record<string, DbRow[]> = {
@@ -177,7 +182,16 @@ export const demoCollections: Record<string, DbRow[]> = {
 };
 
 export const plainPassword = (user: { email: string }): string | undefined => {
-  const map: Record<string, string> = { 'admin@erp.cd': 'Passer@123', 'ecole@erp.cd': 'Passer@123', 'ferme@erp.cd': 'Passer@123', 'mine@erp.cd': 'Passer@123' };
+  const map: Record<string, string> = {
+    'admin@erp.cd': 'Passer@123',
+    'ecole@erp.cd': 'Passer@123',
+    'ferme@erp.cd': 'Passer@123',
+    'mine@erp.cd': 'Passer@123',
+    'directeur@aelimu.cd': 'Passer@123',
+    'secretaire@aelimu.cd': 'Passer@123',
+    'comptable@aelimu.cd': 'Passer@123',
+    'jean.kabeya@aelimu.cd': 'Passer@123',
+  };
   return map[user.email];
 };
 

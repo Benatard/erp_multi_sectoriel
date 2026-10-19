@@ -2,11 +2,16 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import type { ReactNode } from 'react';
 import bcrypt from 'bcryptjs';
 import config from '../config/config';
-import { forgeApi } from '../../services/forge';
+import { forgeApi, schoolForgeApi } from '../../services/forge';
+import { trySchoolLogin } from '../../services/schoolAuth';
 import { demoUsers, DemoUser } from '../../services/demoData';
 import type { Role, User } from '../../common/types';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
+
+export const SCHOOL_ROLES: Role[] = ['school_manager', 'director', 'secretary', 'accountant', 'teacher'];
+
+export const isSchoolRole = (role?: Role | null): boolean => !!role && SCHOOL_ROLES.includes(role);
 
 const safeUser = (u: any): User | null => {
   if (!u) return null;
@@ -56,7 +61,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(async ({ email, password, role }: LoginInput): Promise<LoginResult> => {
     setLoading(true);
     try {
-      if (config.FORGE_ENABLED && config.FORGE_AUTH_ENABLED) {
+      const school = isSchoolRole(role);
+
+      if (school && config.SCHOOL_FORGE_ENABLED && config.SCHOOL_FORGE_AUTH_ENABLED) {
+        const res = await schoolForgeApi.login(email, password);
+        const t = res?.data?.token || res?.token || '';
+        if (!t) throw new Error('Réponse de connexion invalide (token manquant).');
+        setToken(t);
+        let u = res?.data?.user || res?.user || null;
+        if (!u) {
+          try {
+            u = await schoolForgeApi.me(t);
+          } catch {
+            u = null;
+          }
+        }
+        const safe = safeUser(u) as User | null;
+        if (safe) {
+          safe.sector = 'school';
+          safe.auth_source = 'school';
+        }
+        setUser(safe);
+        return { ok: true, user: safe || undefined };
+      }
+
+      if (school && !config.SCHOOL_FORGE_AUTH_ENABLED) {
+        const liveUser = await trySchoolLogin(email, password);
+        if (liveUser) {
+          setUser(liveUser);
+          setToken(`school-${liveUser.id}`);
+          return { ok: true, user: liveUser };
+        }
+      }
+
+      if (!school && config.FORGE_ENABLED && config.FORGE_AUTH_ENABLED) {
         const res = await forgeApi.login(email, password);
         const t = res?.data?.token || res?.token || '';
         if (!t) throw new Error("Réponse de connexion invalide (token manquant).");
@@ -69,8 +107,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             u = null;
           }
         }
-        setUser(safeUser(u));
-        return { ok: true };
+        const safe = safeUser(u) as User | null;
+        if (safe) safe.auth_source = 'global';
+        setUser(safe);
+        return { ok: true, user: safe || undefined };
       }
 
       const found: DemoUser | undefined = demoUsers.find(
@@ -83,6 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { ok: false, error: 'Identifiants invalides ou rôle incorrect.' };
       }
       const u = safeUser(found) as User;
+      u.auth_source = school ? 'school' : 'global';
       setUser(u);
       setToken(`demo-${found.id}`);
       return { ok: true, user: u };
@@ -125,6 +166,10 @@ export const useAuth = (): AuthContextValue => {
 export const ROLE_LABELS: Record<Role, string> = {
   admin: 'Admin',
   school_manager: 'Gestionnaire École',
+  director: 'Directeur',
+  secretary: 'Secrétaire',
+  accountant: 'Comptable',
+  teacher: 'Enseignant',
   farm_manager: "Chef d'Exploitation Ferme",
   mine_director: 'Directeur Mine',
 };

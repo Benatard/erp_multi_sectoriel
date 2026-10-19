@@ -1,7 +1,19 @@
 import type { ReactNode } from 'react';
 import type { IconType } from 'react-icons';
 
-export type Role = 'admin' | 'school_manager' | 'farm_manager' | 'mine_director';
+export type Role =
+  | 'admin'
+  | 'school_manager'
+  | 'director'
+  | 'secretary'
+  | 'accountant'
+  | 'teacher'
+  | 'farm_manager'
+  | 'mine_director';
+
+export type SchoolRole = 'school_manager' | 'director' | 'secretary' | 'accountant' | 'teacher';
+
+export type AuthSource = 'global' | 'school';
 
 export type Sector = 'core' | 'school' | 'farm' | 'mine';
 
@@ -15,6 +27,8 @@ export interface User {
   sector: Sector;
   phone?: string | null;
   is_active?: boolean;
+  teacher_id?: string | null;
+  auth_source?: AuthSource;
 }
 
 export type DbRow = Record<string, any>;

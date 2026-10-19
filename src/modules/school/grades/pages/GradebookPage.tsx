@@ -12,6 +12,7 @@ import useGrades from '../hooks/useGrades';
 import useAssessments from '../../assessments/hooks/useAssessments';
 import useStudents from '../../students/hooks/useStudents';
 import useSubjects from '../../subjects/hooks/useSubjects';
+import useTeacherScope from '../../hooks/useTeacherScope';
 import { schoolTables } from '../../api/schoolApi';
 import { toScale20, weightedAverage } from '../../utils/calculations';
 import type { Grade, GradeStatus } from '../../types';
@@ -21,12 +22,18 @@ export default function GradebookPage() {
   const assessments = useAssessments();
   const students = useStudents();
   const subjects = useSubjects();
+  const scope = useTeacherScope();
 
   const [selectedId, setSelectedId] = useState('');
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
 
-  const assessment = assessments.rows.find((a) => a.id === selectedId) || assessments.rows[0];
+  const scopedAssessments = useMemo(
+    () => (scope.isTeacher ? assessments.rows.filter((a) => scope.allows(a.subject_id, a.class_name)) : assessments.rows),
+    [scope, assessments.rows]
+  );
+
+  const assessment = scopedAssessments.find((a) => a.id === selectedId) || scopedAssessments[0];
 
   const relevantStudents = useMemo(() => {
     if (!assessment) return [];
@@ -103,14 +110,23 @@ export default function GradebookPage() {
       <PageMeta title="Notes / Gradebook" />
       <PageHeader title="Notes / Gradebook" subtitle="Saisie des notes par évaluation, calcul automatique de la moyenne et workflow de validation.">
         <select className="input-root !w-auto" value={assessment?.id || ''} onChange={(e) => { setSelectedId(e.target.value); setDraft({}); }}>
-          {assessments.rows.map((a) => (
+          {scopedAssessments.map((a) => (
             <option key={a.id} value={a.id}>{a.name} — {subjectName(a.subject_id)} ({a.class_name || '—'})</option>
           ))}
         </select>
       </PageHeader>
 
       {!assessment ? (
-        <div className="card-root"><EmptyState title="Aucune évaluation" desc="Créez d’abord une évaluation dans le module Évaluations." /></div>
+        <div className="card-root">
+          <EmptyState
+            title="Aucune évaluation"
+            desc={
+              scope.isTeacher
+                ? 'Aucune évaluation pour vos classes et matières. Contactez l’administration.'
+                : 'Créez d’abord une évaluation dans le module Évaluations.'
+            }
+          />
+        </div>
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
@@ -163,12 +179,16 @@ export default function GradebookPage() {
             <button className="btn-outline-root !px-5 !py-2.5" onClick={() => applyStatus('submitted')} disabled={busy}>
               <FiSend className="w-4 h-4" /> Soumettre
             </button>
-            <button className="btn-outline-root !px-5 !py-2.5" onClick={() => applyStatus('validated')} disabled={busy}>
-              <FiCheckCircle className="w-4 h-4" /> Valider
-            </button>
-            <button className="btn-outline-root !px-5 !py-2.5" onClick={() => applyStatus('published')} disabled={busy}>
-              <FiUploadCloud className="w-4 h-4" /> Publier
-            </button>
+            {!scope.isTeacher && (
+              <>
+                <button className="btn-outline-root !px-5 !py-2.5" onClick={() => applyStatus('validated')} disabled={busy}>
+                  <FiCheckCircle className="w-4 h-4" /> Valider
+                </button>
+                <button className="btn-outline-root !px-5 !py-2.5" onClick={() => applyStatus('published')} disabled={busy}>
+                  <FiUploadCloud className="w-4 h-4" /> Publier
+                </button>
+              </>
+            )}
           </div>
         </>
       )}

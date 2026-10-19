@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import type { Option } from '../types';
 
 const baseInput =
-  'w-full border border-stroke bg-gray2 px-3.5 py-2.5 text-sm text-dark outline-none transition-all duration-300 focus:border-primary focus:ring-4 focus:ring-primary/15 dark:border-transparent dark:bg-[#2C303B] dark:text-body-dark';
+  'w-full rounded border border-stroke bg-gray2 px-3.5 py-2.5 text-sm text-dark outline-none transition-all duration-300 focus:border-primary focus:ring-4 focus:ring-primary/15 dark:border-transparent dark:bg-[#2C303B] dark:text-body-dark';
 
 interface FieldProps {
   label?: string;

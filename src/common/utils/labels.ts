@@ -6,6 +6,10 @@ export const roleLabel = (role?: string): string => {
     ({
       admin: 'Admin',
       school_manager: 'Gestionnaire École',
+      director: 'Directeur',
+      secretary: 'Secrétaire',
+      accountant: 'Comptable',
+      teacher: 'Enseignant',
       farm_manager: "Chef d'Exploitation Ferme",
       mine_director: 'Directeur Mine',
     } as Record<string, string>)[key] || key

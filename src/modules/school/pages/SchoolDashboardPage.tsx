@@ -8,6 +8,9 @@ import type { IconType } from 'react-icons';
 import PageMeta from '../../../common/components/PageMeta';
 import StatCard from '../../../common/components/StatCard';
 import { formatNumber, formatCurrency } from '../../../common/utils/labels';
+import { useAuth } from '../../../app/providers/AuthContext';
+import { rolesPer } from '../../../app/router/nav';
+import type { Role } from '../../../common/types';
 import useStudents from '../students/hooks/useStudents';
 import useClasses from '../classes/hooks/useClasses';
 import useTeachers from '../teachers/hooks/useTeachers';
@@ -17,24 +20,25 @@ import usePayments from '../payments/hooks/usePayments';
 import useAttendance from '../attendance/hooks/useAttendance';
 import useReportCards from '../report-cards/hooks/useReportCards';
 
-const QUICK_LINKS: { path: string; label: string; icon: IconType }[] = [
-  { path: '/app/ecole/eleves', label: 'Élèves', icon: FiUsers },
-  { path: '/app/ecole/inscriptions', label: 'Inscriptions', icon: FiBook },
-  { path: '/app/ecole/classes', label: 'Classes', icon: FiGrid },
-  { path: '/app/ecole/matieres', label: 'Matières', icon: FiBook },
-  { path: '/app/ecole/enseignants', label: 'Enseignants', icon: FiUserCheck },
-  { path: '/app/ecole/affectations', label: 'Affectations', icon: FiLink },
-  { path: '/app/ecole/parents', label: 'Parents', icon: FiUser },
-  { path: '/app/ecole/presences', label: 'Présences', icon: FiCheckCircle },
-  { path: '/app/ecole/evaluations', label: 'Évaluations', icon: FiClipboard },
-  { path: '/app/ecole/notes', label: 'Notes', icon: FiAward },
-  { path: '/app/ecole/bulletins', label: 'Bulletins', icon: FiFileText },
-  { path: '/app/ecole/annees', label: 'Années scolaires', icon: FiCalendar },
-  { path: '/app/ecole/paiements', label: 'Paiements', icon: FiDollarSign },
-  { path: '/app/ecole/parametres', label: 'Paramètres', icon: FiSettings },
+const QUICK_LINKS: { path: string; label: string; icon: IconType; roles: Role[] }[] = [
+  { path: '/app/ecole/eleves', label: 'Élèves', icon: FiUsers, roles: rolesPer.schoolManage },
+  { path: '/app/ecole/inscriptions', label: 'Inscriptions', icon: FiBook, roles: rolesPer.schoolManage },
+  { path: '/app/ecole/classes', label: 'Classes', icon: FiGrid, roles: rolesPer.schoolStructure },
+  { path: '/app/ecole/matieres', label: 'Matières', icon: FiBook, roles: rolesPer.schoolStructure },
+  { path: '/app/ecole/enseignants', label: 'Enseignants', icon: FiUserCheck, roles: rolesPer.schoolStructure },
+  { path: '/app/ecole/affectations', label: 'Affectations', icon: FiLink, roles: rolesPer.schoolStructure },
+  { path: '/app/ecole/parents', label: 'Parents', icon: FiUser, roles: rolesPer.schoolManage },
+  { path: '/app/ecole/presences', label: 'Présences', icon: FiCheckCircle, roles: rolesPer.schoolTeaching },
+  { path: '/app/ecole/evaluations', label: 'Évaluations', icon: FiClipboard, roles: rolesPer.schoolTeaching },
+  { path: '/app/ecole/notes', label: 'Notes', icon: FiAward, roles: rolesPer.schoolTeaching },
+  { path: '/app/ecole/bulletins', label: 'Bulletins', icon: FiFileText, roles: rolesPer.schoolManage },
+  { path: '/app/ecole/annees', label: 'Années scolaires', icon: FiCalendar, roles: rolesPer.schoolStructure },
+  { path: '/app/ecole/paiements', label: 'Paiements', icon: FiDollarSign, roles: rolesPer.schoolFinance },
+  { path: '/app/ecole/parametres', label: 'Paramètres', icon: FiSettings, roles: rolesPer.schoolSettings },
 ];
 
 export default function SchoolDashboardPage() {
+  const { hasRole } = useAuth();
   const students = useStudents();
   const classes = useClasses();
   const teachers = useTeachers();
@@ -86,7 +90,7 @@ export default function SchoolDashboardPage() {
       <div className="card-root p-6">
         <h3 className="text-lg font-bold text-black dark:text-white">Accès rapides</h3>
         <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-          {QUICK_LINKS.map((link) => (
+          {QUICK_LINKS.filter((link) => hasRole(link.roles)).map((link) => (
             <Link
               key={link.path}
               to={link.path}

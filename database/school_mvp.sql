@@ -413,3 +413,32 @@ INSERT INTO school_payments (id, student_id, academic_year, term_phase, amount, 
   ('90000000-0000-0000-0000-000000000903', '10000000-0000-0000-0000-000000000103', '2025-2026', '2025-2026 / Trimestre 1', 350.00, 'bank',   'PAY-000003', '2025-09-12', 'paid'),
   ('90000000-0000-0000-0000-000000000904', '10000000-0000-0000-0000-000000000104', '2025-2026', '2025-2026 / Trimestre 1', 350.00, NULL,     NULL,          NULL,         'late'),
   ('90000000-0000-0000-0000-000000000905', '10000000-0000-0000-0000-000000000105', '2025-2026', '2025-2026 / Trimestre 1', 350.00, NULL,     NULL,          NULL,         'pending');
+
+-- ============================================================================
+-- COMPTES DE CONNEXION (personnel et enseignants)
+-- Activer l'onglet "Auth" du projet Forge sur cette table (email / password_hash)
+-- puis renseigner VITE_SCHOOL_FORGE_AUTH_ENABLED=true. Mot de passe démo : Passer@123.
+-- ============================================================================
+DROP TABLE IF EXISTS school_users;
+
+CREATE TABLE school_users (
+  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  full_name     TEXT NOT NULL,
+  email         TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  role          TEXT NOT NULL DEFAULT 'teacher'
+                CHECK (role IN ('admin','school_manager','director','secretary','accountant','teacher','eleve','parent')),
+  teacher_id    UUID REFERENCES school_teachers(id) ON DELETE SET NULL,
+  phone         TEXT,
+  is_active     BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+COMMENT ON TABLE school_users IS 'Comptes de connexion du module École (personnel et enseignants)';
+
+INSERT INTO school_users (id, full_name, email, password_hash, role, teacher_id, phone, is_active) VALUES
+  ('0a000000-0000-0000-0000-000000000001', 'Émile Kasongo',  'directeur@aelimu.cd',   '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'director',   NULL,                                   '+243 810 000 005', TRUE),
+  ('0a000000-0000-0000-0000-000000000002', 'Julienne Mbayo', 'secretaire@aelimu.cd',  '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'secretary',  NULL,                                   '+243 810 000 006', TRUE),
+  ('0a000000-0000-0000-0000-000000000003', 'Didier Kabwe',   'comptable@aelimu.cd',   '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'accountant', NULL,                                   '+243 810 000 007', TRUE),
+  ('0a000000-0000-0000-0000-000000000004', 'Jean Kabeya',    'jean.kabeya@aelimu.cd', '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'teacher',    'd0000000-0000-0000-0000-000000000001', '+243 811 200 001', TRUE);
