@@ -91,4 +91,9 @@ export interface AppConfig {
   FORGE_API_KEY: string;
   FORGE_ENABLED: boolean;
   FORGE_AUTH_ENABLED: boolean;
+  SCHOOL_FORGE_URL: string;
+  SCHOOL_FORGE_PROJECT_KEY: string;
+  SCHOOL_FORGE_API_KEY: string;
+  SCHOOL_FORGE_ENABLED: boolean;
+  SCHOOL_FORGE_AUTH_ENABLED: boolean;
 }

@@ -1,15 +1,114 @@
-export type StudentStatus = 'active' | 'graduated' | 'left';
+export type AcademicYearStatus = 'planned' | 'active' | 'closed';
+export type ClassStatus = 'active' | 'archived';
+export type SubjectStatus = 'active' | 'archived';
+export type TeacherStatus = 'active' | 'leave' | 'inactive';
+export type AssignmentStatus = 'active' | 'ended';
+export type StudentStatus = 'active' | 'graduated' | 'left' | 'transferred' | 'excluded';
+export type EnrollmentStatus = 'enrolled' | 'withdrawn' | 'graduated' | 'transferred' | 'repeating';
+export type AttendanceStatus = 'present' | 'absent' | 'late' | 'justified' | 'unjustified';
+export type AssessmentType = 'interrogation' | 'homework' | 'practical' | 'exam';
+export type AssessmentStatus = 'draft' | 'open' | 'closed';
+export type GradeStatus = 'draft' | 'submitted' | 'validated' | 'published';
+export type ReportStatus = 'draft' | 'validated' | 'published';
+export type Decision = 'admis' | 'redouble' | 'exclu' | 'transfere' | 'diplome' | 'en_cours';
+export type Relation = 'father' | 'mother' | 'guardian' | 'other';
+export type PaymentMethod = 'cash' | 'mobile' | 'bank';
+export type PaymentStatus = 'paid' | 'pending' | 'late';
+
+export interface AcademicYear {
+  id: string;
+  name: string;
+  start_date?: string | null;
+  end_date?: string | null;
+  status?: AcademicYearStatus | string;
+  notes?: string | null;
+}
+
+export interface SchoolClass {
+  id: string;
+  name: string;
+  cycle?: string | null;
+  level?: string | null;
+  section?: string | null;
+  option?: string | null;
+  academic_year?: string | null;
+  capacity?: number | null;
+  status?: ClassStatus | string;
+}
+
+export interface Subject {
+  id: string;
+  name: string;
+  code?: string | null;
+  coefficient?: number | null;
+  level?: string | null;
+  section?: string | null;
+  description?: string | null;
+  status?: SubjectStatus | string;
+}
+
+export interface Teacher {
+  id: string;
+  full_name: string;
+  postnom?: string | null;
+  first_name?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  address?: string | null;
+  qualification?: string | null;
+  specialty?: string | null;
+  hire_date?: string | null;
+  status?: TeacherStatus | string;
+}
+
+export interface Assignment {
+  id: string;
+  teacher_id: string;
+  subject_id: string;
+  class_id: string;
+  academic_year?: string | null;
+  status?: AssignmentStatus | string;
+}
 
 export interface Student {
   id: string;
   matricule?: string | null;
   full_name?: string | null;
+  postnom?: string | null;
+  first_name?: string | null;
   class_name?: string | null;
+  section?: string | null;
+  birth_date?: string | null;
+  birth_place?: string | null;
+  nationality?: string | null;
+  gender?: string | null;
+  address?: string | null;
+  phone?: string | null;
+  email?: string | null;
   guardian_name?: string | null;
   guardian_phone?: string | null;
-  birth_date?: string | null;
-  gender?: string | null;
+  guardian_email?: string | null;
+  guardian_relation?: string | null;
   status?: StudentStatus | string;
+}
+
+export interface Parent {
+  id: string;
+  full_name: string;
+  relation?: Relation | string;
+  phone?: string | null;
+  email?: string | null;
+  address?: string | null;
+  profession?: string | null;
+  status?: string | null;
+}
+
+export interface StudentParent {
+  id: string;
+  student_id: string;
+  parent_id: string;
+  relation?: Relation | string;
+  is_primary?: boolean;
 }
 
 export interface Enrollment {
@@ -17,8 +116,59 @@ export interface Enrollment {
   student_id: string;
   academic_year?: string | null;
   class_name?: string | null;
+  section?: string | null;
+  option?: string | null;
   enrolled_at?: string | null;
-  status?: string | null;
+  status?: EnrollmentStatus | string;
+}
+
+export interface Attendance {
+  id: string;
+  student_id: string;
+  class_name?: string | null;
+  subject_id?: string | null;
+  attendance_date?: string | null;
+  status?: AttendanceStatus | string;
+  note?: string | null;
+}
+
+export interface Assessment {
+  id: string;
+  name: string;
+  type?: AssessmentType | string;
+  subject_id?: string | null;
+  class_name?: string | null;
+  period?: string | null;
+  scale?: number | null;
+  coefficient?: number | null;
+  assessment_date?: string | null;
+  status?: AssessmentStatus | string;
+}
+
+export interface Grade {
+  id: string;
+  assessment_id: string;
+  student_id: string;
+  score?: number | null;
+  status?: GradeStatus | string;
+  comment?: string | null;
+}
+
+export interface ReportCard {
+  id: string;
+  student_id: string;
+  academic_year?: string | null;
+  period?: string | null;
+  class_name?: string | null;
+  average?: number | null;
+  percentage?: number | null;
+  rank?: number | null;
+  total_students?: number | null;
+  absences?: number | null;
+  lates?: number | null;
+  appreciation?: string | null;
+  decision?: Decision | string;
+  status?: ReportStatus | string;
 }
 
 export interface Payment {
@@ -27,8 +177,15 @@ export interface Payment {
   academic_year?: string | null;
   term_phase?: string | null;
   amount?: number | null;
-  method?: string | null;
+  method?: PaymentMethod | string;
   reference?: string | null;
   paid_at?: string | null;
-  status?: string | null;
+  status?: PaymentStatus | string;
+}
+
+export interface SchoolSetting {
+  id: string;
+  key: string;
+  value?: string | null;
+  category?: string | null;
 }

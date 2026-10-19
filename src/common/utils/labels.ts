@@ -55,6 +55,42 @@ const STATUS_MAP: Record<string, StatusInfo> = {
   // inscriptions
   enrolled: { label: 'Inscrit', tone: 'success' },
   withdrawn: { label: 'Retiré', tone: 'neutral' },
+  repeating: { label: 'Redoublant', tone: 'warning' },
+  transferred: { label: 'Transféré', tone: 'info' },
+  excluded: { label: 'Exclu', tone: 'danger' },
+  // année scolaire / classes / matières / enseignants
+  planned: { label: 'Planifiée', tone: 'neutral' },
+  archived: { label: 'Archivée', tone: 'neutral' },
+  leave: { label: 'En congé', tone: 'warning' },
+  inactive: { label: 'Inactif', tone: 'neutral' },
+  ended: { label: 'Terminée', tone: 'neutral' },
+  // présence
+  present: { label: 'Présent', tone: 'success' },
+  absent: { label: 'Absent', tone: 'danger' },
+  justified: { label: 'Justifiée', tone: 'info' },
+  unjustified: { label: 'Non justifiée', tone: 'danger' },
+  // évaluations
+  interrogation: { label: 'Interrogation', tone: 'info' },
+  homework: { label: 'Devoir', tone: 'neutral' },
+  practical: { label: 'Travail pratique', tone: 'info' },
+  exam: { label: 'Examen', tone: 'warning' },
+  // workflow notes / bulletins
+  draft: { label: 'Brouillon', tone: 'neutral' },
+  submitted: { label: 'Soumis', tone: 'info' },
+  validated: { label: 'Validé', tone: 'warning' },
+  published: { label: 'Publié', tone: 'success' },
+  // décisions
+  admis: { label: 'Admis', tone: 'success' },
+  redouble: { label: 'Redouble', tone: 'warning' },
+  transfere: { label: 'Transféré', tone: 'info' },
+  exclu: { label: 'Exclu', tone: 'danger' },
+  diplome: { label: 'Diplômé', tone: 'info' },
+  en_cours: { label: 'En cours', tone: 'neutral' },
+  // relations parent / élève
+  father: { label: 'Père', tone: 'neutral' },
+  mother: { label: 'Mère', tone: 'neutral' },
+  guardian: { label: 'Tuteur', tone: 'neutral' },
+  other: { label: 'Autre', tone: 'neutral' },
   // parcelles
   prepared: { label: 'Préparée', tone: 'neutral' },
   sown: { label: 'Semée', tone: 'info' },

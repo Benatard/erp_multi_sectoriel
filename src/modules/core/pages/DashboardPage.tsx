@@ -15,8 +15,8 @@ import { roleLabel, sectorLabel, formatNumber, formatCurrency } from '../../../c
 import { navItems } from '../../../app/router/nav';
 import { db } from '../../../services/db';
 import config from '../../../app/config/config';
-import useStudents from '../../school/hooks/useStudents';
-import usePayments from '../../school/hooks/usePayments';
+import useStudents from '../../school/students/hooks/useStudents';
+import usePayments from '../../school/payments/hooks/usePayments';
 import usePlots from '../../farm/hooks/usePlots';
 import useLivestock from '../../farm/hooks/useLivestock';
 import useProduction from '../../mine/hooks/useProduction';
@@ -187,10 +187,19 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {db.isForge() && (
-        <p className="text-xs text-body dark:text-body-dark">
-          Base connectée : Forge Console ({config.FORGE_PROJECT_KEY || ''}) — données live.
-        </p>
+      {(db.isForge() || db.isSchoolForge()) && (
+        <div className="space-y-1">
+          {db.isForge() && (
+            <p className="text-xs text-body dark:text-body-dark">
+              Base connectée : Forge Console ({config.FORGE_PROJECT_KEY || ''}) — données live.
+            </p>
+          )}
+          {db.isSchoolForge() && (
+            <p className="text-xs text-body dark:text-body-dark">
+              Module École : Forge Console dédié ({config.SCHOOL_FORGE_PROJECT_KEY || ''}) — données live.
+            </p>
+          )}
+        </div>
       )}
     </div>
   );

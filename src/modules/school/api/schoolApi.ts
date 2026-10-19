@@ -2,13 +2,54 @@ import db from '../../../services/db';
 import type { ListOptions } from '../../../common/types';
 
 export const schoolTables = {
+  academicYears: 'school_academic_years',
+  classes: 'school_classes',
+  subjects: 'school_subjects',
+  teachers: 'school_teachers',
+  assignments: 'school_assignments',
   students: 'school_students',
+  parents: 'school_parents',
+  studentParents: 'school_student_parents',
   enrollments: 'school_enrollments',
+  attendance: 'school_attendance',
+  assessments: 'school_assessments',
+  grades: 'school_grades',
+  reportCards: 'school_report_cards',
   payments: 'school_payments',
+  settings: 'school_settings',
 } as const;
 
+export const listAcademicYears = (options: ListOptions = {}) => db.list(schoolTables.academicYears, options);
+export const listClasses = (options: ListOptions = {}) => db.list(schoolTables.classes, options);
+export const listSubjects = (options: ListOptions = {}) => db.list(schoolTables.subjects, options);
+export const listTeachers = (options: ListOptions = {}) => db.list(schoolTables.teachers, options);
+export const listAssignments = (options: ListOptions = {}) => db.list(schoolTables.assignments, options);
 export const listStudents = (options: ListOptions = {}) => db.list(schoolTables.students, options);
+export const listParents = (options: ListOptions = {}) => db.list(schoolTables.parents, options);
+export const listStudentParents = (options: ListOptions = {}) => db.list(schoolTables.studentParents, options);
 export const listEnrollments = (options: ListOptions = {}) => db.list(schoolTables.enrollments, options);
+export const listAttendance = (options: ListOptions = {}) => db.list(schoolTables.attendance, options);
+export const listAssessments = (options: ListOptions = {}) => db.list(schoolTables.assessments, options);
+export const listGrades = (options: ListOptions = {}) => db.list(schoolTables.grades, options);
+export const listReportCards = (options: ListOptions = {}) => db.list(schoolTables.reportCards, options);
 export const listPayments = (options: ListOptions = {}) => db.list(schoolTables.payments, options);
+export const listSchoolSettings = (options: ListOptions = {}) => db.list(schoolTables.settings, options);
 
-export default { schoolTables, listStudents, listEnrollments, listPayments };
+export default {
+  schoolTables,
+  listAcademicYears,
+  listClasses,
+  listSubjects,
+  listTeachers,
+  listAssignments,
+  listStudents,
+  listParents,
+  listStudentParents,
+  listEnrollments,
+  listAttendance,
+  listAssessments,
+  listGrades,
+  listReportCards,
+  listPayments,
+  listSchoolSettings,
+};

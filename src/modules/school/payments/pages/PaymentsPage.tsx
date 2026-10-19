@@ -1,19 +1,19 @@
 import React, { useMemo, useState } from 'react';
 import { FiDollarSign, FiCheckCircle, FiClock, FiAlertCircle, FiPlus, FiFilter } from 'react-icons/fi';
-import PageMeta from '../../../common/components/PageMeta';
-import PageHeader from '../../../common/components/PageHeader';
-import StatCard from '../../../common/components/StatCard';
-import DataTable from '../../../common/components/DataTable';
-import Modal from '../../../common/components/Modal';
-import ConfirmDialog from '../../../common/components/ConfirmDialog';
-import { TextField, SelectField, DateField, NumberField } from '../../../common/components/fields';
-import StatusBadge from '../../../common/components/StatusBadge';
-import { formatDate, formatCurrency } from '../../../common/utils/labels';
+import PageMeta from '../../../../common/components/PageMeta';
+import PageHeader from '../../../../common/components/PageHeader';
+import StatCard from '../../../../common/components/StatCard';
+import DataTable from '../../../../common/components/DataTable';
+import Modal from '../../../../common/components/Modal';
+import ConfirmDialog from '../../../../common/components/ConfirmDialog';
+import { TextField, SelectField, DateField, NumberField } from '../../../../common/components/fields';
+import StatusBadge from '../../../../common/components/StatusBadge';
+import { formatDate, formatCurrency } from '../../../../common/utils/labels';
 import usePayments from '../hooks/usePayments';
-import useStudents from '../hooks/useStudents';
-import { ACADEMIC_YEARS } from '../utils/constants';
-import type { Column } from '../../../common/types';
-import type { Payment } from '../types';
+import useStudents from '../../students/hooks/useStudents';
+import { ACADEMIC_YEARS, PAYMENT_METHODS, PAYMENT_STATUSES } from '../../utils/constants';
+import type { Column } from '../../../../common/types';
+import type { Payment } from '../../types';
 
 export default function PaymentsPage() {
   const crud = usePayments();
@@ -23,13 +23,9 @@ export default function PaymentsPage() {
 
   const studentName = (id?: string | null): string => students.rows.find((s) => s.id === id)?.full_name || '—';
 
-  const filtered = useMemo(() => {
-    return crud.rows.filter(
-      (p) =>
-        (!yearFilter || p.academic_year === yearFilter) &&
-        (!statusFilter || p.status === statusFilter)
-    );
-  }, [crud.rows, yearFilter, statusFilter]);
+  const filtered = useMemo(() => crud.rows.filter(
+    (p) => (!yearFilter || p.academic_year === yearFilter) && (!statusFilter || p.status === statusFilter)
+  ), [crud.rows, yearFilter, statusFilter]);
 
   const stats = useMemo(() => {
     const paid = crud.rows.filter((p) => p.status === 'paid');
@@ -65,7 +61,7 @@ export default function PaymentsPage() {
   return (
     <div className="space-y-6">
       <PageMeta title="Paiements & Frais" />
-      <PageHeader title="Suivi des paiements de scolarité" subtitle="Historique des frais : statut Payé, En retard, En attente.">
+      <PageHeader title="Suivi des paiements de scolarité" subtitle="Frais scolaires : statut Payé, En retard, En attente.">
         <button className="btn-primary-root" onClick={() => crud.openCreate({ academic_year: '2025-2026', status: 'pending' })}>
           <FiPlus className="w-4 h-4" /> Nouveau paiement
         </button>
@@ -88,9 +84,7 @@ export default function PaymentsPage() {
         </div>
         <select className="input-root !w-auto" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
           <option value="">Tous les statuts</option>
-          <option value="paid">Payé</option>
-          <option value="pending">En attente</option>
-          <option value="late">En retard</option>
+          {PAYMENT_STATUSES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
         </select>
       </div>
 
@@ -120,15 +114,14 @@ export default function PaymentsPage() {
           <SelectField label="Élève" required value={f.student_id || ''} onChange={(e) => crud.setField('student_id', e.target.value)}
             placeholder="Sélectionner un élève"
             options={students.rows.map((s) => ({ value: s.id, label: `${s.full_name} (${s.matricule})` }))} />
-          <TextField label="Année scolaire" required value={f.academic_year || ''} onChange={(e) => crud.setField('academic_year', e.target.value)} placeholder="2025-2026" />
+          <SelectField label="Année scolaire" required value={f.academic_year || ''} onChange={(e) => crud.setField('academic_year', e.target.value)}
+            placeholder="—" options={ACADEMIC_YEARS.map((y) => ({ value: y, label: y }))} />
           <TextField label="Période / Trimestre" required value={f.term_phase || ''} onChange={(e) => crud.setField('term_phase', e.target.value)} placeholder="2025-2026 / Trimestre 1" />
-          <SelectField label="Méthode" value={f.method || ''} onChange={(e) => crud.setField('method', e.target.value)}
-            placeholder="—" options={[{ value: 'cash', label: 'Espèces' }, { value: 'mobile', label: 'Mobile Money' }, { value: 'bank', label: 'Banque' }]} />
+          <SelectField label="Méthode" value={f.method || ''} onChange={(e) => crud.setField('method', e.target.value)} placeholder="—" options={PAYMENT_METHODS} />
           <NumberField label="Montant (USD)" required value={f.amount ?? ''} onChange={(e) => crud.setField('amount', Number(e.target.value))} placeholder="350" />
           <TextField label="Référence" value={f.reference || ''} onChange={(e) => crud.setField('reference', e.target.value)} placeholder="PAY-000001" />
           <DateField label="Payé le" value={f.paid_at || ''} onChange={(e) => crud.setField('paid_at', e.target.value)} />
-          <SelectField label="Statut" required value={f.status || 'pending'} onChange={(e) => onStatusChange(e.target.value)}
-            options={[{ value: 'paid', label: 'Payé' }, { value: 'pending', label: 'En attente' }, { value: 'late', label: 'En retard' }]} />
+          <SelectField label="Statut" required value={f.status || 'pending'} onChange={(e) => onStatusChange(e.target.value)} options={PAYMENT_STATUSES} />
         </div>
       </Modal>
 

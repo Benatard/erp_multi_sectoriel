@@ -9,6 +9,11 @@ interface ImportMetaEnv {
   readonly VITE_FORGE_API_KEY?: string;
   readonly VITE_FORGE_ENABLED?: string;
   readonly VITE_FORGE_AUTH_ENABLED?: string;
+  readonly VITE_SCHOOL_FORGE_URL?: string;
+  readonly VITE_SCHOOL_FORGE_PROJECT_KEY?: string;
+  readonly VITE_SCHOOL_FORGE_API_KEY?: string;
+  readonly VITE_SCHOOL_FORGE_ENABLED?: string;
+  readonly VITE_SCHOOL_FORGE_AUTH_ENABLED?: string;
 }
 
 interface ImportMeta {
