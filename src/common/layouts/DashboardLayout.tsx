@@ -38,10 +38,10 @@ function SideNav({ onNavigate }: { onNavigate: () => void }) {
 
   return (
     <div className="flex flex-col h-full">
-      <Link to="/" className="flex items-center gap-3 h-16 px-5 flex-shrink-0 border-b border-white/10">
+      <Link to="/" className="flex items-center gap-3 h-16 px-5 flex-shrink-0 border-b border-stroke dark:border-white/10">
         <img src="/images/logo-mark.svg" alt={config.APP_NAME} className="h-8 w-8" />
-        <span className="text-lg font-extrabold tracking-tight text-white">
-          ERP<span className="text-primary-light">MVP</span>
+        <span className="text-lg font-extrabold tracking-tight text-black dark:text-white">
+          ERP<span className="text-primary dark:text-primary-light">MVP</span>
         </span>
       </Link>
 
@@ -55,7 +55,7 @@ function SideNav({ onNavigate }: { onNavigate: () => void }) {
                 type="button"
                 onClick={() => toggle(group.label)}
                 className={`w-full flex items-center justify-between gap-2 rounded px-3 py-2 text-[11px] font-semibold uppercase tracking-widest transition-colors ${
-                  hasActive ? 'text-white' : 'text-body-dark hover:text-white'
+                  hasActive ? 'text-black dark:text-white' : 'text-body dark:text-body-dark hover:text-black dark:hover:text-white'
                 }`}
               >
                 <span className="truncate">{group.label}</span>
@@ -75,7 +75,7 @@ function SideNav({ onNavigate }: { onNavigate: () => void }) {
                           `flex items-center gap-3 rounded px-3 py-2 text-sm font-medium transition-colors ${
                             isActive
                               ? 'bg-primary text-white shadow-btn'
-                              : 'text-body-dark hover:bg-white/5 hover:text-white'
+                              : 'text-body dark:text-body-dark hover:bg-gray2 dark:hover:bg-white/5 hover:text-black dark:hover:text-white'
                           }`
                         }
                       >
@@ -91,14 +91,14 @@ function SideNav({ onNavigate }: { onNavigate: () => void }) {
         })}
       </nav>
 
-      <div className="flex-shrink-0 px-3 py-3 border-t border-white/10">
+      <div className="flex-shrink-0 px-3 py-3 border-t border-stroke dark:border-white/10">
         <div className="flex items-center gap-3 rounded px-2 py-1.5">
           <div className="h-9 w-9 rounded bg-primary/15 text-primary flex items-center justify-center text-xs font-bold flex-shrink-0">
             {initials}
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-white truncate">{user?.full_name}</p>
-            <p className="text-xs text-body-dark truncate">
+            <p className="text-sm font-semibold text-black dark:text-white truncate">{user?.full_name}</p>
+            <p className="text-xs text-body dark:text-body-dark truncate">
               {roleLabel(user?.role)}
               {user?.sector ? ` · ${sectorLabel(user.sector)}` : ''}
             </p>
@@ -133,11 +133,11 @@ export default function DashboardLayout({ children }: { children?: ReactNode }) 
 
   return (
     <div className="min-h-screen flex bg-gray2 dark:bg-black">
-      <aside className="hidden lg:flex w-64 flex-shrink-0 lg:sticky lg:top-0 lg:h-screen bg-black dark:bg-[#0E1219]">{sidebar}</aside>
+      <aside className="hidden lg:flex w-64 flex-shrink-0 lg:sticky lg:top-0 lg:h-screen bg-white dark:bg-[#0E1219] border-r border-stroke dark:border-transparent">{sidebar}</aside>
 
       {sidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
-          <aside className="w-72 h-full bg-black dark:bg-[#0E1219]">{sidebar}</aside>
+          <aside className="w-72 h-full bg-white dark:bg-[#0E1219] border-r border-stroke dark:border-transparent">{sidebar}</aside>
           <button className="flex-1 bg-black/60" aria-label="Fermer le menu" onClick={close} />
         </div>
       )}
