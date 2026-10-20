@@ -21,6 +21,8 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 -- ---------------------------------------------------------------------------
 -- SUPPRESSION (ordre de dépendances)
 -- ---------------------------------------------------------------------------
+DROP TABLE IF EXISTS school_audit_logs;
+DROP TABLE IF EXISTS school_report_lines;
 DROP TABLE IF EXISTS school_payments;
 DROP TABLE IF EXISTS school_report_cards;
 DROP TABLE IF EXISTS school_grades;
@@ -221,7 +223,10 @@ CREATE TABLE school_attendance (
   attendance_date DATE NOT NULL DEFAULT CURRENT_DATE,
   status          TEXT NOT NULL DEFAULT 'present' CHECK (status IN ('present','absent','late','justified','unjustified')),
   note            TEXT,
-  created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  recorded_by     UUID,
+  updated_by      UUID,
+  created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (student_id, class_name, subject_id, attendance_date)
 );
 
 COMMENT ON TABLE school_attendance IS 'Registre de présence (présent, absent, retard, justifiée…)';
@@ -232,9 +237,11 @@ COMMENT ON TABLE school_attendance IS 'Registre de présence (présent, absent, 
 CREATE TABLE school_assessments (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name            TEXT NOT NULL,
-  type            TEXT NOT NULL DEFAULT 'interrogation' CHECK (type IN ('interrogation','homework','practical','exam')),
+  type            TEXT NOT NULL DEFAULT 'interrogation' CHECK (type IN ('interrogation','homework','practical','oral','exam','other')),
   subject_id      UUID REFERENCES school_subjects(id) ON DELETE SET NULL,
   class_name      TEXT,
+  teacher_id      UUID REFERENCES school_teachers(id) ON DELETE SET NULL,
+  teacher_name    TEXT,
   period          TEXT,
   scale           NUMERIC(5,2) NOT NULL DEFAULT 20,
   coefficient     NUMERIC(5,2) NOT NULL DEFAULT 1,
@@ -253,10 +260,16 @@ CREATE TABLE school_grades (
   assessment_id UUID NOT NULL REFERENCES school_assessments(id) ON DELETE CASCADE,
   student_id    UUID NOT NULL REFERENCES school_students(id) ON DELETE CASCADE,
   score         NUMERIC(6,2),
+  is_absent     BOOLEAN NOT NULL DEFAULT FALSE,
   status        TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft','submitted','validated','published')),
   comment       TEXT,
+  submitted_at  TIMESTAMPTZ,
+  validated_at  TIMESTAMPTZ,
+  validated_by  UUID,
+  updated_by    UUID,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (assessment_id, student_id)
 );
 
 COMMENT ON TABLE school_grades IS 'Notes originales par évaluation et élève (workflow brouillon → publié)';
@@ -279,10 +292,45 @@ CREATE TABLE school_report_cards (
   appreciation   TEXT,
   decision       TEXT NOT NULL DEFAULT 'en_cours' CHECK (decision IN ('admis','redouble','exclu','transfere','diplome','en_cours')),
   status         TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft','validated','published')),
-  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  generated_by   UUID,
+  validated_by   UUID,
+  published_by   UUID,
+  published_at   TIMESTAMPTZ,
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (student_id, academic_year, period)
 );
 
 COMMENT ON TABLE school_report_cards IS 'Bulletins générés à partir des notes, présences et appréciations';
+
+CREATE TABLE school_report_lines (
+  id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  report_card_id UUID NOT NULL REFERENCES school_report_cards(id) ON DELETE CASCADE,
+  subject_id     UUID REFERENCES school_subjects(id) ON DELETE SET NULL,
+  subject_name   TEXT,
+  coefficient    NUMERIC(5,2) NOT NULL DEFAULT 1,
+  average        NUMERIC(6,2),
+  appreciation   TEXT,
+  teacher_name   TEXT,
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+COMMENT ON TABLE school_report_lines IS 'Détail par matière de chaque bulletin';
+
+CREATE TABLE school_audit_logs (
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  actor_id    UUID,
+  actor_name  TEXT,
+  actor_role  TEXT,
+  action      TEXT NOT NULL,
+  entity      TEXT,
+  entity_id   UUID,
+  old_value   TEXT,
+  new_value   TEXT,
+  reason      TEXT,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+COMMENT ON TABLE school_audit_logs IS 'Journal d''audit : traçabilité des opérations sensibles';
 
 -- ============================================================================
 -- PAIEMENTS / FRAIS
@@ -390,22 +438,32 @@ INSERT INTO school_attendance (id, student_id, class_name, subject_id, attendanc
   ('50000000-0000-0000-0000-000000000504', '10000000-0000-0000-0000-000000000104', '4e année A',   'b0000000-0000-0000-0000-000000000001', '2025-10-07', 'justified','Certificat médical'),
   ('50000000-0000-0000-0000-000000000505', '10000000-0000-0000-0000-000000000105', '2ème Science', 'b0000000-0000-0000-0000-000000000001', '2025-10-07', 'present', NULL);
 
-INSERT INTO school_assessments (id, name, type, subject_id, class_name, period, scale, coefficient, assessment_date, status) VALUES
-  ('60000000-0000-0000-0000-000000000601', 'Interrogation 1', 'interrogation','b0000000-0000-0000-0000-000000000001', '1ère Science', 'Trimestre 1', 20, 1, '2025-10-03', 'closed'),
-  ('60000000-0000-0000-0000-000000000602', 'Interrogation 2', 'interrogation','b0000000-0000-0000-0000-000000000001', '1ère Science', 'Trimestre 1', 20, 1, '2025-10-10', 'closed'),
-  ('60000000-0000-0000-0000-000000000603', 'Travail pratique','practical',  'b0000000-0000-0000-0000-000000000001', '1ère Science', 'Trimestre 1', 20, 1, '2025-10-15', 'open'),
-  ('60000000-0000-0000-0000-000000000604', 'Examen 1',        'exam',       'b0000000-0000-0000-0000-000000000001', '1ère Science', 'Trimestre 1', 20, 2, '2025-10-20', 'draft');
+INSERT INTO school_assessments (id, name, type, subject_id, class_name, teacher_id, teacher_name, period, scale, coefficient, assessment_date, status) VALUES
+  ('60000000-0000-0000-0000-000000000601', 'Interrogation 1', 'interrogation','b0000000-0000-0000-0000-000000000001', '1ère Science', 'd0000000-0000-0000-0000-000000000001', 'Jean Kabeya', 'Trimestre 1', 20, 1, '2025-10-03', 'closed'),
+  ('60000000-0000-0000-0000-000000000602', 'Interrogation 2', 'interrogation','b0000000-0000-0000-0000-000000000001', '1ère Science', 'd0000000-0000-0000-0000-000000000001', 'Jean Kabeya', 'Trimestre 1', 20, 1, '2025-10-10', 'closed'),
+  ('60000000-0000-0000-0000-000000000603', 'Travail pratique','practical',  'b0000000-0000-0000-0000-000000000001', '1ère Science', 'd0000000-0000-0000-0000-000000000001', 'Jean Kabeya', 'Trimestre 1', 20, 1, '2025-10-15', 'open'),
+  ('60000000-0000-0000-0000-000000000604', 'Examen 1',        'exam',       'b0000000-0000-0000-0000-000000000001', '1ère Science', 'd0000000-0000-0000-0000-000000000001', 'Jean Kabeya', 'Trimestre 1', 20, 2, '2025-10-20', 'draft');
 
-INSERT INTO school_grades (id, assessment_id, student_id, score, status, comment) VALUES
-  ('70000000-0000-0000-0000-000000000701', '60000000-0000-0000-0000-000000000601', '10000000-0000-0000-0000-000000000102', 15, 'validated', NULL),
-  ('70000000-0000-0000-0000-000000000702', '60000000-0000-0000-0000-000000000602', '10000000-0000-0000-0000-000000000102', 16, 'validated', NULL),
-  ('70000000-0000-0000-0000-000000000703', '60000000-0000-0000-0000-000000000601', '10000000-0000-0000-0000-000000000105', 17, 'validated', NULL),
-  ('70000000-0000-0000-0000-000000000704', '60000000-0000-0000-0000-000000000602', '10000000-0000-0000-0000-000000000105', 14, 'validated', NULL),
-  ('70000000-0000-0000-0000-000000000705', '60000000-0000-0000-0000-000000000603', '10000000-0000-0000-0000-000000000102', 15, 'draft', 'À confirmer');
+INSERT INTO school_grades (id, assessment_id, student_id, score, is_absent, status, comment) VALUES
+  ('70000000-0000-0000-0000-000000000701', '60000000-0000-0000-0000-000000000601', '10000000-0000-0000-0000-000000000102', 15, FALSE, 'validated', NULL),
+  ('70000000-0000-0000-0000-000000000702', '60000000-0000-0000-0000-000000000602', '10000000-0000-0000-0000-000000000102', 16, FALSE, 'validated', NULL),
+  ('70000000-0000-0000-0000-000000000703', '60000000-0000-0000-0000-000000000601', '10000000-0000-0000-0000-000000000105', 17, FALSE, 'validated', NULL),
+  ('70000000-0000-0000-0000-000000000704', '60000000-0000-0000-0000-000000000602', '10000000-0000-0000-0000-000000000105', 14, FALSE, 'validated', NULL),
+  ('70000000-0000-0000-0000-000000000705', '60000000-0000-0000-0000-000000000603', '10000000-0000-0000-0000-000000000102', 15, FALSE, 'draft', 'À confirmer');
 
 INSERT INTO school_report_cards (id, student_id, academic_year, period, class_name, average, percentage, rank, total_students, absences, lates, appreciation, decision, status) VALUES
   ('80000000-0000-0000-0000-000000000801', '10000000-0000-0000-0000-000000000102', '2025-2026', 'Trimestre 1', '1ère Science', 15.50, 77.50, 2, 45, 1, 2, 'Très bon travail, continuez ainsi.', 'en_cours', 'published'),
   ('80000000-0000-0000-0000-000000000802', '10000000-0000-0000-0000-000000000105', '2025-2026', 'Trimestre 1', '2ème Science', 15.50, 77.50, 1, 50, 0, 0, 'Très bon travail, continuez ainsi.', 'en_cours', 'draft');
+
+INSERT INTO school_report_lines (id, report_card_id, subject_id, subject_name, coefficient, average, appreciation, teacher_name) VALUES
+  ('81000000-0000-0000-0000-000000000001', '80000000-0000-0000-0000-000000000801', 'b0000000-0000-0000-0000-000000000001', 'Mathématiques', 4, 15.50, 'Très bon travail, continuez ainsi.', 'Jean Kabeya'),
+  ('81000000-0000-0000-0000-000000000002', '80000000-0000-0000-0000-000000000801', 'b0000000-0000-0000-0000-000000000002', 'Français',      3, 15.50, 'Très bon travail, continuez ainsi.', 'Marie Ilunga'),
+  ('81000000-0000-0000-0000-000000000003', '80000000-0000-0000-0000-000000000802', 'b0000000-0000-0000-0000-000000000001', 'Mathématiques', 4, 15.50, 'Très bon travail, continuez ainsi.', 'Jean Kabeya');
+
+INSERT INTO school_audit_logs (id, actor_id, actor_name, actor_role, action, entity, entity_id, old_value, new_value, reason, created_at) VALUES
+  ('82000000-0000-0000-0000-000000000001', '0a000000-0000-0000-0000-000000000004', 'Jean Kabeya',    'teacher',   'notes.submitted',        'school_grades',        '60000000-0000-0000-0000-000000000601', NULL, '{"assessment":"Interrogation 1","count":1}', NULL, '2025-10-03 12:00:00+00'),
+  ('82000000-0000-0000-0000-000000000002', '0a000000-0000-0000-0000-000000000001', 'Émile Kasongo',  'director',  'notes.validated',        'school_grades',        '60000000-0000-0000-0000-000000000601', NULL, '{"assessment":"Interrogation 1","count":1}', NULL, '2025-10-04 08:00:00+00'),
+  ('82000000-0000-0000-0000-000000000003', '0a000000-0000-0000-0000-000000000005', 'Nadine Mwape',   'prefect',   'bulletins.generation',   'school_report_cards',  NULL,                                    NULL, '{"class":"1ère Science","year":"2025-2026","period":"Trimestre 1"}', NULL, '2025-10-15 09:30:00+00');
 
 INSERT INTO school_payments (id, student_id, academic_year, term_phase, amount, method, reference, paid_at, status) VALUES
   ('90000000-0000-0000-0000-000000000901', '10000000-0000-0000-0000-000000000101', '2025-2026', '2025-2026 / Trimestre 1', 350.00, 'cash',   'PAY-000001', '2025-09-10', 'paid'),
@@ -427,7 +485,7 @@ CREATE TABLE school_users (
   email         TEXT NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
   role          TEXT NOT NULL DEFAULT 'teacher'
-                CHECK (role IN ('admin','school_manager','director','secretary','accountant','teacher','eleve','parent')),
+                CHECK (role IN ('admin','school_manager','director','secretary','accountant','teacher','supervisor','prefect')),
   teacher_id    UUID REFERENCES school_teachers(id) ON DELETE SET NULL,
   phone         TEXT,
   is_active     BOOLEAN NOT NULL DEFAULT TRUE,
@@ -441,4 +499,6 @@ INSERT INTO school_users (id, full_name, email, password_hash, role, teacher_id,
   ('0a000000-0000-0000-0000-000000000001', 'Émile Kasongo',  'directeur@aelimu.cd',   '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'director',   NULL,                                   '+243 810 000 005', TRUE),
   ('0a000000-0000-0000-0000-000000000002', 'Julienne Mbayo', 'secretaire@aelimu.cd',  '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'secretary',  NULL,                                   '+243 810 000 006', TRUE),
   ('0a000000-0000-0000-0000-000000000003', 'Didier Kabwe',   'comptable@aelimu.cd',   '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'accountant', NULL,                                   '+243 810 000 007', TRUE),
-  ('0a000000-0000-0000-0000-000000000004', 'Jean Kabeya',    'jean.kabeya@aelimu.cd', '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'teacher',    'd0000000-0000-0000-0000-000000000001', '+243 811 200 001', TRUE);
+  ('0a000000-0000-0000-0000-000000000004', 'Jean Kabeya',    'jean.kabeya@aelimu.cd', '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'teacher',    'd0000000-0000-0000-0000-000000000001', '+243 811 200 001', TRUE),
+  ('0a000000-0000-0000-0000-000000000005', 'Nadine Mwape',   'prefet@aelimu.cd',      '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'prefect',    NULL,                                   '+243 810 000 008', TRUE),
+  ('0a000000-0000-0000-0000-000000000006', 'Augustin Kalala','surveillant@aelimu.cd', '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'supervisor', NULL,                                   '+243 810 000 009', TRUE);

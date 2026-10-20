@@ -15,6 +15,8 @@ export const schoolTables = {
   assessments: 'school_assessments',
   grades: 'school_grades',
   reportCards: 'school_report_cards',
+  reportLines: 'school_report_lines',
+  auditLogs: 'school_audit_logs',
   payments: 'school_payments',
   settings: 'school_settings',
 } as const;
@@ -32,6 +34,8 @@ export const listAttendance = (options: ListOptions = {}) => db.list(schoolTable
 export const listAssessments = (options: ListOptions = {}) => db.list(schoolTables.assessments, options);
 export const listGrades = (options: ListOptions = {}) => db.list(schoolTables.grades, options);
 export const listReportCards = (options: ListOptions = {}) => db.list(schoolTables.reportCards, options);
+export const listReportLines = (options: ListOptions = {}) => db.list(schoolTables.reportLines, options);
+export const listAuditLogs = (options: ListOptions = {}) => db.list(schoolTables.auditLogs, options);
 export const listPayments = (options: ListOptions = {}) => db.list(schoolTables.payments, options);
 export const listSchoolSettings = (options: ListOptions = {}) => db.list(schoolTables.settings, options);
 
@@ -50,6 +54,8 @@ export default {
   listAssessments,
   listGrades,
   listReportCards,
+  listReportLines,
+  listAuditLogs,
   listPayments,
   listSchoolSettings,
 };

@@ -42,9 +42,11 @@ const MODULES: ModuleDef[] = [
     roles: [
       { value: 'school_manager', desc: 'Gestion complète de l’établissement', accent: 'bg-emerald-500/10 text-emerald-600 ring-emerald-500/20' },
       { value: 'director', desc: 'Direction : pédagogie et finances', accent: 'bg-emerald-500/10 text-emerald-600 ring-emerald-500/20' },
+      { value: 'prefect', desc: 'Préfet : notes, résultats, bulletins', accent: 'bg-indigo-500/10 text-indigo-600 ring-indigo-500/20' },
       { value: 'secretary', desc: 'Élèves, inscriptions, dossiers', accent: 'bg-sky-500/10 text-sky-600 ring-sky-500/20' },
       { value: 'accountant', desc: 'Frais, paiements, recouvrement', accent: 'bg-amber-500/10 text-amber-600 ring-amber-500/20' },
       { value: 'teacher', desc: 'Présences, évaluations, notes', accent: 'bg-violet-500/10 text-violet-600 ring-violet-500/20' },
+      { value: 'supervisor', desc: 'Discipline et registre de présence', accent: 'bg-rose-500/10 text-rose-600 ring-rose-500/20' },
     ],
   },
   {

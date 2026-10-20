@@ -1,0 +1,1111 @@
+# CAHIER DES CHARGES FONCTIONNEL DÉTAILLÉ
+# ERP DE GESTION SCOLAIRE — FONCTIONNALITÉS PAR ACTEUR
+
+## 1. PRÉSENTATION GÉNÉRALE
+
+### 1.1. Objectif du document
+
+Ce document décrit les fonctionnalités que doit offrir un ERP de gestion scolaire selon les responsabilités de chaque intervenant. Il précise les actions autorisées, les procédures de travail, les informations manipulées et les règles de gestion nécessaires au bon fonctionnement de l’établissement.
+
+### 1.2. Acteurs concernés
+
+Le système doit prévoir les espaces suivants :
+
+1. Enseignant / Professeur
+2. Direction de l’établissement
+3. Administrateur du système
+4. Secrétariat scolaire
+5. Comptable / Service financier
+6. Surveillant / Responsable des présences
+7. Élève
+8. Parent / Tuteur
+9. Préfet des études / Responsable pédagogique, si cette fonction existe dans l’établissement.
+
+Un même utilisateur peut cumuler plusieurs fonctions si l’établissement lui accorde les permissions correspondantes. Toutefois, chaque action doit respecter les droits attribués à son compte.
+
+---
+
+# 2. ESPACE PROFESSEUR / ENSEIGNANT
+
+## 2.1. Objectif
+
+L’espace professeur permet aux enseignants de gérer les activités pédagogiques qui leur sont attribuées : consultation des classes, suivi des élèves, prise des présences, création des évaluations, saisie des notes et transmission des résultats pour validation.
+
+Le professeur ne doit pas devoir recréer les élèves, les classes ou les matières. Ces données sont préparées dans le système par les responsables autorisés.
+
+## 2.2. Connexion et tableau de bord
+
+Après connexion, le professeur accède à un tableau de bord présentant :
+
+- Ses classes pour l’année scolaire en cours.
+- Les matières qui lui sont attribuées.
+- Son emploi du temps.
+- Les prochaines séances de cours.
+- Les évaluations à préparer.
+- Les notes en cours de saisie.
+- Les notes en attente de validation.
+- Les évaluations dont la saisie n’est pas terminée.
+- Les notifications et annonces de la direction.
+- Un récapitulatif des présences à enregistrer.
+
+Le système doit filtrer automatiquement les informations selon les affectations de l’enseignant.
+
+### Exemple
+
+```text
+PROFESSEUR : M. Pierre
+ANNÉE SCOLAIRE : 2026-2027
+
+Mes classes
+├── 6e Scientifique
+│   └── Mathématiques
+└── 5e Scientifique
+    └── Mathématiques
+
+Actions rapides
+├── Faire l'appel
+├── Saisir les notes
+├── Consulter mes évaluations
+├── Voir mon emploi du temps
+└── Consulter les notifications
+```
+
+## 2.3. Consultation des classes et des élèves
+
+Le professeur doit pouvoir :
+
+- Consulter uniquement les classes qui lui sont attribuées.
+- Sélectionner une classe.
+- Consulter la liste des élèves régulièrement inscrits dans cette classe.
+- Rechercher un élève par son nom ou son matricule.
+- Consulter les informations scolaires utiles à son enseignement.
+- Voir les élèves nouvellement inscrits ou transférés dans sa classe.
+- Identifier les élèves dont l'inscription est inactive, selon les informations auxquelles il est autorisé à accéder.
+
+Pour protéger la vie privée, le professeur ne doit pas automatiquement accéder aux informations financières, aux mots de passe, aux documents confidentiels ou à toutes les informations familiales d'un élève.
+
+## 2.4. Gestion des présences
+
+Le professeur doit pouvoir enregistrer la présence des élèves pendant une séance de cours.
+
+### Procédure
+
+1. Le professeur se connecte.
+2. Il sélectionne une classe qui lui est attribuée.
+3. Il sélectionne la matière et la séance concernée.
+4. Le système affiche la liste des élèves inscrits.
+5. Il indique le statut de chaque élève.
+6. Il enregistre la feuille de présence.
+7. Le système conserve la date, la séance et l'identité de l'utilisateur ayant effectué l'enregistrement.
+
+### Exemple
+
+```text
+Classe : 6e Scientifique
+Matière : Mathématiques
+Date : 20/10/2026
+
+Jean Mukendi       Présent
+Paul Kabila        Absent
+Marie Ilunga       En retard
+Patrick Mbuyi      Absence justifiée
+```
+
+Les statuts doivent pouvoir être configurés par l'établissement. Au minimum, le système peut prévoir :
+
+- Présent.
+- Absent.
+- En retard.
+- Absence justifiée.
+- Absence non justifiée.
+
+Le système doit éviter les doubles enregistrements pour une même séance et permettre la correction d'une erreur par un utilisateur autorisé. Toute correction doit être tracée.
+
+## 2.5. Gestion des évaluations
+
+Le professeur doit pouvoir créer ou préparer les évaluations correspondant aux classes et matières qui lui sont attribuées, dans les limites définies par l'établissement.
+
+Les évaluations peuvent comprendre :
+
+- Interrogation.
+- Travail pratique.
+- Devoir.
+- Examen.
+- Évaluation orale.
+- Autre type défini par l'établissement.
+
+Pour chaque évaluation, le système doit enregistrer :
+
+- L'intitulé.
+- La classe concernée.
+- La matière.
+- L'enseignant responsable.
+- La période scolaire.
+- La date de l'évaluation.
+- Le barème maximal.
+- Le coefficient éventuel.
+- Le statut de l'évaluation.
+
+Exemple :
+
+```text
+Évaluation : Interrogation 1
+Classe : 6e Scientifique
+Matière : Mathématiques
+Enseignant : M. Pierre
+Période : Premier trimestre
+Barème : 20 points
+Date : 20/10/2026
+```
+
+Le système doit empêcher la création d'une évaluation pour une classe ou une matière qui ne relève pas des affectations de l'enseignant, sauf autorisation spécifique.
+
+## 2.6. Saisie des notes
+
+Le professeur doit disposer d'un carnet de notes permettant de saisir les résultats de tous les élèves concernés par une évaluation.
+
+### Exemple concret
+
+Élève : Jean Mukendi  
+Classe : 6e Scientifique  
+Matière : Mathématiques  
+Professeur : M. Pierre  
+Évaluation : Interrogation 1  
+Note : 15/20
+
+### Procédure de saisie
+
+```text
+PROFESSEUR
+    ↓
+Se connecte
+    ↓
+Choisit une classe
+    ↓
+Choisit une matière
+    ↓
+Choisit une période scolaire
+    ↓
+Crée ou sélectionne une évaluation
+    ↓
+Le système affiche les élèves inscrits
+    ↓
+Le professeur saisit les notes
+    ↓
+Il enregistre un brouillon
+    ↓
+Il vérifie et soumet les notes
+    ↓
+Le responsable autorisé les valide
+    ↓
+Le système calcule les résultats
+    ↓
+Les résultats alimentent les bulletins
+```
+
+### Exemple de carnet de notes
+
+| Élève | Interrogation 1 | Interrogation 2 | Examen |
+|---|---:|---:|---:|
+| Jean Mukendi | 15/20 | 13/20 | 16/20 |
+| Paul Kabila | 12/20 | 14/20 | 11/20 |
+| Marie Ilunga | 17/20 | 16/20 | 18/20 |
+
+Le professeur doit pouvoir enregistrer les notes progressivement sans être obligé de terminer toute la classe en une seule opération.
+
+Le système doit :
+
+- Vérifier que chaque note respecte le barème.
+- Refuser les valeurs impossibles, sauf règles particulières explicitement configurées.
+- Distinguer une note non saisie d'une note égale à zéro.
+- Permettre de signaler une absence à l'évaluation.
+- Conserver le brouillon avant la soumission.
+- Afficher les élèves dont les notes sont manquantes.
+- Éviter la duplication d'une note pour le même élève et la même évaluation.
+- Indiquer le statut de la saisie : brouillon, soumise, validée ou publiée.
+- Enregistrer l'auteur et les dates des opérations.
+
+Une absence à une évaluation ne doit pas être automatiquement transformée en zéro sans appliquer la règle officielle de l'établissement.
+
+## 2.7. Modification des notes
+
+Avant la soumission, le professeur peut modifier ses brouillons.
+
+Après la soumission, les modifications doivent suivre le workflow défini par l'établissement.
+
+Après validation ou publication, une modification doit nécessiter une autorisation appropriée et être enregistrée dans l'historique.
+
+Exemple :
+
+```text
+Élève : Jean Mukendi
+Évaluation : Interrogation 1
+
+Ancienne note : 12/20
+Nouvelle note : 15/20
+Motif : Erreur de transcription
+Modifié par : M. Pierre
+Date : 20/10/2026
+Statut : Correction soumise à validation
+```
+
+Le système ne doit jamais remplacer silencieusement une note officielle sans conserver la trace de la modification.
+
+## 2.8. Calcul des moyennes
+
+Le système doit calculer automatiquement les moyennes à partir des notes enregistrées et des règles configurées par l'établissement.
+
+Il doit pouvoir prendre en charge :
+
+- Les moyennes d'une matière.
+- Les moyennes d'une période.
+- Les moyennes générales.
+- Les coefficients des matières.
+- Les pondérations des évaluations, si elles sont prévues.
+- Les examens et autres catégories d'évaluation.
+- Les règles d'arrondi.
+- Les barèmes propres à chaque niveau ou section.
+
+Le professeur peut consulter les résultats calculés pour ses classes, mais ne doit pas pouvoir modifier directement une moyenne calculée sans modifier les données sources ou passer par une procédure autorisée.
+
+Les formules doivent être définies et validées par l'établissement avant leur utilisation officielle.
+
+## 2.9. Consultation des résultats et bulletins
+
+Le professeur peut consulter les résultats des élèves des classes et matières qui lui sont attribuées.
+
+Selon ses permissions, il peut :
+
+- Consulter les notes saisies.
+- Vérifier les moyennes calculées.
+- Identifier les notes manquantes.
+- Consulter les résultats de la période.
+- Proposer une appréciation pédagogique.
+- Consulter le bulletin en préparation.
+
+La génération définitive, la validation et la publication des bulletins doivent rester sous le contrôle des responsables désignés.
+
+## 2.10. Appréciations pédagogiques
+
+Le professeur doit pouvoir rédiger une appréciation sur les performances d'un élève dans sa matière.
+
+Exemples :
+
+- Très bon travail, continuez ainsi.
+- Résultats satisfaisants, mais davantage de régularité est nécessaire.
+- Des efforts supplémentaires sont attendus.
+
+Le système doit associer chaque appréciation à l'élève, à la matière, à la période et à l'enseignant concerné.
+
+Il doit permettre une relecture ou une validation si l'établissement l'exige.
+
+## 2.11. Emploi du temps
+
+Le professeur doit pouvoir :
+
+- Consulter son emploi du temps.
+- Voir les classes, matières, salles et horaires.
+- Identifier les changements communiqués par l'administration.
+- Recevoir des notifications concernant les modifications.
+- Consulter les évaluations planifiées.
+
+Il ne doit pas modifier librement l'emploi du temps officiel, sauf s'il possède une permission spécifique.
+
+## 2.12. Notifications et communication
+
+Le professeur doit recevoir les notifications concernant :
+
+- Les nouvelles affectations.
+- Les modifications d'emploi du temps.
+- Les périodes de saisie des notes.
+- Les notes à soumettre ou à corriger.
+- Les résultats renvoyés pour correction.
+- Les dates limites de remise des résultats.
+- Les annonces de la direction.
+
+## 2.13. Règles de sécurité du professeur
+
+Le professeur ne peut pas :
+
+- Consulter les notes des classes auxquelles il n'est pas autorisé à accéder.
+- Modifier les affectations officielles sans autorisation.
+- Modifier les résultats validés sans procédure.
+- Publier seul les bulletins si la validation relève de la direction.
+- Modifier les paiements scolaires.
+- Créer arbitrairement des élèves ou modifier leur inscription officielle.
+
+---
+
+# 3. ESPACE DIRECTION DE L'ÉTABLISSEMENT
+
+## 3.1. Objectif
+
+La direction supervise le fonctionnement général de l'établissement, les activités académiques, les décisions administratives et les résultats scolaires.
+
+## 3.2. Tableau de bord
+
+La direction doit pouvoir consulter :
+
+- Le nombre d'élèves inscrits.
+- Les effectifs par classe et par section.
+- Le nombre d'enseignants actifs.
+- Les inscriptions en cours.
+- Les statistiques de présence.
+- L'état d'avancement de la saisie des notes.
+- Les résultats par classe et par matière.
+- Les bulletins en attente de validation.
+- Les statistiques financières selon les droits accordés.
+- Les alertes et incidents nécessitant une décision.
+
+## 3.3. Gestion académique
+
+La direction doit pouvoir :
+
+- Définir les périodes scolaires.
+- Superviser l'organisation des classes.
+- Approuver les règles de calcul des moyennes.
+- Définir ou approuver les coefficients.
+- Définir les règles de passage en classe supérieure.
+- Consulter les résultats des différentes classes.
+- Suivre les enseignants qui n'ont pas terminé leur saisie.
+- Valider les résultats selon les procédures de l'établissement.
+- Autoriser la publication des bulletins.
+- Prendre les décisions de promotion, de redoublement ou d'orientation.
+
+## 3.4. Validation des notes et des bulletins
+
+Le système doit permettre à la direction ou au responsable pédagogique autorisé de :
+
+1. Consulter les notes soumises.
+2. Vérifier que les saisies sont complètes.
+3. Identifier les notes manquantes ou incohérentes.
+4. Valider les résultats ou les renvoyer à l'enseignant.
+5. Consulter les moyennes calculées.
+6. Vérifier les bulletins préparés.
+7. Autoriser leur publication.
+
+Une validation ne doit être possible que si les conditions définies par l'établissement sont respectées.
+
+## 3.5. Décisions administratives
+
+La direction doit pouvoir :
+
+- Approuver les inscriptions selon les procédures internes.
+- Autoriser les transferts et sorties.
+- Valider les décisions de redoublement et de promotion.
+- Consulter les dossiers administratifs nécessaires à ses fonctions.
+- Consulter les rapports d'activité.
+- Autoriser les corrections exceptionnelles.
+- Superviser les accès et les responsabilités des services.
+
+## 3.6. Rapports
+
+La direction doit pouvoir générer des rapports sur :
+
+- Les effectifs scolaires.
+- Les performances académiques.
+- Les taux de réussite.
+- Les absences et retards.
+- Les résultats par classe et par matière.
+- L'état des bulletins.
+- Les inscriptions et départs.
+- Les recettes et impayés, si son rôle le permet.
+
+---
+
+# 4. ESPACE ADMINISTRATEUR DU SYSTÈME
+
+## 4.1. Objectif
+
+L'administrateur configure, sécurise et maintient le système. Son rôle technique ne signifie pas nécessairement qu'il peut prendre toutes les décisions pédagogiques ou financières.
+
+## 4.2. Gestion des comptes
+
+L'administrateur doit pouvoir :
+
+- Créer les comptes des utilisateurs autorisés.
+- Modifier les informations de compte.
+- Activer ou désactiver un compte.
+- Réinitialiser un accès selon une procédure sécurisée.
+- Associer un ou plusieurs rôles à un utilisateur.
+- Retirer les droits devenus inutiles.
+- Consulter la date de dernière connexion.
+- Bloquer un compte compromis ou inutilisé.
+
+## 4.3. Gestion des rôles et permissions
+
+Le système doit permettre de définir les permissions selon les fonctions.
+
+Exemples :
+
+```text
+PROFESSEUR
+- Consulter ses classes
+- Enregistrer les présences
+- Saisir les notes
+- Soumettre les résultats
+
+DIRECTION
+- Superviser les résultats
+- Valider les notes selon les règles
+- Autoriser la publication des bulletins
+
+COMPTABLE
+- Gérer les frais
+- Enregistrer les paiements
+- Générer les reçus
+
+SECRÉTARIAT
+- Gérer les dossiers
+- Gérer les inscriptions
+- Produire les documents autorisés
+```
+
+Les permissions doivent être contrôlées côté serveur et pas seulement masquées dans l'interface.
+
+## 4.4. Configuration générale
+
+L'administrateur autorisé doit pouvoir configurer :
+
+- Les informations de l'établissement.
+- Les années scolaires.
+- Les paramètres généraux.
+- Les catégories de documents.
+- Les types de notifications.
+- Les règles techniques de sécurité.
+- Les paramètres de sauvegarde.
+- Les paramètres d'intégration avec d'autres services.
+
+Les décisions pédagogiques et financières doivent rester attribuées aux responsables compétents.
+
+## 4.5. Journalisation et maintenance
+
+Le système doit conserver un historique des actions importantes :
+
+- Création ou désactivation d'un compte.
+- Modification d'une permission.
+- Modification d'une note.
+- Modification d'une inscription.
+- Validation d'un bulletin.
+- Enregistrement ou correction d'un paiement.
+- Suppression logique ou archivage d'une donnée.
+
+L'administrateur technique doit pouvoir consulter les journaux autorisés, surveiller les erreurs et superviser les sauvegardes.
+
+---
+
+# 5. ESPACE SECRÉTARIAT SCOLAIRE
+
+## 5.1. Objectif
+
+Le secrétariat gère les dossiers administratifs des élèves, les admissions, les inscriptions et les documents officiels.
+
+## 5.2. Admissions et création des dossiers
+
+Le secrétariat doit pouvoir :
+
+- Enregistrer une nouvelle demande d'admission.
+- Saisir les informations personnelles du candidat.
+- Enregistrer les coordonnées des parents ou tuteurs.
+- Ajouter les documents demandés.
+- Vérifier les pièces reçues.
+- Signaler les dossiers incomplets.
+- Transmettre les dossiers à la direction pour décision, si nécessaire.
+
+Le candidat ne doit pas automatiquement devenir un élève inscrit : le système doit distinguer la demande d'admission, l'acceptation et l'inscription effective.
+
+## 5.3. Création du dossier élève
+
+Après acceptation, le secrétariat doit pouvoir créer ou compléter le dossier officiel de l'élève.
+
+Informations possibles :
+
+- Nom et prénom.
+- Date et lieu de naissance.
+- Sexe, si nécessaire selon les règles de l'établissement.
+- Adresse.
+- Photo.
+- Coordonnées.
+- Parents ou tuteurs.
+- Documents administratifs.
+- Informations scolaires antérieures.
+
+Le système doit rechercher les dossiers existants avant la création pour limiter les doublons.
+
+## 5.4. Matricule
+
+Le système doit pouvoir attribuer automatiquement un matricule unique.
+
+Exemple :
+
+```text
+ELE-2026-00001
+```
+
+Le matricule doit permettre de retrouver le dossier, les inscriptions, les bulletins, les documents et l'historique scolaire.
+
+## 5.5. Inscriptions et réinscriptions
+
+Le secrétariat doit pouvoir :
+
+1. Sélectionner un élève existant.
+2. Sélectionner l'année scolaire.
+3. Sélectionner la classe.
+4. Renseigner la section ou l'option.
+5. Vérifier les informations requises.
+6. Soumettre ou confirmer l'inscription selon ses permissions.
+7. Générer une confirmation d'inscription.
+
+Une nouvelle inscription annuelle ne doit pas créer un nouvel élève si son dossier existe déjà.
+
+## 5.6. Documents administratifs
+
+Le secrétariat doit pouvoir préparer ou générer les documents autorisés :
+
+- Attestation de fréquentation.
+- Attestation d'inscription.
+- Certificat de scolarité.
+- Fiche individuelle.
+- Relevé de notes.
+- Documents de transfert.
+- Autres documents définis par l'établissement.
+
+Le système doit conserver la date de génération, le type de document et l'utilisateur responsable.
+
+## 5.7. Transferts et sorties
+
+Le secrétariat doit pouvoir préparer les dossiers de transfert, départ, abandon ou fin de scolarité.
+
+Le système doit conserver l'historique de l'élève, même après son départ, et empêcher la modification accidentelle des anciennes années scolaires.
+
+---
+
+# 6. ESPACE COMPTABLE / SERVICE FINANCIER
+
+## 6.1. Objectif
+
+Le service financier gère les frais scolaires, les factures, les paiements, les reçus et les soldes des élèves.
+
+## 6.2. Configuration des frais
+
+Le comptable autorisé doit pouvoir définir ou gérer :
+
+- Les frais d'inscription.
+- Les frais de scolarité.
+- Les frais d'examen.
+- Les frais de transport.
+- Les frais de documents.
+- Les autres frais autorisés.
+- Les échéances.
+- Les règles de réduction ou d'exonération approuvées.
+
+Les frais peuvent varier selon l'année scolaire, la classe, la section ou la catégorie d'élève.
+
+## 6.3. Génération des factures
+
+Le système doit pouvoir produire une facture à partir de l'inscription et des frais applicables.
+
+Exemple :
+
+```text
+Élève : Jean Mukendi
+Année : 2026-2027
+Classe : 6e Scientifique
+
+Frais d'inscription : 50 $
+Frais scolaires : 600 $
+Autres frais : 30 $
+-------------------------
+Total : 680 $
+Montant payé : 200 $
+Solde restant : 480 $
+```
+
+Les montants ci-dessus sont uniquement illustratifs.
+
+## 6.4. Enregistrement des paiements
+
+Le comptable doit pouvoir :
+
+1. Rechercher l'élève par son nom ou son matricule.
+2. Consulter les factures et le solde.
+3. Sélectionner la facture concernée.
+4. Saisir le montant reçu.
+5. Indiquer le moyen de paiement.
+6. Enregistrer la référence de transaction, si nécessaire.
+7. Confirmer l'opération selon ses permissions.
+8. Générer un reçu.
+
+Moyens de paiement possibles :
+
+- Espèces.
+- Banque.
+- Mobile Money.
+- Virement.
+- Autre moyen configuré.
+
+## 6.5. Reçus et historique financier
+
+Chaque paiement confirmé doit avoir un identifiant unique et être relié à l'élève, à la facture et à l'utilisateur qui l'a enregistré.
+
+Le système doit permettre de :
+
+- Imprimer ou télécharger un reçu.
+- Consulter l'historique des paiements.
+- Identifier les factures soldées.
+- Identifier les paiements partiels.
+- Consulter les soldes restants.
+- Produire les rapports financiers autorisés.
+
+Un paiement confirmé ne doit pas être supprimé silencieusement. Une annulation ou une correction doit suivre une procédure et laisser une trace.
+
+## 6.6. Rapports financiers
+
+Le comptable doit pouvoir consulter :
+
+- Les recettes par période.
+- Les paiements par classe.
+- Les paiements par type de frais.
+- Les factures impayées.
+- Les soldes des élèves.
+- Les reçus émis.
+- Les opérations annulées ou corrigées.
+
+Les informations financières détaillées doivent être réservées aux utilisateurs autorisés.
+
+---
+
+# 7. ESPACE SURVEILLANT / RESPONSABLE DES PRÉSENCES
+
+## 7.1. Objectif
+
+Ce rôle, lorsqu'il existe, permet de suivre l'assiduité des élèves au-delà des seules séances de cours.
+
+## 7.2. Fonctionnalités
+
+Le surveillant doit pouvoir :
+
+- Consulter les listes d'élèves autorisées.
+- Enregistrer les présences à l'arrivée.
+- Enregistrer les retards.
+- Enregistrer les absences constatées.
+- Consulter les absences par jour ou par période.
+- Ajouter un motif ou une observation.
+- Transmettre une absence à vérifier.
+- Consulter les absences récurrentes.
+- Produire les rapports d'assiduité autorisés.
+
+## 7.3. Justification d'une absence
+
+Le système doit permettre de distinguer :
+
+- Absence constatée.
+- Absence justifiée.
+- Absence non justifiée.
+- Justification en attente de vérification.
+
+Exemple de workflow :
+
+```text
+Absence enregistrée
+        ↓
+Justificatif reçu
+        ↓
+Vérification par le responsable
+        ↓
+Justification acceptée ou refusée
+        ↓
+Historique d'assiduité mis à jour
+```
+
+Le surveillant ne doit pas pouvoir modifier les notes ni les résultats scolaires, sauf s'il possède également un rôle distinct l'y autorisant.
+
+---
+
+# 8. ESPACE ÉLÈVE
+
+## 8.1. Objectif
+
+Le portail élève permet à chaque élève de consulter ses propres informations scolaires et de suivre son parcours.
+
+Ce portail peut être activé dans une version ultérieure du projet, après la mise en place du cœur académique.
+
+## 8.2. Tableau de bord
+
+L'élève doit pouvoir consulter :
+
+- Son identité et son matricule.
+- Sa classe et son année scolaire.
+- Son emploi du temps.
+- Ses matières.
+- Ses présences et absences, selon les permissions.
+- Ses notes publiées.
+- Ses moyennes.
+- Ses bulletins publiés.
+- Les annonces de l'établissement.
+- Les documents mis à sa disposition.
+
+## 8.3. Consultation des notes
+
+L'élève ne doit voir que ses propres résultats.
+
+Exemple :
+
+```text
+Élève : Jean Mukendi
+Classe : 6e Scientifique
+Période : Premier trimestre
+
+Mathématiques
+├── Interrogation 1 : 15/20
+├── Interrogation 2 : 13/20
+└── Examen : 16/20
+
+Moyenne : selon les règles de calcul
+Statut : Résultats publiés
+```
+
+Les notes provisoires ne doivent pas nécessairement être visibles. L'établissement doit pouvoir définir à quel moment les résultats deviennent accessibles.
+
+## 8.4. Documents et notifications
+
+L'élève peut télécharger les documents qui lui sont destinés et recevoir des notifications concernant :
+
+- La publication des résultats.
+- Les modifications d'emploi du temps.
+- Les annonces.
+- Les échéances scolaires.
+- Les absences ou retards, si cette fonction est activée.
+
+Il ne doit pas pouvoir modifier ses notes, ses absences officielles ou les informations administratives validées.
+
+---
+
+# 9. ESPACE PARENT / TUTEUR
+
+## 9.1. Objectif
+
+Le portail parent permet aux responsables légaux de suivre la scolarité des enfants qui leur sont associés dans le système.
+
+## 9.2. Association parent-enfant
+
+Le système doit relier chaque parent ou tuteur aux élèves concernés.
+
+Un même parent peut être associé à plusieurs enfants.
+
+Le système doit vérifier cette relation avant d'autoriser l'accès aux dossiers scolaires.
+
+## 9.3. Tableau de bord parent
+
+Le parent doit pouvoir consulter, selon les permissions :
+
+- Les informations scolaires de ses enfants.
+- La classe et l'année scolaire.
+- Les résultats publiés.
+- Les bulletins disponibles.
+- Les présences et absences.
+- Les retards.
+- Les annonces scolaires.
+- Les frais facturés.
+- Les paiements et soldes, si le portail financier est activé.
+- Les notifications et documents autorisés.
+
+## 9.4. Suivi des résultats
+
+Le parent doit pouvoir sélectionner l'enfant concerné et consulter ses résultats par période.
+
+Il doit pouvoir télécharger un bulletin publié, mais ne doit pas pouvoir modifier les notes ni les décisions pédagogiques.
+
+## 9.5. Suivi financier
+
+Si la fonction est activée, le parent peut consulter :
+
+- Les frais facturés.
+- Les montants payés.
+- Les soldes restants.
+- Les échéances.
+- Les reçus accessibles.
+- Les instructions de paiement.
+
+L'accès doit se limiter aux enfants associés au compte.
+
+## 9.6. Notifications
+
+Le parent peut recevoir des notifications concernant :
+
+- La publication des bulletins.
+- Les absences ou retards.
+- Les réunions.
+- Les annonces de la direction.
+- Les échéances financières.
+- Les événements scolaires.
+
+Les notifications doivent respecter les préférences et les moyens de communication configurés par l'établissement.
+
+---
+
+# 10. ESPACE PRÉFET DES ÉTUDES / RESPONSABLE PÉDAGOGIQUE
+
+## 10.1. Objectif
+
+Ce rôle est optionnel et dépend de l'organisation de l'établissement. Il permet de coordonner le travail pédagogique entre les enseignants, les classes et la direction.
+
+## 10.2. Fonctionnalités
+
+Le responsable pédagogique doit pouvoir :
+
+- Consulter les classes et les matières.
+- Consulter les affectations des enseignants.
+- Superviser la progression de la saisie des notes.
+- Vérifier les évaluations et les résultats.
+- Identifier les notes manquantes.
+- Contrôler la complétude des bulletins.
+- Examiner les moyennes et les classements.
+- Transmettre des résultats pour correction.
+- Valider les notes ou bulletins si la direction lui délègue cette responsabilité.
+- Produire des rapports pédagogiques.
+
+Il ne doit disposer que des permissions explicitement accordées par l'établissement.
+
+---
+
+# 11. FONCTIONNALITÉS COMMUNES À TOUS LES ACTEURS
+
+## 11.1. Authentification
+
+Le système doit prévoir :
+
+- Connexion sécurisée.
+- Déconnexion.
+- Réinitialisation du mot de passe.
+- Gestion des sessions.
+- Blocage ou désactivation des comptes.
+- Protection contre les accès non autorisés.
+
+## 11.2. Tableau de bord adapté au rôle
+
+Chaque acteur doit disposer d'un tableau de bord correspondant à ses responsabilités.
+
+Le système ne doit pas présenter les mêmes menus ni les mêmes possibilités à tous les utilisateurs.
+
+## 11.3. Recherche et filtres
+
+Selon ses permissions, l'utilisateur doit pouvoir rechercher les informations pertinentes par :
+
+- Nom.
+- Matricule.
+- Classe.
+- Année scolaire.
+- Matière.
+- Période.
+- Statut.
+- Date.
+
+## 11.4. Notifications
+
+Le système doit gérer les notifications internes et, si elles sont configurées, les notifications par e-mail ou SMS.
+
+## 11.5. Historique des actions
+
+Les actions sensibles doivent être enregistrées avec :
+
+- L'utilisateur concerné.
+- Le type d'action.
+- La date et l'heure.
+- L'objet modifié.
+- L'ancienne valeur, lorsque cela est pertinent.
+- La nouvelle valeur.
+- Le motif, si la procédure l'exige.
+
+---
+
+# 12. WORKFLOWS PRINCIPAUX DU SYSTÈME
+
+## 12.1. Workflow de gestion des notes
+
+```text
+Administration
+    ↓
+Crée les classes et les matières
+    ↓
+Affecte les enseignants
+    ↓
+Secrétariat
+    ↓
+Enregistre les élèves et leurs inscriptions
+    ↓
+Professeur
+    ↓
+Sélectionne sa classe et sa matière
+    ↓
+Prépare une évaluation
+    ↓
+Saisit les notes des élèves
+    ↓
+Enregistre puis soumet les notes
+    ↓
+Responsable pédagogique / Direction
+    ↓
+Vérifie et valide les résultats
+    ↓
+Système
+    ↓
+Calcule les moyennes selon les règles configurées
+    ↓
+Prépare les bulletins
+    ↓
+Responsable autorisé
+    ↓
+Valide et publie les bulletins
+    ↓
+Élève / Parent
+    ↓
+Consulte les résultats autorisés
+```
+
+## 12.2. Workflow de gestion d'un dossier élève
+
+```text
+Demande d'admission
+        ↓
+Vérification du dossier
+        ↓
+Décision d'admission
+        ↓
+Création ou récupération du dossier élève
+        ↓
+Attribution du matricule
+        ↓
+Inscription à une année scolaire
+        ↓
+Affectation à une classe
+        ↓
+Suivi des présences et des notes
+        ↓
+Calcul des résultats
+        ↓
+Publication du bulletin
+        ↓
+Décision de passage ou de redoublement
+        ↓
+Conservation de l'historique scolaire
+```
+
+## 12.3. Workflow de gestion financière
+
+```text
+Inscription de l'élève
+        ↓
+Application des frais scolaires
+        ↓
+Création de la facture
+        ↓
+Enregistrement du paiement
+        ↓
+Confirmation de l'opération
+        ↓
+Génération du reçu
+        ↓
+Mise à jour du solde
+        ↓
+Mise à jour de l'historique financier
+        ↓
+Production des rapports
+```
+
+---
+
+# 13. RÈGLES DE GESTION OBLIGATOIRES
+
+Le système doit respecter les règles suivantes :
+
+1. Un élève possède un dossier permanent, distinct de ses inscriptions annuelles.
+2. Une inscription est associée à une année scolaire et à une classe.
+3. Un enseignant ne peut saisir des notes que pour les classes et matières autorisées.
+4. Les notes doivent être liées à une évaluation précise et à un élève inscrit.
+5. Les notes doivent respecter le barème défini.
+6. Les notes soumises suivent un processus de validation.
+7. Une modification d'une note validée doit être autorisée et tracée.
+8. Les moyennes sont calculées selon les règles officielles configurées par l'établissement.
+9. Un bulletin officiel ne peut être publié que par un utilisateur autorisé.
+10. Un parent ne peut consulter que les informations des enfants qui lui sont associés.
+11. Un élève ne peut consulter que ses propres données.
+12. Un paiement confirmé ne doit pas être supprimé sans procédure de correction ou d'annulation.
+13. Les données des années précédentes doivent rester consultables selon les permissions.
+14. Les actions sensibles doivent être enregistrées dans un journal d'audit.
+15. Les autorisations doivent être vérifiées par le backend, même si l'interface masque déjà les fonctions non autorisées.
+
+---
+
+# 14. PRIORISATION DES FONCTIONNALITÉS PAR VERSION
+
+## MVP / V1 — Cœur académique
+
+Le MVP doit permettre à l'établissement de gérer réellement les activités académiques essentielles.
+
+Fonctionnalités prioritaires :
+
+- Authentification et rôles.
+- Création des classes et des matières.
+- Gestion des enseignants.
+- Affectation des enseignants aux classes et matières.
+- Création et gestion des dossiers élèves.
+- Inscriptions et années scolaires.
+- Consultation des classes par les enseignants.
+- Gestion des évaluations.
+- Saisie et soumission des notes.
+- Validation des notes.
+- Calcul des moyennes.
+- Préparation, validation et génération des bulletins.
+- Gestion des présences.
+- Historique des résultats.
+
+Le MVP doit donc permettre au professeur de saisir des notes, au responsable autorisé de les valider et au système de calculer les résultats.
+
+## V2 — Administration et finances
+
+- Gestion financière complète.
+- Factures et frais scolaires.
+- Paiements et reçus.
+- Suivi des impayés.
+- Gestion avancée des documents.
+- Rapports financiers.
+- Gestion avancée des admissions et transferts.
+
+## V3 — Portails et communication
+
+- Portail élève.
+- Portail parent.
+- Notifications.
+- Annonces.
+- Communication par e-mail ou SMS.
+- Consultation des bulletins en ligne.
+
+## V4 — Pilotage et automatisation
+
+- Tableaux de bord avancés.
+- Statistiques académiques.
+- Rapports personnalisés.
+- Alertes sur les absences et les notes manquantes.
+- Audit approfondi.
+- Automatisation des opérations récurrentes.
+
+## V5 — Application mobile et intégrations
+
+- Application mobile, si nécessaire.
+- Intégration des moyens de paiement.
+- Cartes d'élèves et QR codes.
+- Intégrations avec des services externes.
+- Extensions techniques selon les besoins de l'établissement.
+
+---
+
+# 15. RÉSULTAT ATTENDU
+
+À la fin de sa mise en œuvre, l'ERP doit permettre à chaque intervenant d'effectuer ses tâches dans un espace adapté, sans multiplier les saisies ni perdre la trace des opérations.
+
+Le professeur gère les activités pédagogiques qui lui sont attribuées. Le secrétariat gère les dossiers et les inscriptions. La direction supervise et prend les décisions autorisées. Le comptable gère les opérations financières. L'élève et le parent consultent les informations qui leur sont destinées. L'administrateur assure la configuration et la sécurité technique.
+
+Toutes ces actions alimentent un système centralisé dans lequel les informations sont reliées, contrôlées et conservées dans l'historique scolaire.
+
+**Principe fondamental : chaque acteur effectue les opérations correspondant à son rôle, tandis que l'ERP assure la cohérence des données, les calculs, les contrôles d'accès, les validations et la traçabilité.**

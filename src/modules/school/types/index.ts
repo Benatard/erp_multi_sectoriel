@@ -6,7 +6,7 @@ export type AssignmentStatus = 'active' | 'ended';
 export type StudentStatus = 'active' | 'graduated' | 'left' | 'transferred' | 'excluded';
 export type EnrollmentStatus = 'enrolled' | 'withdrawn' | 'graduated' | 'transferred' | 'repeating';
 export type AttendanceStatus = 'present' | 'absent' | 'late' | 'justified' | 'unjustified';
-export type AssessmentType = 'interrogation' | 'homework' | 'practical' | 'exam';
+export type AssessmentType = 'interrogation' | 'homework' | 'practical' | 'oral' | 'exam' | 'other';
 export type AssessmentStatus = 'draft' | 'open' | 'closed';
 export type GradeStatus = 'draft' | 'submitted' | 'validated' | 'published';
 export type ReportStatus = 'draft' | 'validated' | 'published';
@@ -130,6 +130,8 @@ export interface Attendance {
   attendance_date?: string | null;
   status?: AttendanceStatus | string;
   note?: string | null;
+  recorded_by?: string | null;
+  updated_by?: string | null;
 }
 
 export interface Assessment {
@@ -138,6 +140,8 @@ export interface Assessment {
   type?: AssessmentType | string;
   subject_id?: string | null;
   class_name?: string | null;
+  teacher_id?: string | null;
+  teacher_name?: string | null;
   period?: string | null;
   scale?: number | null;
   coefficient?: number | null;
@@ -150,8 +154,14 @@ export interface Grade {
   assessment_id: string;
   student_id: string;
   score?: number | null;
+  is_absent?: boolean | null;
   status?: GradeStatus | string;
   comment?: string | null;
+  submitted_at?: string | null;
+  validated_at?: string | null;
+  validated_by?: string | null;
+  updated_by?: string | null;
+  updated_at?: string | null;
 }
 
 export interface ReportCard {
@@ -169,6 +179,35 @@ export interface ReportCard {
   appreciation?: string | null;
   decision?: Decision | string;
   status?: ReportStatus | string;
+  generated_by?: string | null;
+  validated_by?: string | null;
+  published_by?: string | null;
+  published_at?: string | null;
+}
+
+export interface ReportLine {
+  id: string;
+  report_card_id: string;
+  subject_id?: string | null;
+  subject_name?: string | null;
+  coefficient?: number | null;
+  average?: number | null;
+  appreciation?: string | null;
+  teacher_name?: string | null;
+}
+
+export interface AuditLog {
+  id: string;
+  actor_id?: string | null;
+  actor_name?: string | null;
+  actor_role?: string | null;
+  action: string;
+  entity?: string | null;
+  entity_id?: string | null;
+  old_value?: string | null;
+  new_value?: string | null;
+  reason?: string | null;
+  created_at?: string | null;
 }
 
 export interface Payment {

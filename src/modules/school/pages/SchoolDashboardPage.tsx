@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FiUsers, FiGrid, FiBook, FiUserCheck, FiCheckCircle, FiDollarSign, FiFileText, FiAward,
-  FiClipboard, FiCalendar, FiLink, FiSettings, FiUser,
+  FiClipboard, FiCalendar, FiLink, FiSettings, FiUser, FiTrendingUp, FiShield,
 } from 'react-icons/fi';
 import type { IconType } from 'react-icons';
 import PageMeta from '../../../common/components/PageMeta';
@@ -19,6 +19,7 @@ import useEnrollments from '../enrollments/hooks/useEnrollments';
 import usePayments from '../payments/hooks/usePayments';
 import useAttendance from '../attendance/hooks/useAttendance';
 import useReportCards from '../report-cards/hooks/useReportCards';
+import { can } from '../utils/permissions';
 
 const QUICK_LINKS: { path: string; label: string; icon: IconType; roles: Role[] }[] = [
   { path: '/app/ecole/eleves', label: 'Élèves', icon: FiUsers, roles: rolesPer.schoolManage },
@@ -28,17 +29,19 @@ const QUICK_LINKS: { path: string; label: string; icon: IconType; roles: Role[] 
   { path: '/app/ecole/enseignants', label: 'Enseignants', icon: FiUserCheck, roles: rolesPer.schoolStructure },
   { path: '/app/ecole/affectations', label: 'Affectations', icon: FiLink, roles: rolesPer.schoolStructure },
   { path: '/app/ecole/parents', label: 'Parents', icon: FiUser, roles: rolesPer.schoolManage },
-  { path: '/app/ecole/presences', label: 'Présences', icon: FiCheckCircle, roles: rolesPer.schoolTeaching },
+  { path: '/app/ecole/presences', label: 'Présences', icon: FiCheckCircle, roles: rolesPer.schoolPresence },
   { path: '/app/ecole/evaluations', label: 'Évaluations', icon: FiClipboard, roles: rolesPer.schoolTeaching },
   { path: '/app/ecole/notes', label: 'Notes', icon: FiAward, roles: rolesPer.schoolTeaching },
-  { path: '/app/ecole/bulletins', label: 'Bulletins', icon: FiFileText, roles: rolesPer.schoolManage },
+  { path: '/app/ecole/bulletins', label: 'Bulletins', icon: FiFileText, roles: rolesPer.schoolBulletins },
+  { path: '/app/ecole/resultats', label: 'Résultats', icon: FiTrendingUp, roles: rolesPer.schoolResults },
+  { path: '/app/ecole/journal', label: 'Journal d’audit', icon: FiShield, roles: rolesPer.schoolAudit },
   { path: '/app/ecole/annees', label: 'Années scolaires', icon: FiCalendar, roles: rolesPer.schoolStructure },
   { path: '/app/ecole/paiements', label: 'Paiements', icon: FiDollarSign, roles: rolesPer.schoolFinance },
   { path: '/app/ecole/parametres', label: 'Paramètres', icon: FiSettings, roles: rolesPer.schoolSettings },
 ];
 
 export default function SchoolDashboardPage() {
-  const { hasRole } = useAuth();
+  const { user, hasRole } = useAuth();
   const students = useStudents();
   const classes = useClasses();
   const teachers = useTeachers();
@@ -67,23 +70,43 @@ export default function SchoolDashboardPage() {
     };
   }, [students.rows, classes.rows, teachers.rows, subjects.rows, enrollments.rows, payments.rows, attendance.rows, reportCards.rows]);
 
+  const showManagement =
+    can(user?.role, 'structure.manage') || can(user?.role, 'students.manage') || can(user?.role, 'reports.manage');
+  const showFinance = can(user?.role, 'finance.manage');
+  const subtitle =
+    user?.role === 'teacher'
+      ? 'Vos classes, évaluations et feuilles de présence.'
+      : user?.role === 'supervisor'
+        ? 'Discipline et registre de présence de l’établissement.'
+        : user?.role === 'prefect'
+          ? 'Pilotage pédagogique : évaluations, résultats et bulletins.'
+          : 'Vue d’ensemble de la gestion scolaire : effectifs, académique et finances.';
+
   return (
     <div className="space-y-8">
       <PageMeta title="Tableau de bord École" />
 
       <div>
         <h2 className="text-2xl font-extrabold text-black dark:text-white">Module École — A+ELIMU</h2>
-        <p className="mt-1 text-sm text-body dark:text-body-dark">Vue d’ensemble de la gestion scolaire : effectifs, académique et finances.</p>
+        <p className="mt-1 text-sm text-body dark:text-body-dark">{subtitle}</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
         <StatCard icon={FiUsers} label="Élèves actifs" value={stats.studentsActive} hint={`${stats.students} dossiers au total`} />
         <StatCard icon={FiGrid} label="Classes" value={stats.classes} />
-        <StatCard icon={FiUserCheck} label="Enseignants" value={stats.teachers} />
-        <StatCard icon={FiBook} label="Matières" value={stats.subjects} />
-        <StatCard icon={FiBook} label="Inscrits (année en cours)" value={stats.enrolled} />
+        {showManagement && (
+          <>
+            <StatCard icon={FiUserCheck} label="Enseignants" value={stats.teachers} />
+            <StatCard icon={FiBook} label="Matières" value={stats.subjects} />
+            <StatCard icon={FiBook} label="Inscrits (année en cours)" value={stats.enrolled} />
+          </>
+        )}
         <StatCard icon={FiCheckCircle} label="Taux de présence" value={stats.attendanceRate != null ? `${formatNumber(stats.attendanceRate, 1)} %` : '—'} />
-        <StatCard icon={FiDollarSign} label="Encaissé (scolarité)" value={formatCurrency(stats.collected)} />
+        {showFinance ? (
+          <StatCard icon={FiDollarSign} label="Encaissé (scolarité)" value={formatCurrency(stats.collected)} />
+        ) : (
+          <StatCard icon={FiFileText} label="Bulletins publiés" value={stats.published} hint={`${reportCards.rows.length} bulletins au total`} />
+        )}
         <StatCard icon={FiAward} label="Moyenne générale" value={stats.overallAverage != null ? formatNumber(stats.overallAverage, 2) : '—'} hint={`${stats.published} bulletins publiés`} />
       </div>
 

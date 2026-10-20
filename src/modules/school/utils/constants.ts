@@ -97,7 +97,9 @@ export const ASSESSMENT_TYPES: Option[] = [
   { value: 'interrogation', label: 'Interrogation' },
   { value: 'homework', label: 'Devoir' },
   { value: 'practical', label: 'Travail pratique' },
+  { value: 'oral', label: 'Évaluation orale' },
   { value: 'exam', label: 'Examen' },
+  { value: 'other', label: 'Autre' },
 ];
 
 export const ASSESSMENT_STATUSES: Option[] = [

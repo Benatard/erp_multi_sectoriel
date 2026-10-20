@@ -10,7 +10,7 @@ import type { Role, User } from '../../common/types';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-export const SCHOOL_ROLES: Role[] = ['school_manager', 'director', 'secretary', 'accountant', 'teacher'];
+export const SCHOOL_ROLES: Role[] = ['school_manager', 'director', 'secretary', 'accountant', 'teacher', 'supervisor', 'prefect'];
 
 export const isSchoolRole = (role?: Role | null): boolean => !!role && SCHOOL_ROLES.includes(role);
 
@@ -207,6 +207,8 @@ export const ROLE_LABELS: Record<Role, string> = {
   secretary: 'Secrétaire',
   accountant: 'Comptable',
   teacher: 'Enseignant',
+  supervisor: 'Surveillant',
+  prefect: 'Préfet des études',
   farm_manager: "Chef d'Exploitation Ferme",
   farm_director: 'Directeur Ferme',
   agronomist: 'Agronome',

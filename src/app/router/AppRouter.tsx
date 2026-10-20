@@ -21,6 +21,8 @@ import AttendancePage from '../../modules/school/attendance/pages/AttendancePage
 import AssessmentsPage from '../../modules/school/assessments/pages/AssessmentsPage';
 import GradebookPage from '../../modules/school/grades/pages/GradebookPage';
 import ReportCardsPage from '../../modules/school/report-cards/pages/ReportCardsPage';
+import ResultsPage from '../../modules/school/results/pages/ResultsPage';
+import AuditLogsPage from '../../modules/school/audit/pages/AuditLogsPage';
 import PaymentsPage from '../../modules/school/payments/pages/PaymentsPage';
 import SchoolSettingsPage from '../../modules/school/settings/pages/SchoolSettingsPage';
 
@@ -80,10 +82,12 @@ export default function App() {
       {schoolRoute('/app/ecole/matieres', rolesPer.schoolStructure, <SubjectsPage />)}
       {schoolRoute('/app/ecole/enseignants', rolesPer.schoolStructure, <TeachersPage />)}
       {schoolRoute('/app/ecole/affectations', rolesPer.schoolStructure, <AssignmentsPage />)}
-      {schoolRoute('/app/ecole/presences', rolesPer.schoolTeaching, <AttendancePage />)}
+      {schoolRoute('/app/ecole/presences', rolesPer.schoolPresence, <AttendancePage />)}
       {schoolRoute('/app/ecole/evaluations', rolesPer.schoolTeaching, <AssessmentsPage />)}
       {schoolRoute('/app/ecole/notes', rolesPer.schoolTeaching, <GradebookPage />)}
-      {schoolRoute('/app/ecole/bulletins', rolesPer.schoolManage, <ReportCardsPage />)}
+      {schoolRoute('/app/ecole/bulletins', rolesPer.schoolBulletins, <ReportCardsPage />)}
+      {schoolRoute('/app/ecole/resultats', rolesPer.schoolResults, <ResultsPage />)}
+      {schoolRoute('/app/ecole/journal', rolesPer.schoolAudit, <AuditLogsPage />)}
       {schoolRoute('/app/ecole/paiements', rolesPer.schoolFinance, <PaymentsPage />)}
       {schoolRoute('/app/ecole/parametres', rolesPer.schoolSettings, <SchoolSettingsPage />)}
 

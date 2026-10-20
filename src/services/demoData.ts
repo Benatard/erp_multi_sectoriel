@@ -29,6 +29,8 @@ export const demoUsers: DemoUser[] = [
   { id: '00000000-0000-0000-0000-00000000000b', full_name: 'Benoît Kasongo', email: 'magasinier@ferme.cd', password_hash: DEMO_PASSWORD_HASH, role: 'warehouse_keeper', sector: 'farm', phone: '+243 812 300 003', is_active: true },
   { id: '00000000-0000-0000-0000-00000000000c', full_name: 'Chantal Mbayo', email: 'compta.ferme@ferme.cd', password_hash: DEMO_PASSWORD_HASH, role: 'farm_accountant', sector: 'farm', phone: '+243 812 300 004', is_active: true },
   { id: '00000000-0000-0000-0000-00000000000d', full_name: 'Serge Kabila', email: 'commercial@ferme.cd', password_hash: DEMO_PASSWORD_HASH, role: 'sales_agent', sector: 'farm', phone: '+243 812 300 005', is_active: true },
+  { id: '00000000-0000-0000-0000-00000000000e', full_name: 'Nadine Mwape', email: 'prefet@aelimu.cd', password_hash: DEMO_PASSWORD_HASH, role: 'prefect', sector: 'school', phone: '+243 810 000 008', is_active: true },
+  { id: '00000000-0000-0000-0000-00000000000f', full_name: 'Augustin Kalala', email: 'surveillant@aelimu.cd', password_hash: DEMO_PASSWORD_HASH, role: 'supervisor', sector: 'school', phone: '+243 810 000 009', is_active: true },
 ];
 
 export const demoCollections: Record<string, DbRow[]> = {
@@ -128,21 +130,31 @@ export const demoCollections: Record<string, DbRow[]> = {
     { id: '50000000-0000-0000-0000-000000000505', student_id: '10000000-0000-0000-0000-000000000105', class_name: '2ème Science', subject_id: 'b0000000-0000-0000-0000-000000000001', attendance_date: '2025-10-07', status: 'present', note: null },
   ],
   school_assessments: [
-    { id: '60000000-0000-0000-0000-000000000601', name: 'Interrogation 1', type: 'interrogation', subject_id: 'b0000000-0000-0000-0000-000000000001', class_name: '1ère Science', period: 'Trimestre 1', scale: 20, coefficient: 1, assessment_date: '2025-10-03', status: 'closed' },
-    { id: '60000000-0000-0000-0000-000000000602', name: 'Interrogation 2', type: 'interrogation', subject_id: 'b0000000-0000-0000-0000-000000000001', class_name: '1ère Science', period: 'Trimestre 1', scale: 20, coefficient: 1, assessment_date: '2025-10-10', status: 'closed' },
-    { id: '60000000-0000-0000-0000-000000000603', name: 'Travail pratique', type: 'practical', subject_id: 'b0000000-0000-0000-0000-000000000001', class_name: '1ère Science', period: 'Trimestre 1', scale: 20, coefficient: 1, assessment_date: '2025-10-15', status: 'open' },
-    { id: '60000000-0000-0000-0000-000000000604', name: 'Examen 1', type: 'exam', subject_id: 'b0000000-0000-0000-0000-000000000001', class_name: '1ère Science', period: 'Trimestre 1', scale: 20, coefficient: 2, assessment_date: '2025-10-20', status: 'draft' },
+    { id: '60000000-0000-0000-0000-000000000601', name: 'Interrogation 1', type: 'interrogation', subject_id: 'b0000000-0000-0000-0000-000000000001', class_name: '1ère Science', teacher_id: 'd0000000-0000-0000-0000-000000000001', teacher_name: 'Jean Kabeya', period: 'Trimestre 1', scale: 20, coefficient: 1, assessment_date: '2025-10-03', status: 'closed' },
+    { id: '60000000-0000-0000-0000-000000000602', name: 'Interrogation 2', type: 'interrogation', subject_id: 'b0000000-0000-0000-0000-000000000001', class_name: '1ère Science', teacher_id: 'd0000000-0000-0000-0000-000000000001', teacher_name: 'Jean Kabeya', period: 'Trimestre 1', scale: 20, coefficient: 1, assessment_date: '2025-10-10', status: 'closed' },
+    { id: '60000000-0000-0000-0000-000000000603', name: 'Travail pratique', type: 'practical', subject_id: 'b0000000-0000-0000-0000-000000000001', class_name: '1ère Science', teacher_id: 'd0000000-0000-0000-0000-000000000001', teacher_name: 'Jean Kabeya', period: 'Trimestre 1', scale: 20, coefficient: 1, assessment_date: '2025-10-15', status: 'open' },
+    { id: '60000000-0000-0000-0000-000000000604', name: 'Examen 1', type: 'exam', subject_id: 'b0000000-0000-0000-0000-000000000001', class_name: '1ère Science', teacher_id: 'd0000000-0000-0000-0000-000000000001', teacher_name: 'Jean Kabeya', period: 'Trimestre 1', scale: 20, coefficient: 2, assessment_date: '2025-10-20', status: 'draft' },
   ],
   school_grades: [
-    { id: '70000000-0000-0000-0000-000000000701', assessment_id: '60000000-0000-0000-0000-000000000601', student_id: '10000000-0000-0000-0000-000000000102', score: 15, status: 'validated', comment: null },
-    { id: '70000000-0000-0000-0000-000000000702', assessment_id: '60000000-0000-0000-0000-000000000602', student_id: '10000000-0000-0000-0000-000000000102', score: 16, status: 'validated', comment: null },
-    { id: '70000000-0000-0000-0000-000000000703', assessment_id: '60000000-0000-0000-0000-000000000601', student_id: '10000000-0000-0000-0000-000000000105', score: 17, status: 'validated', comment: null },
-    { id: '70000000-0000-0000-0000-000000000704', assessment_id: '60000000-0000-0000-0000-000000000602', student_id: '10000000-0000-0000-0000-000000000105', score: 14, status: 'validated', comment: null },
-    { id: '70000000-0000-0000-0000-000000000705', assessment_id: '60000000-0000-0000-0000-000000000603', student_id: '10000000-0000-0000-0000-000000000102', score: 15, status: 'draft', comment: 'À confirmer' },
+    { id: '70000000-0000-0000-0000-000000000701', assessment_id: '60000000-0000-0000-0000-000000000601', student_id: '10000000-0000-0000-0000-000000000102', score: 15, is_absent: false, status: 'validated', submitted_at: '2025-10-03T12:00:00.000Z', validated_at: '2025-10-04T08:00:00.000Z', comment: null },
+    { id: '70000000-0000-0000-0000-000000000702', assessment_id: '60000000-0000-0000-0000-000000000602', student_id: '10000000-0000-0000-0000-000000000102', score: 16, is_absent: false, status: 'validated', submitted_at: '2025-10-10T12:00:00.000Z', validated_at: '2025-10-11T08:00:00.000Z', comment: null },
+    { id: '70000000-0000-0000-0000-000000000703', assessment_id: '60000000-0000-0000-0000-000000000601', student_id: '10000000-0000-0000-0000-000000000105', score: 17, is_absent: false, status: 'validated', submitted_at: '2025-10-03T12:00:00.000Z', validated_at: '2025-10-04T08:00:00.000Z', comment: null },
+    { id: '70000000-0000-0000-0000-000000000704', assessment_id: '60000000-0000-0000-0000-000000000602', student_id: '10000000-0000-0000-0000-000000000105', score: 14, is_absent: false, status: 'validated', submitted_at: '2025-10-10T12:00:00.000Z', validated_at: '2025-10-11T08:00:00.000Z', comment: null },
+    { id: '70000000-0000-0000-0000-000000000705', assessment_id: '60000000-0000-0000-0000-000000000603', student_id: '10000000-0000-0000-0000-000000000102', score: 15, is_absent: false, status: 'draft', comment: 'À confirmer' },
   ],
   school_report_cards: [
     { id: '80000000-0000-0000-0000-000000000801', student_id: '10000000-0000-0000-0000-000000000102', academic_year: '2025-2026', period: 'Trimestre 1', class_name: '1ère Science', average: 15.5, percentage: 77.5, rank: 2, total_students: 45, absences: 1, lates: 2, appreciation: 'Très bon travail, continuez ainsi.', decision: 'en_cours', status: 'published' },
     { id: '80000000-0000-0000-0000-000000000802', student_id: '10000000-0000-0000-0000-000000000105', academic_year: '2025-2026', period: 'Trimestre 1', class_name: '2ème Science', average: 15.5, percentage: 77.5, rank: 1, total_students: 50, absences: 0, lates: 0, appreciation: 'Très bon travail, continuez ainsi.', decision: 'en_cours', status: 'draft' },
+  ],
+  school_report_lines: [
+    { id: '81000000-0000-0000-0000-000000000001', report_card_id: '80000000-0000-0000-0000-000000000801', subject_id: 'b0000000-0000-0000-0000-000000000001', subject_name: 'Mathématiques', coefficient: 4, average: 15.5, appreciation: 'Très bon travail, continuez ainsi.', teacher_name: 'Jean Kabeya' },
+    { id: '81000000-0000-0000-0000-000000000002', report_card_id: '80000000-0000-0000-0000-000000000801', subject_id: 'b0000000-0000-0000-0000-000000000002', subject_name: 'Français', coefficient: 3, average: 15.5, appreciation: 'Très bon travail, continuez ainsi.', teacher_name: 'Marie Ilunga' },
+    { id: '81000000-0000-0000-0000-000000000003', report_card_id: '80000000-0000-0000-0000-000000000802', subject_id: 'b0000000-0000-0000-0000-000000000001', subject_name: 'Mathématiques', coefficient: 4, average: 15.5, appreciation: 'Très bon travail, continuez ainsi.', teacher_name: 'Jean Kabeya' },
+  ],
+  school_audit_logs: [
+    { id: '82000000-0000-0000-0000-000000000001', actor_id: '00000000-0000-0000-0000-000000000008', actor_name: 'Jean Kabeya', actor_role: 'teacher', action: 'notes.submitted', entity: 'school_grades', entity_id: '60000000-0000-0000-0000-000000000601', old_value: null, new_value: '{"assessment":"Interrogation 1","count":1}', reason: null, created_at: '2025-10-03T12:00:00.000Z' },
+    { id: '82000000-0000-0000-0000-000000000002', actor_id: '00000000-0000-0000-0000-000000000005', actor_name: 'Émile Kasongo', actor_role: 'director', action: 'notes.validated', entity: 'school_grades', entity_id: '60000000-0000-0000-0000-000000000601', old_value: null, new_value: '{"assessment":"Interrogation 1","count":1}', reason: null, created_at: '2025-10-04T08:00:00.000Z' },
+    { id: '82000000-0000-0000-0000-000000000003', actor_id: '00000000-0000-0000-0000-00000000000e', actor_name: 'Nadine Mwape', actor_role: 'prefect', action: 'bulletins.generation', entity: 'school_report_cards', entity_id: null, old_value: null, new_value: '{"class":"1ère Science","year":"2025-2026","period":"Trimestre 1"}', reason: null, created_at: '2025-10-15T09:30:00.000Z' },
   ],
   school_payments: [
     { id: '90000000-0000-0000-0000-000000000901', student_id: '10000000-0000-0000-0000-000000000101', academic_year: '2025-2026', term_phase: '2025-2026 / Trimestre 1', amount: 350.0, method: 'cash', reference: 'PAY-000001', paid_at: '2025-09-10', status: 'paid' },
@@ -285,6 +297,8 @@ export const plainPassword = (user: { email: string }): string | undefined => {
     'secretaire@aelimu.cd': 'Passer@123',
     'comptable@aelimu.cd': 'Passer@123',
     'jean.kabeya@aelimu.cd': 'Passer@123',
+    'prefet@aelimu.cd': 'Passer@123',
+    'surveillant@aelimu.cd': 'Passer@123',
     'directeur.ferme@ferme.cd': 'Passer@123',
     'agronome@ferme.cd': 'Passer@123',
     'magasinier@ferme.cd': 'Passer@123',

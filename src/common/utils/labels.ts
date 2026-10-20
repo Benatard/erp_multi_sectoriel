@@ -10,6 +10,8 @@ export const roleLabel = (role?: string): string => {
       secretary: 'Secrétaire',
       accountant: 'Comptable',
       teacher: 'Enseignant',
+      supervisor: 'Surveillant',
+      prefect: 'Préfet des études',
       farm_manager: "Chef d'Exploitation Ferme",
       farm_director: 'Directeur Ferme',
       agronomist: 'Agronome',
@@ -82,6 +84,7 @@ const STATUS_MAP: Record<string, StatusInfo> = {
   interrogation: { label: 'Interrogation', tone: 'info' },
   homework: { label: 'Devoir', tone: 'neutral' },
   practical: { label: 'Travail pratique', tone: 'info' },
+  oral: { label: 'Évaluation orale', tone: 'info' },
   exam: { label: 'Examen', tone: 'warning' },
   // workflow notes / bulletins
   draft: { label: 'Brouillon', tone: 'neutral' },

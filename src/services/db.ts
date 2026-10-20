@@ -54,7 +54,7 @@ export const db = {
   list: async (table: string, options: ListOptions = {}): Promise<DbRow[]> => {
     const forge = resolveForge(table);
     if (forge) {
-      const params: Record<string, any> = {};
+      const params: Record<string, any> = { limit: 200 };
       (['limit', 'offset', 'page', 'order', 'expand'] as const).forEach((k) => {
         if (options[k]) params[k] = options[k];
       });

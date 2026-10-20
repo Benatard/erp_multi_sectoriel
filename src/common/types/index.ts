@@ -8,6 +8,8 @@ export type Role =
   | 'secretary'
   | 'accountant'
   | 'teacher'
+  | 'supervisor'
+  | 'prefect'
   | 'farm_manager'
   | 'farm_director'
   | 'agronomist'
@@ -16,7 +18,7 @@ export type Role =
   | 'sales_agent'
   | 'mine_director';
 
-export type SchoolRole = 'school_manager' | 'director' | 'secretary' | 'accountant' | 'teacher';
+export type SchoolRole = 'school_manager' | 'director' | 'secretary' | 'accountant' | 'teacher' | 'supervisor' | 'prefect';
 
 export type FarmRole = 'farm_manager' | 'farm_director' | 'agronomist' | 'warehouse_keeper' | 'farm_accountant' | 'sales_agent';
 

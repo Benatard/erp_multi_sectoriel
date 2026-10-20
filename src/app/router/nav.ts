@@ -26,18 +26,23 @@ import {
   FiShoppingCart,
   FiShoppingBag,
   FiLayers,
+  FiShield,
 } from 'react-icons/fi';
 import type { IconType } from 'react-icons';
 import type { NavGroup, Role } from '../../common/types';
 
 export const rolesPer: Record<string, Role[]> = {
   admin: ['admin'],
-  school: ['admin', 'school_manager', 'director', 'secretary', 'accountant', 'teacher'],
+  school: ['admin', 'school_manager', 'director', 'secretary', 'accountant', 'teacher', 'supervisor', 'prefect'],
   schoolManage: ['admin', 'school_manager', 'director', 'secretary'],
   schoolStructure: ['admin', 'school_manager', 'director', 'secretary'],
-  schoolTeaching: ['admin', 'school_manager', 'director', 'teacher'],
+  schoolTeaching: ['admin', 'school_manager', 'director', 'teacher', 'prefect'],
+  schoolPresence: ['admin', 'school_manager', 'director', 'teacher', 'supervisor', 'prefect'],
+  schoolBulletins: ['admin', 'school_manager', 'director', 'secretary', 'prefect'],
+  schoolResults: ['admin', 'school_manager', 'director', 'teacher', 'prefect'],
   schoolFinance: ['admin', 'school_manager', 'director', 'accountant'],
   schoolSettings: ['admin', 'school_manager', 'director'],
+  schoolAudit: ['admin', 'school_manager', 'director'],
   farm: ['admin', 'farm_manager', 'farm_director', 'agronomist', 'warehouse_keeper', 'farm_accountant', 'sales_agent'],
   farmOps: ['admin', 'farm_manager', 'farm_director', 'agronomist'],
   farmStock: ['admin', 'farm_manager', 'farm_director', 'warehouse_keeper', 'agronomist'],
@@ -77,11 +82,18 @@ export const navItems: NavGroup[] = [
   {
     label: 'École — Vie scolaire',
     items: [
-      { label: 'Présences', path: '/app/ecole/presences', icon: FiCheckSquare, roles: rolesPer.schoolTeaching },
+      { label: 'Présences', path: '/app/ecole/presences', icon: FiCheckSquare, roles: rolesPer.schoolPresence },
       { label: 'Évaluations', path: '/app/ecole/evaluations', icon: FiClipboard, roles: rolesPer.schoolTeaching },
       { label: 'Notes', path: '/app/ecole/notes', icon: FiAward, roles: rolesPer.schoolTeaching },
-      { label: 'Bulletins', path: '/app/ecole/bulletins', icon: FiFileText, roles: rolesPer.schoolManage },
+      { label: 'Bulletins', path: '/app/ecole/bulletins', icon: FiFileText, roles: rolesPer.schoolBulletins },
       { label: 'Paiements & Frais', path: '/app/ecole/paiements', icon: FiDollarSign, roles: rolesPer.schoolFinance },
+    ],
+  },
+  {
+    label: 'École — Pilotage',
+    items: [
+      { label: 'Résultats & moyennes', path: '/app/ecole/resultats', icon: FiTrendingUp, roles: rolesPer.schoolResults },
+      { label: 'Journal d’audit', path: '/app/ecole/journal', icon: FiShield, roles: rolesPer.schoolAudit },
     ],
   },
   {
@@ -169,6 +181,8 @@ export const pageTitles: Record<string, string> = {
   '/app/ecole/evaluations': 'Évaluations',
   '/app/ecole/notes': 'Notes / Gradebook',
   '/app/ecole/bulletins': 'Bulletins',
+  '/app/ecole/resultats': 'Résultats & moyennes',
+  '/app/ecole/journal': 'Journal d’audit',
   '/app/ecole/paiements': 'Paiements & Frais',
   '/app/ecole/parametres': 'Paramètres établissement',
   '/app/ferme': 'Tableau de bord Ferme',
@@ -200,4 +214,5 @@ export const allIcons: Record<string, IconType> = {
   FiHome, FiUsers, FiBookOpen, FiCalendar, FiDollarSign, FiMap, FiLifeBuoy, FiTruck, FiAlertTriangle,
   FiSettings, FiGrid, FiTrendingUp, FiBook, FiUserCheck, FiLink, FiCheckSquare, FiClipboard, FiAward,
   FiFileText, FiUser, FiTool, FiPackage, FiRepeat, FiShoppingCart, FiShoppingBag, FiLayers, FiTrendingDown,
+  FiShield,
 };

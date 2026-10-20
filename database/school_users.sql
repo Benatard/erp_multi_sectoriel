@@ -30,7 +30,7 @@ CREATE TABLE school_users (
   email         TEXT NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
   role          TEXT NOT NULL DEFAULT 'teacher'
-                CHECK (role IN ('admin','school_manager','director','secretary','accountant','teacher','eleve','parent')),
+                CHECK (role IN ('admin','school_manager','director','secretary','accountant','teacher','supervisor','prefect')),
   teacher_id    UUID REFERENCES school_teachers(id) ON DELETE SET NULL,
   phone         TEXT,
   is_active     BOOLEAN NOT NULL DEFAULT TRUE,
@@ -44,4 +44,6 @@ INSERT INTO school_users (id, full_name, email, password_hash, role, teacher_id,
   ('0a000000-0000-0000-0000-000000000001', 'Émile Kasongo',  'directeur@aelimu.cd',   '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'director',   NULL,                                   '+243 810 000 005', TRUE),
   ('0a000000-0000-0000-0000-000000000002', 'Julienne Mbayo', 'secretaire@aelimu.cd',  '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'secretary',  NULL,                                   '+243 810 000 006', TRUE),
   ('0a000000-0000-0000-0000-000000000003', 'Didier Kabwe',   'comptable@aelimu.cd',   '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'accountant', NULL,                                   '+243 810 000 007', TRUE),
-  ('0a000000-0000-0000-0000-000000000004', 'Jean Kabeya',    'jean.kabeya@aelimu.cd', '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'teacher',    'd0000000-0000-0000-0000-000000000001', '+243 811 200 001', TRUE);
+  ('0a000000-0000-0000-0000-000000000004', 'Jean Kabeya',    'jean.kabeya@aelimu.cd', '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'teacher',    'd0000000-0000-0000-0000-000000000001', '+243 811 200 001', TRUE),
+  ('0a000000-0000-0000-0000-000000000005', 'Nadine Mwape',   'prefet@aelimu.cd',      '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'prefect',    NULL,                                   '+243 810 000 008', TRUE),
+  ('0a000000-0000-0000-0000-000000000006', 'Augustin Kalala','surveillant@aelimu.cd', '$2b$10$7MjvorNd5FXpPzscqjDsduFO3hcGMyfa7f.1ghJWoY1wezNWgMtui', 'supervisor', NULL,                                   '+243 810 000 009', TRUE);
