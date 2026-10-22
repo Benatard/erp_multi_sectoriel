@@ -31,16 +31,17 @@ export default function useCrud<T extends { id: string } = CrudRow>(table: strin
   const askDelete = (row: T) => setPendingDelete(row);
   const cancelDelete = () => setPendingDelete(null);
 
-  const save = async () => {
-    if (!form) return;
+  const save = async (): Promise<T | null> => {
+    if (!form) return null;
     setSaving(true);
     try {
-      if (editingId) await update(editingId, form);
-      else await create(form);
+      const saved = editingId ? await update(editingId, form) : await create(form);
       showSuccess(editingId ? 'Enregistrement modifié.' : 'Enregistrement créé.');
       close();
+      return saved;
     } catch (err) {
       showError((err as any)?.response?.data?.error || (err as any)?.message || "Erreur d'enregistrement.");
+      return null;
     } finally {
       setSaving(false);
     }

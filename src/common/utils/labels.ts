@@ -91,6 +91,9 @@ const STATUS_MAP: Record<string, StatusInfo> = {
   submitted: { label: 'Soumis', tone: 'info' },
   validated: { label: 'Validé', tone: 'warning' },
   published: { label: 'Publié', tone: 'success' },
+  approved: { label: 'Approuvée', tone: 'success' },
+  rejected: { label: 'Rejetée', tone: 'danger' },
+  changed: { label: 'Modifié', tone: 'warning' },
   // décisions
   admis: { label: 'Admis', tone: 'success' },
   redouble: { label: 'Redouble', tone: 'warning' },

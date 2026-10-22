@@ -23,8 +23,14 @@ import GradebookPage from '../../modules/school/grades/pages/GradebookPage';
 import ReportCardsPage from '../../modules/school/report-cards/pages/ReportCardsPage';
 import ResultsPage from '../../modules/school/results/pages/ResultsPage';
 import AuditLogsPage from '../../modules/school/audit/pages/AuditLogsPage';
+import SchoolUsersPage from '../../modules/school/users/pages/SchoolUsersPage';
 import PaymentsPage from '../../modules/school/payments/pages/PaymentsPage';
 import SchoolSettingsPage from '../../modules/school/settings/pages/SchoolSettingsPage';
+import TeacherClassesPage from '../../modules/school/teachers/pages/TeacherClassesPage';
+import TimetablePage from '../../modules/school/timetable/pages/TimetablePage';
+import AppreciationsPage from '../../modules/school/appreciations/pages/AppreciationsPage';
+import CorrectionsPage from '../../modules/school/corrections/pages/CorrectionsPage';
+import NotificationsPage from '../../modules/school/notifications/pages/NotificationsPage';
 
 import FarmDashboardPage from '../../modules/farm/pages/FarmDashboardPage';
 import FarmsPage from '../../modules/farm/pages/FarmsPage';
@@ -86,8 +92,14 @@ export default function App() {
       {schoolRoute('/app/ecole/evaluations', rolesPer.schoolTeaching, <AssessmentsPage />)}
       {schoolRoute('/app/ecole/notes', rolesPer.schoolTeaching, <GradebookPage />)}
       {schoolRoute('/app/ecole/bulletins', rolesPer.schoolBulletins, <ReportCardsPage />)}
+      {schoolRoute('/app/ecole/mes-classes', rolesPer.schoolTeaching, <TeacherClassesPage />)}
+      {schoolRoute('/app/ecole/emploi-du-temps', rolesPer.schoolTimetable, <TimetablePage />)}
+      {schoolRoute('/app/ecole/appreciations', rolesPer.schoolTeaching, <AppreciationsPage />)}
+      {schoolRoute('/app/ecole/corrections', rolesPer.schoolTeaching, <CorrectionsPage />)}
+      {schoolRoute('/app/ecole/notifications', rolesPer.school, <NotificationsPage />)}
       {schoolRoute('/app/ecole/resultats', rolesPer.schoolResults, <ResultsPage />)}
       {schoolRoute('/app/ecole/journal', rolesPer.schoolAudit, <AuditLogsPage />)}
+      {schoolRoute('/app/ecole/utilisateurs', rolesPer.schoolUsers, <SchoolUsersPage />)}
       {schoolRoute('/app/ecole/paiements', rolesPer.schoolFinance, <PaymentsPage />)}
       {schoolRoute('/app/ecole/parametres', rolesPer.schoolSettings, <SchoolSettingsPage />)}
 

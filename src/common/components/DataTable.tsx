@@ -10,8 +10,13 @@ interface DataTableProps<T> {
   rowKey?: keyof T & string;
   onEdit?: (row: T) => void;
   onDelete?: (row: T) => void;
+  rowActions?: (row: T) => ReactNode;
   emptyTitle?: string;
   emptyDesc?: string;
+  selectable?: boolean;
+  selectedIds?: string[];
+  onToggleRow?: (id: string) => void;
+  onToggleAll?: (ids: string[]) => void;
 }
 
 export default function DataTable<T extends object>({
@@ -21,10 +26,16 @@ export default function DataTable<T extends object>({
   rowKey = 'id' as keyof T & string,
   onEdit,
   onDelete,
+  rowActions,
   emptyTitle,
   emptyDesc,
+  selectable,
+  selectedIds = [],
+  onToggleRow,
+  onToggleAll,
 }: DataTableProps<T>) {
-  const hasActions = !!onEdit || !!onDelete;
+  const hasActions = !!onEdit || !!onDelete || !!rowActions;
+  const allSelected = rows.length > 0 && rows.every((row) => selectedIds.includes(String(row[rowKey])));
 
   if (loading) {
     return (
@@ -52,6 +63,16 @@ export default function DataTable<T extends object>({
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-stroke dark:border-[#2C303B] bg-gray2 dark:bg-[#2C303B]/40">
+              {selectable && (
+                <th className="px-5 py-3.5 w-10">
+                  <input
+                    type="checkbox"
+                    aria-label="Tout sélectionner"
+                    checked={allSelected}
+                    onChange={() => onToggleAll?.(rows.map((row) => String(row[rowKey])))}
+                  />
+                </th>
+              )}
               {columns.map((col) => (
                 <th
                   key={String(col.key)}
@@ -66,6 +87,16 @@ export default function DataTable<T extends object>({
           <tbody className="divide-y divide-stroke dark:divide-[#2C303B]">
             {rows.map((row) => (
               <tr key={String(row[rowKey])} className="bg-white dark:bg-gray-dark hover:bg-gray2/60 dark:hover:bg-[#2C303B]/40 transition-colors">
+                {selectable && (
+                  <td className="px-5 py-3.5">
+                    <input
+                      type="checkbox"
+                      aria-label="Sélectionner"
+                      checked={selectedIds.includes(String(row[rowKey]))}
+                      onChange={() => onToggleRow?.(String(row[rowKey]))}
+                    />
+                  </td>
+                )}
                 {columns.map((col) => (
                   <td key={String(col.key)} className={`px-5 py-3.5 text-dark dark:text-body-dark ${col.className || ''}`}>
                     {col.render ? col.render(row) : (row[col.key] as ReactNode)}
@@ -92,6 +123,7 @@ export default function DataTable<T extends object>({
                           <FiTrash2 className="w-4 h-4" />
                         </button>
                       )}
+                      {rowActions?.(row)}
                     </div>
                   </td>
                 )}

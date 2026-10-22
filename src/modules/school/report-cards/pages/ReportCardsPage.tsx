@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { FiFileText, FiPlus, FiZap, FiAward, FiUploadCloud, FiCheckCircle, FiRotateCcw } from 'react-icons/fi';
+import { FiFileText, FiPlus, FiZap, FiAward, FiUploadCloud, FiCheckCircle, FiRotateCcw, FiPrinter, FiDownload } from 'react-icons/fi';
 import PageMeta from '../../../../common/components/PageMeta';
 import PageHeader from '../../../../common/components/PageHeader';
 import StatCard from '../../../../common/components/StatCard';
@@ -23,6 +23,9 @@ import useGrades from '../../grades/hooks/useGrades';
 import useSubjects from '../../subjects/hooks/useSubjects';
 import useAttendance from '../../attendance/hooks/useAttendance';
 import useClasses from '../../classes/hooks/useClasses';
+import useSchoolSettings from '../../settings/hooks/useSchoolSettings';
+import useTeacherScope from '../../hooks/useTeacherScope';
+import useAppreciations from '../../appreciations/hooks/useAppreciations';
 import { schoolTables } from '../../api/schoolApi';
 import {
   subjectResultsFor,
@@ -36,8 +39,10 @@ import {
 import { ACADEMIC_YEARS, PERIODS, DECISIONS } from '../../utils/constants';
 import { can } from '../../utils/permissions';
 import { logAudit } from '../../utils/audit';
+import { printReportCards, downloadReportCardsCsv } from '../utils/reportCardDocument';
+import type { ReportCardDocumentInput } from '../utils/reportCardDocument';
 import type { Column } from '../../../../common/types';
-import type { ReportCard } from '../../types';
+import type { ReportCard, ReportLine } from '../../types';
 
 const REPORT_STATUSES = [
   { value: 'draft', label: 'Brouillon' },
@@ -56,12 +61,16 @@ export default function ReportCardsPage() {
   const subjects = useSubjects();
   const attendance = useAttendance();
   const classes = useClasses();
+  const settings = useSchoolSettings();
+  const scope = useTeacherScope();
+  const appreciations = useAppreciations();
 
   const [classFilter, setClassFilter] = useState('');
   const [year, setYear] = useState(ACADEMIC_YEARS[0]);
   const [period, setPeriod] = useState('Trimestre 1');
   const [busy, setBusy] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const canManage = can(user?.role, 'reports.manage');
   const canValidate = can(user?.role, 'reports.validate');
@@ -80,15 +89,20 @@ export default function ReportCardsPage() {
     return base.filter((s) => s.status === 'active' || !s.status);
   }, [classFilter, enrollments.rows, students.rows]);
 
+  const classOptions = scope.isTeacher
+    ? scope.classOptions
+    : classes.rows.map((c) => ({ value: c.name, label: c.name }));
+
   const filteredCards = useMemo(
     () =>
       crud.rows.filter(
         (r) =>
           (!classFilter || r.class_name === classFilter) &&
           (!year || r.academic_year === year) &&
-          (!period || r.period === period)
+          (!period || r.period === period) &&
+          (!scope.isTeacher || (!!r.class_name && scope.classNames.includes(r.class_name)))
       ),
-    [crud.rows, classFilter, year, period]
+    [crud.rows, classFilter, year, period, scope.isTeacher, scope.classNames]
   );
 
   const stats = useMemo(() => {
@@ -101,6 +115,94 @@ export default function ReportCardsPage() {
       avg: averages.length ? averages.reduce((s, v) => s + v, 0) / averages.length : null,
     };
   }, [filteredCards]);
+
+  const schoolInfo = useMemo(() => {
+    const get = (key: string) => settings.rows.find((s) => s.key === key)?.value || undefined;
+    return {
+      name: get('school_name'),
+      address: get('school_address'),
+      phone: get('school_phone'),
+      email: get('school_email'),
+    };
+  }, [settings.rows]);
+
+  const documentFor = (card: ReportCard): ReportCardDocumentInput => ({
+    card,
+    student: students.rows.find((s) => s.id === card.student_id) || null,
+    lines: lines.rows.filter((l) => l.report_card_id === card.id),
+    school: schoolInfo,
+  });
+
+  const selectedCards = filteredCards.filter((card) => selectedIds.includes(card.id));
+
+  const fetchAllLines = async (): Promise<ReportLine[]> => {
+    const all = [...lines.rows];
+    if (all.length < 200) return all;
+    let offset = all.length;
+    for (let guard = 0; guard < 50; guard += 1) {
+      const page = (await db.list(schoolTables.reportLines, { limit: 200, offset })) as ReportLine[];
+      if (!page.length) break;
+      all.push(...page);
+      if (page.length < 200) break;
+      offset += page.length;
+    }
+    return all;
+  };
+
+  const inputsFor = (cards: ReportCard[], source: ReportLine[]): ReportCardDocumentInput[] =>
+    cards.map((card) => ({
+      ...documentFor(card),
+      lines: source.filter((line) => line.report_card_id === card.id),
+    }));
+
+  const printSelected = async () => {
+    if (!selectedCards.length) {
+      showError('Sélectionnez au moins un bulletin.');
+      return;
+    }
+    let source = lines.rows;
+    try {
+      source = await fetchAllLines();
+    } catch {
+      source = lines.rows;
+    }
+    printReportCards(inputsFor(selectedCards, source));
+  };
+
+  const exportSelected = async () => {
+    if (!selectedCards.length) {
+      showError('Sélectionnez au moins un bulletin.');
+      return;
+    }
+    let source = lines.rows;
+    try {
+      source = await fetchAllLines();
+    } catch {
+      source = lines.rows;
+    }
+    downloadReportCardsCsv(inputsFor(selectedCards, source));
+  };
+
+  const printOne = async (card: ReportCard) => {
+    const input = documentFor(card);
+    let cardLines = input.lines;
+    try {
+      const fresh = (await db.list(schoolTables.reportLines, {
+        limit: 200,
+        filters: { report_card_id: card.id },
+      })) as ReportLine[];
+      if (fresh.length >= cardLines.length) cardLines = fresh;
+    } catch {
+      cardLines = input.lines;
+    }
+    printReportCards([{ ...input, lines: cardLines }]);
+  };
+
+  const toggleRow = (id: string) =>
+    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+
+  const toggleAll = (ids: string[]) =>
+    setSelectedIds((prev) => (ids.every((id) => prev.includes(id)) ? [] : ids));
 
   const columns: Column<ReportCard>[] = [
     { key: 'student_id', label: 'Élève', render: (r) => (
@@ -115,6 +217,15 @@ export default function ReportCardsPage() {
     { key: 'rank', label: 'Rang', render: (r) => (r.rank ? `${r.rank}${r.total_students ? ` / ${r.total_students}` : ''}` : '—') },
     { key: 'decision', label: 'Décision', render: (r) => <StatusBadge status={r.decision} /> },
     { key: 'status', label: 'Statut', render: (r) => <StatusBadge status={r.status} /> },
+    { key: 'print' as keyof ReportCard, label: '', render: (r) => (
+      <button
+        type="button"
+        onClick={() => printOne(r)}
+        className="inline-flex items-center gap-1.5 rounded bg-primary/10 px-2.5 py-1.5 text-xs font-semibold text-primary hover:bg-primary hover:text-white transition-colors"
+      >
+        <FiPrinter className="w-3.5 h-3.5" /> Imprimer
+      </button>
+    ) },
   ];
 
   const f: Partial<ReportCard> = crud.form || {};
@@ -140,6 +251,16 @@ export default function ReportCardsPage() {
       }));
       const ranked = rankStudents(base, (entry) => generalAverageFor(entry.results));
       const scored = ranked.filter((entry) => entry.averageValue != null).length;
+      const validatedAppreciations = new Map(
+        appreciations.rows
+          .filter(
+            (a) =>
+              a.status === 'validated' &&
+              (a.period || '') === (period || '') &&
+              (a.academic_year || '') === (year || '')
+          )
+          .map((a) => [`${a.student_id}|${a.subject_id}`, a])
+      );
 
       let created = 0;
       let updated = 0;
@@ -201,15 +322,18 @@ export default function ReportCardsPage() {
           }
 
           for (const result of entry.results) {
+            const validated = validatedAppreciations.get(`${entry.student.id}|${result.subjectId}`);
             const teacherName =
-              relevantAssessments.find((a) => a.subject_id === result.subjectId)?.teacher_name || null;
+              validated?.teacher_name ||
+              relevantAssessments.find((a) => a.subject_id === result.subjectId)?.teacher_name ||
+              null;
             await db.create(schoolTables.reportLines, {
               report_card_id: cardId,
               subject_id: result.subjectId,
               subject_name: result.subjectName,
               coefficient: result.coefficient,
               average: result.average,
-              appreciation: appreciationFor(result.average),
+              appreciation: validated?.appreciation || appreciationFor(result.average),
               teacher_name: teacherName,
             });
           }
@@ -326,10 +450,16 @@ export default function ReportCardsPage() {
         )}
       </PageHeader>
 
+      {scope.isTeacher && (
+        <div className="card-root p-4 text-sm text-body dark:text-body-dark">
+          Consultation en lecture seule des bulletins de vos classes. La génération, la validation et la publication relèvent de la direction.
+        </div>
+      )}
+
       <div className="card-root p-5 space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <SelectField label="Classe" required value={classFilter} onChange={(e) => setClassFilter(e.target.value)}
-            placeholder="Sélectionner une classe" options={classes.rows.map((c) => ({ value: c.name, label: c.name }))} />
+            placeholder="Sélectionner une classe" options={classOptions} />
           <SelectField label="Année scolaire" value={year} onChange={(e) => setYear(e.target.value)}
             options={ACADEMIC_YEARS.map((y) => ({ value: y, label: y }))} />
           <SelectField label="Période" value={period} onChange={(e) => setPeriod(e.target.value)}
@@ -369,6 +499,28 @@ export default function ReportCardsPage() {
         <StatCard icon={FiAward} label="Moyenne générale" value={stats.avg != null ? formatNumber(stats.avg, 2) : '—'} />
       </div>
 
+      {filteredCards.length > 0 && (
+        <div className="card-root flex flex-wrap items-center gap-3">
+          <button className="btn-primary-root" onClick={printSelected} disabled={!selectedCards.length}>
+            <FiPrinter className="w-4 h-4" /> Imprimer la sélection ({selectedCards.length})
+          </button>
+          <button className="btn-outline-root !px-5 !py-2.5" onClick={exportSelected} disabled={!selectedCards.length}>
+            <FiDownload className="w-4 h-4" /> Exporter en CSV
+          </button>
+          <button className="btn-outline-root !px-5 !py-2.5" onClick={() => setSelectedIds(filteredCards.map((c) => c.id))}>
+            Tout sélectionner
+          </button>
+          {selectedIds.length > 0 && (
+            <button className="text-xs font-semibold text-body hover:text-primary" onClick={() => setSelectedIds([])}>
+              Effacer la sélection
+            </button>
+          )}
+          <span className="text-xs text-body dark:text-body-dark">
+            Cochez un ou plusieurs élèves pour imprimer leurs bulletins complets ou exporter leurs données.
+          </span>
+        </div>
+      )}
+
       {!filteredCards.length ? (
         <div className="card-root">
           <EmptyState
@@ -385,6 +537,10 @@ export default function ReportCardsPage() {
           onDelete={canManage ? crud.askDelete : undefined}
           emptyTitle="Aucun bulletin"
           emptyDesc="Générez les bulletins de la classe."
+          selectable
+          selectedIds={selectedIds}
+          onToggleRow={toggleRow}
+          onToggleAll={toggleAll}
         />
       )}
 

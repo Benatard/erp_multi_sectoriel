@@ -34,6 +34,8 @@ interface SchoolCrudPageProps<T extends { id: string }> {
   modalSize?: string;
   filters?: ReactNode;
   toolbar?: ReactNode;
+  readOnly?: boolean;
+  onSaved?: (saved: T, editing: boolean) => void;
   renderForm: (form: Partial<T>, setField: (key: keyof T & string, value: any) => void) => ReactNode;
 }
 
@@ -54,6 +56,8 @@ export default function SchoolCrudPage<T extends { id: string }>({
   modalSize,
   filters,
   toolbar,
+  readOnly,
+  onSaved,
   renderForm,
 }: SchoolCrudPageProps<T>) {
   const [search, setSearch] = useState('');
@@ -71,9 +75,11 @@ export default function SchoolCrudPage<T extends { id: string }>({
       <PageMeta title={metaTitle} />
       <PageHeader title={title} subtitle={subtitle}>
         {toolbar}
-        <button className="btn-primary-root" onClick={() => crud.openCreate(defaults)}>
-          <FiPlus className="w-4 h-4" /> {createLabel}
-        </button>
+        {!readOnly && (
+          <button className="btn-primary-root" onClick={() => crud.openCreate(defaults)}>
+            <FiPlus className="w-4 h-4" /> {createLabel}
+          </button>
+        )}
       </PageHeader>
 
       {stats && stats.length > 0 && (
@@ -104,8 +110,8 @@ export default function SchoolCrudPage<T extends { id: string }>({
         columns={columns}
         rows={filtered}
         loading={crud.loading}
-        onEdit={crud.openEdit}
-        onDelete={crud.askDelete}
+        onEdit={readOnly ? undefined : crud.openEdit}
+        onDelete={readOnly ? undefined : crud.askDelete}
         emptyTitle={emptyTitle || `Aucun élément`}
         emptyDesc={emptyDesc}
       />
@@ -118,7 +124,15 @@ export default function SchoolCrudPage<T extends { id: string }>({
         footer={
           <>
             <button onClick={crud.close} className="btn-outline-root !px-5 !py-2.5">Annuler</button>
-            <button onClick={crud.save} disabled={crud.saving} className="btn-primary-root !px-5 !py-2.5">
+            <button
+              onClick={async () => {
+                const editing = !!crud.editingId;
+                const saved = await crud.save();
+                if (saved) onSaved?.(saved, editing);
+              }}
+              disabled={crud.saving}
+              className="btn-primary-root !px-5 !py-2.5"
+            >
               {crud.saving ? 'Enregistrement…' : 'Enregistrer'}
             </button>
           </>

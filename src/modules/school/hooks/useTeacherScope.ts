@@ -17,6 +17,7 @@ export interface TeacherScope {
   classNames: string[];
   subjectOptions: ScopeOption[];
   classOptions: ScopeOption[];
+  assignments: Assignment[];
   allows: (subjectId?: string | null, className?: string | null) => boolean;
 }
 
@@ -66,5 +67,5 @@ export default function useTeacherScope(): TeacherScope {
     [isTeacher, subjectIds, classNames]
   );
 
-  return { isTeacher, teacherId, loading, subjectIds, classNames, subjectOptions, classOptions, allows };
+  return { isTeacher, teacherId, loading, subjectIds, classNames, subjectOptions, classOptions, assignments: mine, allows };
 }

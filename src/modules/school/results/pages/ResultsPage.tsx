@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { FiAward, FiTrendingUp, FiUsers, FiTarget } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+import { FiAward, FiTrendingUp, FiUsers, FiTarget, FiAlertTriangle, FiMessageSquare } from 'react-icons/fi';
 import PageMeta from '../../../../common/components/PageMeta';
 import PageHeader from '../../../../common/components/PageHeader';
 import StatCard from '../../../../common/components/StatCard';
@@ -15,6 +16,7 @@ import useSubjects from '../../subjects/hooks/useSubjects';
 import useClasses from '../../classes/hooks/useClasses';
 import useEnrollments from '../../enrollments/hooks/useEnrollments';
 import useTeacherScope from '../../hooks/useTeacherScope';
+import useSchoolSettings from '../../settings/hooks/useSchoolSettings';
 import {
   subjectResultsFor,
   generalAverageFor,
@@ -35,12 +37,13 @@ interface ResultRow {
   rank: number | null;
   mention: string;
   decision: string;
+  missing: number;
 }
 
-const MENTION_TONE = (average: number | null): Tone => {
+const MENTION_TONE = (average: number | null, passMark: number): Tone => {
   if (average == null) return 'neutral';
   if (average >= 14) return 'success';
-  if (average >= 10) return 'info';
+  if (average >= passMark) return 'info';
   return 'danger';
 };
 
@@ -52,6 +55,7 @@ export default function ResultsPage() {
   const classes = useClasses();
   const enrollments = useEnrollments();
   const scope = useTeacherScope();
+  const settings = useSchoolSettings();
 
   const [classFilter, setClassFilter] = useState('');
   const [period, setPeriod] = useState('');
@@ -86,6 +90,12 @@ export default function ResultsPage() {
     [assessments.rows, classFilter, period, scope]
   );
 
+  const passMark = useMemo(() => {
+    const raw = settings.rows.find((s) => s.key === 'pass_mark')?.value;
+    const value = Number(raw);
+    return Number.isFinite(value) && value > 0 ? value : 10;
+  }, [settings.rows]);
+
   const subjectList = useMemo(() => {
     const ids = Array.from(new Set(filteredAssessments.map((a) => a.subject_id).filter(Boolean))) as string[];
     return subjects.rows.filter((s) => ids.includes(s.id));
@@ -101,6 +111,10 @@ export default function ResultsPage() {
         period || null
       );
       const average = generalAverageFor(results);
+      const missing = filteredAssessments.filter((a) => {
+        const grade = grades.rows.find((g) => g.assessment_id === a.id && g.student_id === student.id);
+        return !grade || (!grade.is_absent && grade.score == null);
+      }).length;
       return {
         id: student.id,
         student,
@@ -108,16 +122,17 @@ export default function ResultsPage() {
         average,
         rank: null,
         mention: mentionFor(average),
-        decision: decisionFor(average),
+        decision: decisionFor(average, passMark),
+        missing,
       };
     });
     return rankStudents(base, (r) => r.average);
-  }, [studentsInClass, filteredAssessments, grades.rows, subjects.rows, period]);
+  }, [studentsInClass, filteredAssessments, grades.rows, subjects.rows, period, passMark]);
 
   const stats = useMemo(() => {
     const averages = rows.map((r) => r.average).filter((v): v is number => v != null);
     const classAverage = averages.length ? averages.reduce((s, v) => s + v, 0) / averages.length : null;
-    const passed = averages.filter((v) => v >= 10).length;
+    const passed = averages.filter((v) => v >= passMark).length;
     const best = averages.length ? Math.max(...averages) : null;
     return {
       count: rows.length,
@@ -125,8 +140,9 @@ export default function ResultsPage() {
       classAverage,
       successRate: averages.length ? (passed / averages.length) * 100 : null,
       best,
+      missing: rows.reduce((sum, row) => sum + row.missing, 0),
     };
-  }, [rows]);
+  }, [rows, passMark]);
 
   const columns = useMemo<Column<ResultRow>[]>(() => {
     const base: Column<ResultRow>[] = [
@@ -152,18 +168,23 @@ export default function ResultsPage() {
       ...base,
       ...subjectColumns,
       { key: 'average', label: 'Moyenne générale', render: (r) => <span className="font-bold text-primary">{formatNumber(r.average, 2)}</span> },
-      { key: 'mention', label: 'Mention', render: (r) => <Badge tone={MENTION_TONE(r.average)}>{r.mention}</Badge> },
+      { key: 'missing', label: 'Notes manquantes', render: (r) => r.missing ? <Badge tone="warning">{r.missing}</Badge> : <Badge tone="success">Complet</Badge> },
+      { key: 'mention', label: 'Mention', render: (r) => <Badge tone={MENTION_TONE(r.average, passMark)}>{r.mention}</Badge> },
       { key: 'decision', label: 'Décision', render: (r) => <Badge tone={statusInfo(r.decision).tone}>{statusInfo(r.decision).label}</Badge> },
     ];
-  }, [subjectList]);
+  }, [subjectList, passMark]);
 
   return (
     <div className="space-y-6">
       <PageMeta title="Résultats & moyennes" />
       <PageHeader
         title="Résultats & moyennes"
-        subtitle="Moyennes par matière, moyenne générale, rang, mention et décision. Seules les notes validées ou publiées sont comptabilisées."
-      />
+        subtitle={`Moyennes par matière, moyenne générale, rang, mention et décision. Seuil de réussite : ${passMark}/20. Seules les notes validées ou publiées sont comptabilisées.`}
+      >
+        <Link to="/app/ecole/appreciations" className="btn-outline-root !px-5 !py-2.5">
+          <FiMessageSquare className="w-4 h-4" /> Appréciations
+        </Link>
+      </PageHeader>
 
       <div className="card-root p-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -185,11 +206,23 @@ export default function ResultsPage() {
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-            <StatCard icon={FiUsers} label="Élèves évalués" value={`${stats.assessed}/${stats.count}`} />
+            <StatCard icon={FiUsers} label="Élèves évalués" value={`${stats.assessed}/${stats.count}`} hint={`${stats.missing} note(s) manquante(s)`} />
             <StatCard icon={FiTrendingUp} label="Moyenne de classe" value={stats.classAverage != null ? formatNumber(stats.classAverage, 2) : '—'} />
-            <StatCard icon={FiTarget} label="Taux de réussite" value={stats.successRate != null ? `${formatNumber(stats.successRate, 1)} %` : '—'} hint="Moyenne ≥ 10/20" />
+            <StatCard icon={FiTarget} label="Taux de réussite" value={stats.successRate != null ? `${formatNumber(stats.successRate, 1)} %` : '—'} hint={`Moyenne ≥ ${passMark}/20`} />
             <StatCard icon={FiAward} label="Meilleure moyenne" value={stats.best != null ? formatNumber(stats.best, 2) : '—'} />
           </div>
+
+          {stats.missing > 0 && (
+            <div className="card-root p-4 flex items-center gap-3 text-sm">
+              <FiAlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />
+              <span className="text-body dark:text-body-dark">
+                {stats.missing} note(s) manquante(s) sur les évaluations de cette classe et période. Les moyennes peuvent être incomplètes.
+              </span>
+              <Link to="/app/ecole/notes" className="ml-auto text-xs font-semibold text-primary hover:underline whitespace-nowrap">
+                Ouvrir le carnet de notes
+              </Link>
+            </div>
+          )}
 
           <DataTable
             columns={columns}

@@ -7,11 +7,14 @@ import useAssignments from '../hooks/useAssignments';
 import useTeachers from '../../teachers/hooks/useTeachers';
 import useSubjects from '../../subjects/hooks/useSubjects';
 import useClasses from '../../classes/hooks/useClasses';
+import { useAuth } from '../../../../app/providers/AuthContext';
+import { notifyTeacher } from '../../utils/schoolNotifications';
 import { ASSIGNMENT_STATUSES, ACADEMIC_YEARS } from '../../utils/constants';
 import type { Column } from '../../../../common/types';
 import type { Assignment } from '../../types';
 
 export default function AssignmentsPage() {
+  const { user } = useAuth();
   const crud = useAssignments();
   const teachers = useTeachers();
   const subjects = useSubjects();
@@ -47,6 +50,15 @@ export default function AssignmentsPage() {
       searchable={['academic_year']}
       searchPlaceholder="Rechercher une année…"
       emptyTitle="Aucune affectation"
+      onSaved={(saved, editing) =>
+        notifyTeacher(saved.teacher_id, {
+          title: editing ? 'Affectation modifiée' : 'Nouvelle affectation',
+          message: `${subjectName(saved.subject_id)} — ${className(saved.class_id)} (${saved.academic_year || 'année non précisée'}).`,
+          type: 'assignment',
+          link: '/app/ecole/mes-classes',
+          actor: user,
+        })
+      }
       deleteMessage={(r) => `Supprimer l’affectation « ${teacherName(r.teacher_id)} → ${subjectName(r.subject_id)} » ?`}
       stats={[
         { icon: FiLink, label: 'Affectations', value: stats.total },

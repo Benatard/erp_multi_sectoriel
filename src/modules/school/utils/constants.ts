@@ -152,6 +152,44 @@ export const PERIODS: Option[] = [
   { value: 'Annuel', label: 'Annuel' },
 ];
 
+export const DAYS: Option[] = [
+  { value: '1', label: 'Lundi' },
+  { value: '2', label: 'Mardi' },
+  { value: '3', label: 'Mercredi' },
+  { value: '4', label: 'Jeudi' },
+  { value: '5', label: 'Vendredi' },
+  { value: '6', label: 'Samedi' },
+];
+
+export const TIMETABLE_STATUSES: Option[] = [
+  { value: 'active', label: 'Actif' },
+  { value: 'changed', label: 'Modifié' },
+  { value: 'cancelled', label: 'Annulé' },
+];
+
+export const APPRECIATION_STATUSES: Option[] = [
+  { value: 'draft', label: 'Brouillon' },
+  { value: 'submitted', label: 'Soumise' },
+  { value: 'validated', label: 'Validée' },
+];
+
+export const CORRECTION_STATUSES: Option[] = [
+  { value: 'pending', label: 'En attente' },
+  { value: 'approved', label: 'Approuvée' },
+  { value: 'rejected', label: 'Rejetée' },
+];
+
+export const NOTIFICATION_TYPES: Option[] = [
+  { value: 'info', label: 'Information' },
+  { value: 'assignment', label: 'Affectation' },
+  { value: 'timetable', label: 'Emploi du temps' },
+  { value: 'grades', label: 'Notes' },
+  { value: 'deadline', label: 'Échéance' },
+  { value: 'announcement', label: 'Annonce' },
+  { value: 'correction', label: 'Correction' },
+  { value: 'appreciation', label: 'Appréciation' },
+];
+
 export const SCALES: Option[] = [
   { value: '20', label: 'Sur 20' },
   { value: '10', label: 'Sur 10' },
@@ -195,6 +233,11 @@ export default {
   PAYMENT_METHODS,
   PAYMENT_STATUSES,
   PERIODS,
+  DAYS,
+  TIMETABLE_STATUSES,
+  APPRECIATION_STATUSES,
+  CORRECTION_STATUSES,
+  NOTIFICATION_TYPES,
   SCALES,
   GRADE_COEFFICIENTS,
   SCHOOL_SETTING_CATEGORIES,

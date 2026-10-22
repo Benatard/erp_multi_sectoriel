@@ -82,7 +82,7 @@ export interface CrudBag<T extends { id: string }> {
   openEdit: (row: T) => void;
   close: () => void;
   setField: (key: string, value: any) => void;
-  save: () => Promise<void>;
+  save: () => Promise<T | null>;
   askDelete: (row: T) => void;
   cancelDelete: () => void;
   confirmDelete: () => Promise<void>;

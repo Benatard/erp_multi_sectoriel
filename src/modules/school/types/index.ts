@@ -14,6 +14,18 @@ export type Decision = 'admis' | 'redouble' | 'exclu' | 'transfere' | 'diplome' 
 export type Relation = 'father' | 'mother' | 'guardian' | 'other';
 export type PaymentMethod = 'cash' | 'mobile' | 'bank';
 export type PaymentStatus = 'paid' | 'pending' | 'late';
+export type TimetableStatus = 'active' | 'changed' | 'cancelled';
+export type NotificationType =
+  | 'info'
+  | 'assignment'
+  | 'timetable'
+  | 'grades'
+  | 'deadline'
+  | 'announcement'
+  | 'correction'
+  | 'appreciation';
+export type AppreciationStatus = 'draft' | 'submitted' | 'validated';
+export type CorrectionStatus = 'pending' | 'approved' | 'rejected';
 
 export interface AcademicYear {
   id: string;
@@ -162,6 +174,75 @@ export interface Grade {
   validated_by?: string | null;
   updated_by?: string | null;
   updated_at?: string | null;
+}
+
+export interface TimetableSlot {
+  id: string;
+  academic_year?: string | null;
+  class_name?: string | null;
+  subject_id?: string | null;
+  subject_name?: string | null;
+  teacher_id?: string | null;
+  teacher_name?: string | null;
+  room?: string | null;
+  day_of_week?: number | null;
+  start_time?: string | null;
+  end_time?: string | null;
+  status?: TimetableStatus | string;
+  notes?: string | null;
+  updated_at?: string | null;
+}
+
+export interface SubjectAppreciation {
+  id: string;
+  student_id: string;
+  subject_id?: string | null;
+  subject_name?: string | null;
+  teacher_id?: string | null;
+  teacher_name?: string | null;
+  academic_year?: string | null;
+  period?: string | null;
+  appreciation?: string | null;
+  status?: AppreciationStatus | string;
+  validated_by?: string | null;
+  validated_at?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface GradeCorrection {
+  id: string;
+  grade_id: string;
+  assessment_id?: string | null;
+  assessment_name?: string | null;
+  student_id: string;
+  student_name?: string | null;
+  old_score?: number | null;
+  new_score?: number | null;
+  old_absent?: boolean | null;
+  new_absent?: boolean | null;
+  reason: string;
+  status?: CorrectionStatus | string;
+  requested_by?: string | null;
+  requested_by_name?: string | null;
+  requested_at?: string | null;
+  reviewed_by?: string | null;
+  reviewed_by_name?: string | null;
+  reviewed_at?: string | null;
+}
+
+export interface SchoolNotification {
+  id: string;
+  user_id?: string | null;
+  role?: string | null;
+  title: string;
+  message?: string | null;
+  type?: NotificationType | string;
+  link?: string | null;
+  is_read?: boolean | null;
+  created_by?: string | null;
+  created_at?: string | null;
+  read_at?: string | null;
 }
 
 export interface ReportCard {

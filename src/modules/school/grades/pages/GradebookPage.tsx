@@ -6,6 +6,8 @@ import StatCard from '../../../../common/components/StatCard';
 import StatusBadge from '../../../../common/components/StatusBadge';
 import EmptyState from '../../../../common/components/EmptyState';
 import Badge from '../../../../common/components/Badge';
+import Modal from '../../../../common/components/Modal';
+import { TextField } from '../../../../common/components/fields';
 import { showError, showSuccess } from '../../../../common/utils/notifications';
 import { formatNumber } from '../../../../common/utils/labels';
 import { useAuth } from '../../../../app/providers/AuthContext';
@@ -16,6 +18,8 @@ import useStudents from '../../students/hooks/useStudents';
 import useSubjects from '../../subjects/hooks/useSubjects';
 import useEnrollments from '../../enrollments/hooks/useEnrollments';
 import useTeacherScope from '../../hooks/useTeacherScope';
+import useCorrections from '../../corrections/hooks/useCorrections';
+import { notifyValidators } from '../../utils/schoolNotifications';
 import { schoolTables } from '../../api/schoolApi';
 import { toScale20, weightedAverage } from '../../utils/calculations';
 import { can } from '../../utils/permissions';
@@ -32,11 +36,18 @@ export default function GradebookPage() {
   const subjects = useSubjects();
   const enrollments = useEnrollments();
   const scope = useTeacherScope();
+  const corrections = useCorrections();
 
   const [selectedId, setSelectedId] = useState('');
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [absent, setAbsent] = useState<Record<string, boolean>>({});
   const [busy, setBusy] = useState(false);
+  const [correctionTarget, setCorrectionTarget] = useState<Grade | null>(null);
+  const [correctionStudent, setCorrectionStudent] = useState('');
+  const [correctionScore, setCorrectionScore] = useState('');
+  const [correctionAbsent, setCorrectionAbsent] = useState(false);
+  const [correctionReason, setCorrectionReason] = useState('');
+  const [correctionBusy, setCorrectionBusy] = useState(false);
 
   const canEnter = can(user?.role, 'grades.enter');
   const canSubmit = can(user?.role, 'grades.submit');
@@ -243,6 +254,81 @@ export default function GradebookPage() {
     }
   };
 
+  const pendingCorrectionFor = (gradeId: string) =>
+    corrections.rows.find((c) => c.grade_id === gradeId && (c.status || 'pending') === 'pending');
+
+  const openCorrection = (grade: Grade, studentName: string) => {
+    setCorrectionTarget(grade);
+    setCorrectionStudent(studentName);
+    setCorrectionScore(grade.score != null ? String(grade.score) : '');
+    setCorrectionAbsent(!!grade.is_absent);
+    setCorrectionReason('');
+  };
+
+  const submitCorrection = async () => {
+    if (!assessment || !correctionTarget) return;
+    const reason = correctionReason.trim();
+    if (!reason) {
+      showError('Le motif de la correction est obligatoire.');
+      return;
+    }
+    const scale = Number(assessment.scale || 20);
+    let newScore: number | null = null;
+    if (!correctionAbsent && correctionScore !== '') {
+      newScore = Number(correctionScore);
+      if (Number.isNaN(newScore) || newScore < 0 || newScore > scale) {
+        showError(`Note invalide (barème ${scale}).`);
+        return;
+      }
+    }
+    if (!correctionAbsent && newScore == null) {
+      showError('Saisissez la nouvelle note ou cochez « Absent ».');
+      return;
+    }
+    setCorrectionBusy(true);
+    try {
+      await corrections.create({
+        grade_id: correctionTarget.id,
+        assessment_id: assessment.id,
+        assessment_name: assessment.name,
+        student_id: correctionTarget.student_id,
+        student_name: correctionStudent,
+        old_score: correctionTarget.score ?? null,
+        new_score: newScore,
+        old_absent: !!correctionTarget.is_absent,
+        new_absent: correctionAbsent,
+        reason,
+        status: 'pending',
+        requested_by: user?.id || null,
+        requested_by_name: user?.full_name || '',
+        requested_at: new Date().toISOString(),
+      });
+      await notifyValidators({
+        title: 'Demande de correction de note',
+        message: `${correctionStudent} · ${assessment.name} : ${correctionTarget.score ?? '—'} → ${correctionAbsent ? 'Absent' : newScore}.`,
+        type: 'correction',
+        link: '/app/ecole/corrections',
+        actor: user,
+      });
+      await logAudit({
+        user,
+        action: 'correction.demande',
+        entity: 'school_corrections',
+        entityId: correctionTarget.id,
+        oldValue: { score: correctionTarget.score, is_absent: correctionTarget.is_absent },
+        newValue: { score: newScore, is_absent: correctionAbsent },
+        reason,
+      });
+      await corrections.reload();
+      showSuccess('Demande de correction soumise à la direction.');
+      setCorrectionTarget(null);
+    } catch (err) {
+      showError((err as any)?.response?.data?.error || (err as any)?.message || 'Demande impossible.');
+    } finally {
+      setCorrectionBusy(false);
+    }
+  };
+
   const weighted = weightedAverage(
     rows
       .filter((r) => !r.isAbsent)
@@ -307,12 +393,14 @@ export default function GradebookPage() {
                     <th className="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-body dark:text-body-dark">Note /{formatNumber(assessment.scale, 0)}</th>
                     <th className="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-body dark:text-body-dark">Absent</th>
                     <th className="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-body dark:text-body-dark">Statut</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-body dark:text-body-dark">Correction</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-stroke dark:divide-[#2C303B]">
                   {rows.map(({ student, existing, value, isAbsent }) => {
                     const locked = isLocked(existing);
                     const missing = !isAbsent && value === '';
+                    const pendingCorrection = existing ? pendingCorrectionFor(existing.id) : undefined;
                     return (
                       <tr key={student.id} className="bg-white dark:bg-gray-dark">
                         <td className="px-5 py-3 text-dark dark:text-body-dark">{student.full_name}</td>
@@ -346,6 +434,23 @@ export default function GradebookPage() {
                         </td>
                         <td className="px-5 py-3">
                           {existing ? <StatusBadge status={existing.status} /> : <Badge tone={missing ? 'warning' : 'neutral'}>{missing ? 'Manquante' : '—'}</Badge>}
+                        </td>
+                        <td className="px-5 py-3">
+                          {existing && locked ? (
+                            pendingCorrection ? (
+                              <Badge tone="warning">Demande en attente</Badge>
+                            ) : (
+                              <button
+                                type="button"
+                                className="btn-outline-root !px-3 !py-1.5 text-xs"
+                                onClick={() => openCorrection(existing, student.full_name || '')}
+                              >
+                                Demander
+                              </button>
+                            )
+                          ) : (
+                            <span className="text-xs text-body dark:text-body-dark">—</span>
+                          )}
                         </td>
                       </tr>
                     );
@@ -389,6 +494,61 @@ export default function GradebookPage() {
           </div>
         </>
       )}
+
+      <Modal
+        open={!!correctionTarget}
+        title="Demander une correction de note"
+        onClose={() => setCorrectionTarget(null)}
+        size="max-w-xl"
+        footer={
+          <>
+            <button className="btn-outline-root !px-5 !py-2.5" onClick={() => setCorrectionTarget(null)}>Annuler</button>
+            <button className="btn-primary-root" onClick={submitCorrection} disabled={correctionBusy}>
+              {correctionBusy ? 'Envoi…' : 'Soumettre la demande'}
+            </button>
+          </>
+        }
+      >
+        {correctionTarget && assessment && (
+          <div className="space-y-4">
+            <div className="bg-gray2 dark:bg-[#2C303B]/50 p-4 text-sm">
+              <p className="font-semibold text-dark dark:text-white">{correctionStudent}</p>
+              <p className="text-body dark:text-body-dark">
+                {assessment.name} · note actuelle : {correctionTarget.is_absent ? 'Absent' : formatNumber(correctionTarget.score, 2)}
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <TextField
+                label={`Nouvelle note /${formatNumber(assessment.scale, 0)}`}
+                type="number"
+                value={correctionScore}
+                disabled={correctionAbsent}
+                onChange={(e) => setCorrectionScore(e.target.value)}
+              />
+              <label className="flex items-end gap-2 pb-2.5">
+                <input
+                  type="checkbox"
+                  checked={correctionAbsent}
+                  onChange={(e) => setCorrectionAbsent(e.target.checked)}
+                />
+                <span className="text-sm text-dark dark:text-body-dark">Élève absent</span>
+              </label>
+            </div>
+            <label className="block">
+              <span className="label-root mb-1.5">Motif de la correction</span>
+              <textarea
+                className="input-root min-h-[100px]"
+                value={correctionReason}
+                onChange={(e) => setCorrectionReason(e.target.value)}
+                placeholder="Erreur de saisie, copie mal reportée, réclamation de l’élève…"
+              />
+            </label>
+            <p className="text-xs text-body dark:text-body-dark">
+              La note ne sera modifiée qu’après approbation de la direction. La demande et la décision sont journalisées.
+            </p>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }
