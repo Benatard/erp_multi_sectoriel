@@ -1,0 +1,2409 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Catalogue des extractions et documents du module École de l'ERP multi-sectoriel." />
+<title>Extractions — Module École</title>
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #0f172a;
+    --muted: #5b6475;
+    --soft: #f5f7fb;
+    --line: #e3e8ef;
+    --card: #ffffff;
+    --navy: #0b1f3a;
+    --blue: #1d4ed8;
+    --blue-soft: #eef4ff;
+    --green: #047857;
+    --green-soft: #ecfdf3;
+    --amber: #b45309;
+    --amber-soft: #fffbeb;
+    --red: #b42318;
+    --red-soft: #fef3f2;
+    --violet: #6d28d9;
+    --violet-soft: #f5f3ff;
+    --cyan: #0e7490;
+    --cyan-soft: #ecfeff;
+    --slate: #475467;
+    --slate-soft: #f2f4f7;
+    --shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 10px 30px rgba(15, 23, 42, 0.06);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--soft);
+    color: var(--ink);
+    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  [hidden] { display: none !important; }
+  button, input, select { font: inherit; }
+  a { color: var(--blue); }
+  code, .mono {
+    font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  }
+
+  .wrap { width: min(1240px, calc(100% - 32px)); margin: 0 auto; }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 42px 0 34px;
+    color: #fff;
+    background:
+      radial-gradient(circle at 82% 18%, rgba(59, 130, 246, 0.32), transparent 34%),
+      radial-gradient(circle at 8% 88%, rgba(14, 116, 144, 0.25), transparent 32%),
+      linear-gradient(135deg, #081729 0%, #0b1f3a 52%, #102a4c 100%);
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 46px 46px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 85%);
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 28px;
+    align-items: end;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 26px;
+    color: #dbeafe;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .brand-mark {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+  .eyebrow {
+    margin: 0 0 10px;
+    color: #93c5fd;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(34px, 5vw, 58px);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+  }
+  .lede {
+    max-width: 760px;
+    margin: 16px 0 0;
+    color: #cbd5e1;
+    font-size: 15px;
+  }
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 22px;
+  }
+  .hero-chip {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 7px 11px;
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.07);
+    color: #dbeafe;
+    font-size: 12px;
+  }
+  .hero-chip strong { color: #fff; font-size: 14px; }
+  .hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 220px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 10px 16px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 140ms ease, background 140ms ease, border-color 140ms ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: #fff; color: var(--navy); }
+  .btn-primary:hover { background: #eff6ff; }
+  .btn-ghost { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); color: #fff; }
+  .btn-ghost:hover { background: rgba(255,255,255,0.14); }
+  .btn-outline { border-color: var(--line); background: #fff; color: var(--ink); }
+  .btn-outline:hover { border-color: #b8c4d4; background: #fbfcfe; }
+  .btn-small { min-height: 34px; padding: 7px 11px; font-size: 12px; border-radius: 8px; }
+
+  .anchor-nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: 1px solid var(--line);
+    background: rgba(245, 247, 251, 0.92);
+    backdrop-filter: blur(12px);
+  }
+  .anchor-nav .wrap {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-top: 9px;
+    padding-bottom: 9px;
+  }
+  .anchor-nav a {
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .anchor-nav a:hover { background: #fff; color: var(--ink); }
+
+  main { padding: 26px 0 42px; }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .kpi {
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+    box-shadow: var(--shadow);
+  }
+  .kpi-label {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .kpi-value {
+    display: block;
+    margin-top: 6px;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+  .kpi-hint { display: block; margin-top: 7px; color: var(--muted); font-size: 11px; }
+
+  .panel {
+    margin-bottom: 18px;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: var(--shadow);
+  }
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+  .section-head h2 {
+    margin: 0;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+  }
+  .section-head p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .section-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .filters {
+    display: grid;
+    grid-template-columns: minmax(220px, 1.6fr) repeat(6, minmax(130px, 1fr)) auto;
+    gap: 10px;
+    align-items: end;
+  }
+  .field { display: grid; gap: 5px; min-width: 0; }
+  .field label {
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .field input, .field select {
+    width: 100%;
+    min-height: 38px;
+    padding: 8px 10px;
+    border: 1px solid #cfd8e5;
+    border-radius: 9px;
+    background: #fff;
+    color: var(--ink);
+    font-size: 13px;
+    outline: none;
+  }
+  .field input:focus, .field select:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+  }
+  .filter-actions { display: flex; gap: 8px; }
+
+  .table-wrap {
+    overflow: auto;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  .catalog-table { min-width: 980px; }
+  .catalog-table th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 10px 11px;
+    border-bottom: 1px solid var(--line);
+    background: #f8fafc;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .catalog-table td {
+    padding: 10px 11px;
+    border-bottom: 1px solid #edf0f4;
+    vertical-align: top;
+    font-size: 12px;
+  }
+  .catalog-table tr:last-child td { border-bottom: 0; }
+  .catalog-table tbody tr { cursor: pointer; }
+  .catalog-table tbody tr:hover { background: #f8fbff; }
+  .row-title { font-weight: 700; }
+  .tables-inline {
+    display: block;
+    max-width: 240px;
+    color: var(--muted);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 10px;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+  }
+  .code-link {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--blue);
+    cursor: pointer;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 11px;
+    font-weight: 800;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .code-link:hover { text-decoration: underline; }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    padding: 3px 8px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+  .tone-green { border-color: #a7f3d0; background: var(--green-soft); color: var(--green); }
+  .tone-blue { border-color: #bfdbfe; background: var(--blue-soft); color: var(--blue); }
+  .tone-amber { border-color: #fde68a; background: var(--amber-soft); color: var(--amber); }
+  .tone-red { border-color: #fecaca; background: var(--red-soft); color: var(--red); }
+  .tone-violet { border-color: #ddd6fe; background: var(--violet-soft); color: var(--violet); }
+  .tone-cyan { border-color: #a5f3fc; background: var(--cyan-soft); color: var(--cyan); }
+  .tone-slate { border-color: #e2e8f0; background: var(--slate-soft); color: var(--slate); }
+
+  .family-section { margin-top: 24px; }
+  .family-section:first-child { margin-top: 0; }
+  .family-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+    padding: 0 2px;
+  }
+  .family-head h3 { margin: 0; font-size: 17px; letter-spacing: -0.02em; }
+  .family-head p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+  .family-code {
+    display: inline-block;
+    margin-bottom: 5px;
+    color: var(--blue);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+  }
+  .family-count { flex: 0 0 auto; color: var(--muted); font-size: 11px; font-weight: 700; }
+
+  .fiche-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .fiche {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+    scroll-margin-top: 64px;
+  }
+  .fiche summary {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 14px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .fiche summary::-webkit-details-marker { display: none; }
+  .fiche summary::after {
+    content: "+";
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .fiche[open] summary::after { content: "–"; }
+  .fiche-code {
+    color: var(--blue);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 10px;
+    font-weight: 800;
+  }
+  .fiche-title { min-width: 0; font-size: 13px; font-weight: 700; }
+  .fiche-badges { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; }
+  .fiche-body { padding: 0 14px 15px; border-top: 1px solid #edf0f4; }
+  .objective { margin: 13px 0; color: #344054; font-size: 12px; }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 14px;
+    margin-bottom: 14px;
+  }
+  .meta-label {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip {
+    display: inline-block;
+    padding: 2px 6px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: #fbfcfe;
+    color: #344054;
+    font-size: 9px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+  }
+  .chip.route { border-color: #bfdbfe; background: #f5f9ff; color: #1e40af; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+  .chip.table { border-color: #ddd6fe; background: #faf8ff; color: #5b21b6; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+  .chip.ref { border-color: #a7f3d0; background: #f0fdf4; color: #047857; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .detail-grid h4 { margin: 0 0 5px; font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+  .detail-grid ul { margin: 0; padding-left: 17px; }
+  .detail-grid li { margin: 3px 0; font-size: 11px; color: #344054; }
+  .note {
+    padding: 9px 10px;
+    border: 1px solid #e4e7ec;
+    border-left: 3px solid var(--blue);
+    border-radius: 7px;
+    background: #fbfcfe;
+    color: #475467;
+    font-size: 11px;
+  }
+  .note strong { color: var(--ink); }
+
+  .empty {
+    padding: 28px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    background: #fbfcfe;
+    color: var(--muted);
+    text-align: center;
+    font-size: 13px;
+  }
+
+  .audit-grid, .limits-grid, .roadmap-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .audit-card, .limit-card, .roadmap-card {
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+  }
+  .audit-card h3, .limit-card h3, .roadmap-card h3 {
+    margin: 8px 0 5px;
+    font-size: 13px;
+  }
+  .audit-card p, .limit-card p, .roadmap-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 11px;
+  }
+  .audit-card code {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 3px 6px;
+    border: 1px solid #a7f3d0;
+    border-radius: 5px;
+    background: #f0fdf4;
+    color: #047857;
+    font-size: 10px;
+    overflow-wrap: anywhere;
+  }
+  .limits-grid { margin-top: 10px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .limit-card { background: #fbfcfe; }
+  .roadmap-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .roadmap-card header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .roadmap-card ul { margin: 0; padding: 10px 0 0 17px; }
+  .roadmap-card li { margin: 0 0 7px; font-size: 11px; color: #344054; }
+  .roadmap-card .badge { margin-left: 4px; }
+
+  .rules-table th, .rules-table td {
+    padding: 9px 11px;
+    border-bottom: 1px solid #edf0f4;
+    text-align: left;
+    vertical-align: top;
+    font-size: 12px;
+  }
+  .rules-table th {
+    background: #f8fafc;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+  .rules-table td:first-child { width: 28%; font-weight: 700; }
+  .rules-table code { color: #5b21b6; font-size: 11px; }
+
+  footer {
+    padding: 22px 0 32px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 11px;
+  }
+  footer .wrap {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 1080px) {
+    .kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .filters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .filter-actions { grid-column: span 3; }
+    .limits-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 820px) {
+    .hero-inner { grid-template-columns: 1fr; align-items: start; }
+    .hero-actions { flex-direction: row; flex-wrap: wrap; min-width: 0; }
+    .hero-actions .btn { flex: 1 1 190px; }
+    .fiche-grid { grid-template-columns: 1fr; }
+    .audit-grid, .roadmap-grid { grid-template-columns: 1fr; }
+    .fiche summary { grid-template-columns: auto minmax(0, 1fr) auto; }
+    .fiche-badges { grid-column: 1 / -1; justify-content: flex-start; padding-left: 0; }
+  }
+  @media (max-width: 620px) {
+    .wrap { width: min(100% - 20px, 1240px); }
+    .hero { padding: 28px 0 24px; }
+    .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .filters { grid-template-columns: 1fr; }
+    .filter-actions { grid-column: auto; }
+    .section-head { align-items: flex-start; flex-direction: column; }
+    .meta-grid, .detail-grid { grid-template-columns: 1fr; }
+    .limits-grid { grid-template-columns: 1fr; }
+    .panel { padding: 14px; }
+    .fiche summary { padding: 10px 11px; }
+    .fiche-body { padding: 0 11px 12px; }
+  }
+
+  @media print {
+    @page { size: A4; margin: 11mm; }
+    body { background: #fff; color: #000; font-size: 9.5px; }
+    .wrap { width: 100%; }
+    .no-print, .hero-actions, .anchor-nav, .filters, .section-actions, .filter-actions { display: none !important; }
+    .hero {
+      padding: 0 0 10px;
+      border-bottom: 2px solid #000;
+      background: #fff !important;
+      color: #000;
+    }
+    .hero::after { display: none; }
+    .brand { margin-bottom: 10px; color: #000; }
+    .brand-mark { border-color: #000; background: #fff; color: #000; }
+    .eyebrow { color: #000; }
+    .lede { color: #333; }
+    .hero-chip { border-color: #bbb; background: #fff; color: #333; }
+    .hero-chip strong { color: #000; }
+    main { padding: 12px 0 0; }
+    .kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-bottom: 10px; }
+    .kpi, .panel, .fiche, .audit-card, .limit-card, .roadmap-card {
+      box-shadow: none;
+      break-inside: avoid;
+    }
+    .kpi { padding: 8px; }
+    .kpi-value { font-size: 20px; }
+    .panel { padding: 10px; margin-bottom: 10px; }
+    .table-wrap { overflow: visible; border-color: #bbb; }
+    .catalog-table { min-width: 0; }
+    .catalog-table th, .catalog-table td { padding: 4px 5px; font-size: 8px; }
+    .tables-inline { max-width: none; font-size: 7.5px; }
+    .fiche-grid { display: block; }
+    .family-section { break-before: page; }
+    .family-section:first-of-type { break-before: auto; }
+    .fiche { margin-bottom: 6px; border-color: #bbb; }
+    .fiche summary { padding: 6px 8px; }
+    .fiche summary::after { display: none; }
+    .fiche-body { display: block !important; padding: 0 8px 8px; }
+    .objective { margin: 7px 0; font-size: 9px; }
+    .meta-grid, .detail-grid { gap: 6px 10px; margin-bottom: 7px; }
+    .chip { font-size: 7.5px; }
+    .detail-grid li { font-size: 8.5px; }
+    .note { font-size: 8.5px; padding: 6px; }
+    .audit-grid, .limits-grid, .roadmap-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .roadmap-card li { font-size: 8.5px; }
+    .rules-table th, .rules-table td { padding: 4px 5px; font-size: 8px; }
+    a { color: #000; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div>
+      <div class="brand">
+        <span class="brand-mark">A+</span>
+        <span>ERP multi-sectoriel · Module École</span>
+      </div>
+      <p class="eyebrow">Référentiel documentaire</p>
+      <h1>Catalogue des extractions</h1>
+      <p class="lede">
+        Inventaire des documents, listes, reçus, bulletins, rapports et exports attendus dans le module École.
+        Chaque fiche précise les données sources, les rôles autorisés, les filtres, les règles de gestion et
+        l’état d’avancement réel.
+      </p>
+      <div class="chip-row">
+        <span class="hero-chip"><strong id="hero-total">55</strong> extractions</span>
+        <span class="hero-chip"><strong>7</strong> familles</span>
+        <span class="hero-chip"><strong id="hero-existing">3</strong> existantes</span>
+        <span class="hero-chip"><strong id="hero-p0">19</strong> priorités P0</span>
+        <span class="hero-chip">Mise à jour <strong id="generated-date">—</strong></span>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <button class="btn btn-primary" id="print-btn" type="button">Imprimer le catalogue</button>
+      <button class="btn btn-ghost" id="csv-btn" type="button">Exporter le catalogue en CSV</button>
+    </div>
+  </div>
+</header>
+
+<nav class="anchor-nav no-print" aria-label="Sections du catalogue">
+  <div class="wrap">
+    <a href="#catalogue">Catalogue</a>
+    <a href="#fiches">Fiches détaillées</a>
+    <a href="#audit">Audit de l’existant</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#regles">Règles de génération</a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <noscript>
+    <div class="panel">Activez JavaScript pour afficher le catalogue interactif et les fiches détaillées.</div>
+  </noscript>
+  <section class="kpi-grid" id="kpis" aria-label="Synthèse"></section>
+
+  <section class="panel filters no-print" aria-label="Filtres du catalogue">
+    <div class="field">
+      <label for="filter-search">Recherche</label>
+      <input id="filter-search" type="search" placeholder="Code, titre, table, rôle, règle…" autocomplete="off" />
+    </div>
+    <div class="field">
+      <label for="filter-family">Famille</label>
+      <select id="filter-family"><option value="">Toutes</option></select>
+    </div>
+    <div class="field">
+      <label for="filter-format">Format</label>
+      <select id="filter-format"><option value="">Tous</option></select>
+    </div>
+    <div class="field">
+      <label for="filter-role">Rôle</label>
+      <select id="filter-role"><option value="">Tous</option></select>
+    </div>
+    <div class="field">
+      <label for="filter-priority">Priorité</label>
+      <select id="filter-priority">
+        <option value="">Toutes</option>
+        <option value="P0">P0</option>
+        <option value="P1">P1</option>
+        <option value="P2">P2</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="filter-status">Statut</label>
+      <select id="filter-status">
+        <option value="">Tous</option>
+        <option value="Existant">Existant</option>
+        <option value="À créer">À créer</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="filter-readiness">Faisabilité</label>
+      <select id="filter-readiness">
+        <option value="">Toutes</option>
+        <option value="Livré">Livré</option>
+        <option value="Prêt">Prêt</option>
+        <option value="Partiel">Partiel</option>
+        <option value="Schéma requis">Schéma requis</option>
+      </select>
+    </div>
+    <div class="filter-actions">
+      <button class="btn btn-outline btn-small" id="reset-btn" type="button">Réinitialiser</button>
+    </div>
+  </section>
+
+  <section class="panel" id="catalogue">
+    <div class="section-head">
+      <div>
+        <h2>Catalogue des extractions</h2>
+        <p id="result-count" role="status" aria-live="polite">Chargement…</p>
+      </div>
+      <div class="section-actions no-print">
+        <span class="badge tone-green">Livré</span>
+        <span class="badge tone-blue">Prêt</span>
+        <span class="badge tone-amber">Partiel</span>
+        <span class="badge tone-red">Schéma requis</span>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="catalog-table" aria-label="Catalogue des extractions du module École">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Extraction</th>
+            <th>Famille</th>
+            <th>Rôles</th>
+            <th>Format</th>
+            <th>Tables sources</th>
+            <th>Priorité</th>
+            <th>Statut</th>
+            <th>Faisabilité</th>
+          </tr>
+        </thead>
+        <tbody id="catalog-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="fiches">
+    <div class="section-head">
+      <div>
+        <h2>Fiches détaillées</h2>
+        <p>Une fiche de spécification par extraction. Cliquez sur une ligne du catalogue pour ouvrir sa fiche.</p>
+      </div>
+      <div class="section-actions no-print">
+        <button class="btn btn-outline btn-small" id="expand-btn" type="button">Tout déplier</button>
+        <button class="btn btn-outline btn-small" id="collapse-btn" type="button">Tout replier</button>
+      </div>
+    </div>
+    <div id="fiches-root"></div>
+    <div class="empty" id="empty-state" hidden>Aucune extraction ne correspond aux filtres sélectionnés.</div>
+  </section>
+
+  <section class="panel" id="audit">
+    <div class="section-head">
+      <div>
+        <h2>Audit de l’existant</h2>
+        <p>Seul le bulletin scolaire est aujourd’hui exportable. Les autres documents sont à construire.</p>
+      </div>
+    </div>
+    <div class="audit-grid">
+      <article class="audit-card">
+        <span class="badge tone-green">Existant</span>
+        <h3>Bulletin individuel</h3>
+        <p>Impression A4 avec en-tête établissement, lignes par matière, synthèse, appréciation et signatures.</p>
+        <code>src/modules/school/report-cards/utils/reportCardDocument.ts:162</code>
+      </article>
+      <article class="audit-card">
+        <span class="badge tone-green">Existant</span>
+        <h3>Bulletins en lot</h3>
+        <p>Impression de plusieurs bulletins sélectionnés, avec saut de page par élève.</p>
+        <code>src/modules/school/report-cards/pages/ReportCardsPage.tsx:158</code>
+      </article>
+      <article class="audit-card">
+        <span class="badge tone-green">Existant</span>
+        <h3>Export CSV des bulletins</h3>
+        <p>Synthèse des bulletins sélectionnés avec détail par matière, UTF-8 BOM et séparateur point-virgule.</p>
+        <code>src/modules/school/report-cards/utils/reportCardDocument.ts:174</code>
+      </article>
+    </div>
+    <div class="limits-grid">
+      <article class="limit-card">
+        <span class="badge tone-red">Limite</span>
+        <h3>Aucun reçu</h3>
+        <p>Les paiements existent, mais aucun document de reçu ou de duplicata n’est imprimable.</p>
+      </article>
+      <article class="limit-card">
+        <span class="badge tone-red">Limite</span>
+        <h3>Pas de facturation</h3>
+        <p>Aucune table de frais, facture, ligne de facture ou allocation paiement/facture.</p>
+      </article>
+      <article class="limit-card">
+        <span class="badge tone-red">Limite</span>
+        <h3>Pas de référentiel de salles</h3>
+        <p>La salle est un texte libre dans l’emploi du temps, sans table dédiée.</p>
+      </article>
+      <article class="limit-card">
+        <span class="badge tone-red">Limite</span>
+        <h3>Pas de portail familles</h3>
+        <p>Les documents destinés aux élèves et parents sont générés par le personnel, sans espace dédié.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="panel" id="roadmap">
+    <div class="section-head">
+      <div>
+        <h2>Roadmap de mise en œuvre</h2>
+        <p>Les priorités sont calculées à partir du catalogue. Les éléments « Schéma requis » supposent une évolution SQL préalable.</p>
+      </div>
+    </div>
+    <div class="roadmap-grid" id="roadmap-root"></div>
+  </section>
+
+  <section class="panel" id="regles">
+    <div class="section-head">
+      <div>
+        <h2>Règles de génération</h2>
+        <p>Conventions communes à appliquer à tous les documents du module École.</p>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="rules-table">
+        <thead>
+          <tr><th>Règle</th><th>Convention</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Format papier</td>
+            <td>A4 portrait, marges 12 mm, police lisible, tableau répété sur chaque page. Le modèle de référence est <code>reportCardDocument.ts:123</code>.</td>
+          </tr>
+          <tr>
+            <td>En-tête établissement</td>
+            <td>Utiliser <code>school_name</code>, <code>school_address</code>, <code>school_phone</code>, <code>school_email</code> et <code>school_website</code> depuis <code>school_settings</code>. Prévoir un logo optionnel et un repli textuel.</td>
+          </tr>
+          <tr>
+            <td>Pied de page</td>
+            <td>Type de document, date de génération, utilisateur responsable et pagination <code>Page X / Y</code>.</td>
+          </tr>
+          <tr>
+            <td>Numérotation</td>
+            <td>Format <code>TYPE-ANNÉE-SÉQUENCE</code> : <code>REC</code>, <code>FAC</code>, <code>ATT</code>, <code>CERT</code>, <code>BUL</code>, <code>PV</code>. Un numéro ne doit jamais être réutilisé.</td>
+          </tr>
+          <tr>
+            <td>Duplicata</td>
+            <td>Mention <code>DUPLICATA</code> visible, référence du document original, date et utilisateur de la réimpression.</td>
+          </tr>
+          <tr>
+            <td>Export CSV</td>
+            <td>UTF-8 avec BOM, séparateur point-virgule, dates ISO, en-têtes en français, échappement des guillemets.</td>
+          </tr>
+          <tr>
+            <td>Journalisation</td>
+            <td>Écrire une entrée dans <code>school_audit_logs</code> avec l’action <code>document.generate</code>, le type, l’identifiant concerné et l’utilisateur.</td>
+          </tr>
+          <tr>
+            <td>Confidentialité</td>
+            <td>Les enseignants n’accèdent pas aux données financières. Les élèves et parents ne voient que leurs propres documents. Les données familiales sont réservées aux rôles autorisés.</td>
+          </tr>
+          <tr>
+            <td>Paiements</td>
+            <td>Aucune suppression silencieuse. Toute annulation ou correction doit être tracée et motivée.</td>
+          </tr>
+          <tr>
+            <td>PDF</td>
+            <td>Impression navigateur pour l’instant, sans bibliothèque PDF. Le document doit rester lisible si l’impression est enregistrée en PDF.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Module École · Catalogue des extractions · Version 1.0</span>
+    <span>Source : cahier des charges fonctionnel, schéma SQL et code du module. Généré le <span id="footer-date">—</span>.</span>
+  </div>
+</footer>
+
+<script>
+const FAMILIES = {
+  ADM: {
+    label: "Scolarité & administration",
+    description: "Dossiers, listes et documents officiels de scolarité.",
+    tone: "blue"
+  },
+  PED: {
+    label: "Pédagogie & bulletins",
+    description: "Notes, bulletins, palmarès et décisions pédagogiques.",
+    tone: "violet"
+  },
+  VIE: {
+    label: "Présences & vie scolaire",
+    description: "Présences, absences, retards et suivi des familles.",
+    tone: "green"
+  },
+  ENS: {
+    label: "Emploi du temps & enseignants",
+    description: "Emplois du temps, affectations et données enseignants.",
+    tone: "amber"
+  },
+  FIN: {
+    label: "Finances & paiements",
+    description: "Encaissements, reçus, facturation et soldes.",
+    tone: "red"
+  },
+  PIL: {
+    label: "Pilotage & administration",
+    description: "Rapports de direction, effectifs, audit et administration.",
+    tone: "slate"
+  },
+  COM: {
+    label: "Communication",
+    description: "Annonces, notifications, convocations et publications.",
+    tone: "cyan"
+  }
+};
+
+const PRIORITY_TONES = { P0: "red", P1: "amber", P2: "slate" };
+const READINESS_TONES = {
+  "Livré": "green",
+  "Prêt": "blue",
+  "Partiel": "amber",
+  "Schéma requis": "red"
+};
+const STATUS_TONES = {
+  "Existant": "green",
+  "À créer": "slate"
+};
+
+const EXTRACTIONS = [
+  {
+    code: "ADM-01",
+    title: "Fiche individuelle élève",
+    family: "ADM",
+    objective: "Restituer le dossier administratif complet d’un élève pour le secrétariat, la direction et les familles.",
+    routes: ["/app/ecole/eleves"],
+    tables: ["school_students", "school_parents", "school_student_parents", "school_enrollments", "school_classes", "school_settings"],
+    roles: ["Secrétariat", "Direction"],
+    filters: ["Élève", "Année scolaire"],
+    formats: ["PDF"],
+    columns: ["Identité", "Matricule", "Classe", "Section", "Naissance", "Parents/tuteurs", "Contacts", "Inscription", "Statut"],
+    rules: ["Un document par élève", "Données familiales réservées au secrétariat et à la direction", "Journaliser la génération"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Les données existent dans school_students, school_parents et school_enrollments."
+  },
+  {
+    code: "ADM-02",
+    title: "Liste des élèves par classe",
+    family: "ADM",
+    objective: "Produire la liste nominative d’une classe avec les informations utiles à la vie scolaire.",
+    routes: ["/app/ecole/eleves", "/app/ecole/classes"],
+    tables: ["school_students", "school_enrollments", "school_classes"],
+    roles: ["Secrétariat", "Direction", "Enseignant"],
+    filters: ["Année scolaire", "Classe", "Statut"],
+    formats: ["PDF", "CSV"],
+    columns: ["N°", "Matricule", "Nom complet", "Genre", "Date de naissance", "Classe", "Section", "Statut"],
+    rules: ["Trier par nom", "Afficher l’effectif en tête", "Respecter le périmètre de l’enseignant"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Base de nombreuses feuilles de présence et documents administratifs."
+  },
+  {
+    code: "ADM-03",
+    title: "Registre des inscriptions",
+    family: "ADM",
+    objective: "Lister les inscriptions d’une année avec leur statut et leur date d’entrée.",
+    routes: ["/app/ecole/inscriptions"],
+    tables: ["school_enrollments", "school_students", "school_academic_years", "school_classes"],
+    roles: ["Secrétariat", "Direction"],
+    filters: ["Année scolaire", "Classe", "Statut", "Période"],
+    formats: ["PDF", "CSV"],
+    columns: ["Date", "Matricule", "Élève", "Classe", "Section", "Option", "Statut"],
+    rules: ["Conserver l’historique par année", "Ne pas modifier les années clôturées", "Signaler les doublons potentiels"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Les inscriptions sont déjà historisées dans school_enrollments."
+  },
+  {
+    code: "ADM-04",
+    title: "Certificat de scolarité",
+    family: "ADM",
+    objective: "Attester qu’un élève est régulièrement inscrit dans l’établissement.",
+    routes: ["/app/ecole/inscriptions", "/app/ecole/eleves"],
+    tables: ["school_students", "school_enrollments", "school_settings"],
+    roles: ["Secrétariat", "Direction"],
+    filters: ["Élève", "Année scolaire", "Classe"],
+    formats: ["PDF"],
+    columns: ["En-tête établissement", "Identité", "Matricule", "Classe", "Année", "Date", "Signature"],
+    rules: ["Vérifier une inscription active", "Numéroter le document", "Journaliser l’émetteur"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Document officiel le plus demandé par les familles."
+  },
+  {
+    code: "ADM-05",
+    title: "Attestation d’inscription",
+    family: "ADM",
+    objective: "Confirmer l’inscription d’un élève pour une démarche administrative.",
+    routes: ["/app/ecole/inscriptions"],
+    tables: ["school_students", "school_enrollments", "school_settings"],
+    roles: ["Secrétariat", "Direction"],
+    filters: ["Élève", "Année scolaire"],
+    formats: ["PDF"],
+    columns: ["Identité", "Matricule", "Classe", "Année", "Date d’inscription", "Signature"],
+    rules: ["Uniquement pour une inscription active", "Mentionner la date de génération", "Conserver une trace"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Variante simplifiée du certificat de scolarité."
+  },
+  {
+    code: "ADM-06",
+    title: "Attestation de fréquentation",
+    family: "ADM",
+    objective: "Justifier la présence effective d’un élève sur une période donnée.",
+    routes: ["/app/ecole/presences"],
+    tables: ["school_students", "school_attendance", "school_enrollments", "school_settings"],
+    roles: ["Secrétariat", "Direction", "Surveillant"],
+    filters: ["Élève", "Période", "Classe"],
+    formats: ["PDF"],
+    columns: ["Identité", "Classe", "Période", "Jours ouvrés", "Présences", "Absences", "Taux", "Signature"],
+    rules: ["Calculer le taux à partir des présences", "Signaler les absences non justifiées", "Ne pas inclure les jours non ouvrés"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Dépend de la qualité des feuilles de présence."
+  },
+  {
+    code: "ADM-07",
+    title: "Fiche parents/tuteurs",
+    family: "ADM",
+    objective: "Fournir les coordonnées et la relation des parents ou tuteurs d’un élève.",
+    routes: ["/app/ecole/parents"],
+    tables: ["school_parents", "school_student_parents", "school_students"],
+    roles: ["Secrétariat", "Direction"],
+    filters: ["Élève", "Parent", "Relation", "Statut"],
+    formats: ["PDF", "CSV"],
+    columns: ["Élève", "Matricule", "Parent/tuteur", "Relation", "Téléphone", "Email", "Adresse", "Contact principal"],
+    rules: ["Marquer le contact principal", "Protéger les données personnelles", "Ne pas exposer aux enseignants sans nécessité"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Les tables school_parents et school_student_parents existent déjà."
+  },
+  {
+    code: "ADM-08",
+    title: "Dossier de transfert/sortie",
+    family: "ADM",
+    objective: "Préparer le dossier administratif d’un élève qui quitte ou change d’établissement.",
+    routes: ["/app/ecole/inscriptions", "/app/ecole/eleves"],
+    tables: ["school_students", "school_enrollments", "school_settings"],
+    roles: ["Secrétariat", "Direction"],
+    filters: ["Élève", "Année scolaire", "Motif"],
+    formats: ["PDF"],
+    columns: ["Identité", "Classe", "Dernière inscription", "Motif", "Date de sortie", "Documents remis", "Signature"],
+    rules: ["Conserver l’historique après le départ", "Vérifier le statut de l’élève", "Mentionner les documents remis"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Partiel",
+    existingRef: null,
+    notes: "Statuts disponibles, mais pas de table dédiée aux transferts et départs."
+  },
+  {
+    code: "PED-01",
+    title: "Bulletin individuel",
+    family: "PED",
+    objective: "Éditer le bulletin officiel d’un élève pour une période.",
+    routes: ["/app/ecole/bulletins"],
+    tables: ["school_report_cards", "school_report_lines", "school_students", "school_settings"],
+    roles: ["Direction", "Préfet", "Enseignant (consultation)"],
+    filters: ["Élève", "Année", "Période", "Classe"],
+    formats: ["PDF"],
+    columns: ["En-tête", "Identité", "Matières", "Coefficients", "Moyennes", "Appréciations", "Résumé", "Signatures"],
+    rules: ["Imprimer depuis un bulletin validé ou publié", "Mentionner le statut", "Ne pas modifier les notes depuis le document"],
+    priority: "P0",
+    status: "Existant",
+    readiness: "Livré",
+    existingRef: "src/modules/school/report-cards/utils/reportCardDocument.ts:162",
+    notes: "Déjà opérationnel via reportCardDocument.ts et ReportCardsPage.tsx."
+  },
+  {
+    code: "PED-02",
+    title: "Bulletins de classe en lot",
+    family: "PED",
+    objective: "Imprimer les bulletins de plusieurs élèves en une seule opération.",
+    routes: ["/app/ecole/bulletins"],
+    tables: ["school_report_cards", "school_report_lines", "school_students", "school_settings"],
+    roles: ["Direction", "Préfet", "Secrétariat"],
+    filters: ["Classe", "Année", "Période", "Statut", "Sélection"],
+    formats: ["PDF"],
+    columns: ["Un bulletin par page", "En-tête établissement", "Signature"],
+    rules: ["Sélection explicite des élèves", "Saut de page par bulletin", "Journaliser le lot"],
+    priority: "P0",
+    status: "Existant",
+    readiness: "Livré",
+    existingRef: "src/modules/school/report-cards/pages/ReportCardsPage.tsx:158",
+    notes: "Bouton Imprimer la sélection déjà présent."
+  },
+  {
+    code: "PED-03",
+    title: "Export CSV des bulletins",
+    family: "PED",
+    objective: "Exporter les données de synthèse des bulletins pour analyse.",
+    routes: ["/app/ecole/bulletins"],
+    tables: ["school_report_cards", "school_report_lines", "school_students"],
+    roles: ["Direction", "Préfet", "Secrétariat"],
+    filters: ["Classe", "Année", "Période", "Statut"],
+    formats: ["CSV"],
+    columns: ["Élève", "Matricule", "Classe", "Moyenne", "Pourcentage", "Rang", "Mention", "Décision", "Statut", "Détail matières"],
+    rules: ["UTF-8 BOM", "Séparateur point-virgule", "Une ligne par bulletin"],
+    priority: "P1",
+    status: "Existant",
+    readiness: "Livré",
+    existingRef: "src/modules/school/report-cards/utils/reportCardDocument.ts:174",
+    notes: "Export déjà disponible, limité aux bulletins sélectionnés."
+  },
+  {
+    code: "PED-04",
+    title: "Palmarès / classement de classe",
+    family: "PED",
+    objective: "Classer les élèves d’une classe selon la moyenne de la période.",
+    routes: ["/app/ecole/resultats", "/app/ecole/bulletins"],
+    tables: ["school_report_cards", "school_students", "school_enrollments"],
+    roles: ["Direction", "Préfet", "Enseignant"],
+    filters: ["Année", "Période", "Classe", "Statut"],
+    formats: ["PDF", "CSV"],
+    columns: ["Rang", "Élève", "Matricule", "Moyenne", "Pourcentage", "Mention", "Décision"],
+    rules: ["Exclure les bulletins non validés selon le paramètre", "Gérer les ex æquo", "Afficher l’effectif classé"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Les rangs existent déjà dans school_report_cards."
+  },
+  {
+    code: "PED-05",
+    title: "Relevé de notes individuel",
+    family: "PED",
+    objective: "Détailler toutes les notes d’un élève par matière et évaluation.",
+    routes: ["/app/ecole/notes", "/app/ecole/bulletins"],
+    tables: ["school_grades", "school_assessments", "school_subjects", "school_students"],
+    roles: ["Direction", "Préfet", "Enseignant", "Secrétariat"],
+    filters: ["Élève", "Année", "Période", "Matière"],
+    formats: ["PDF"],
+    columns: ["Matière", "Évaluation", "Type", "Date", "Note", "Barème", "Coefficient", "Statut"],
+    rules: ["Respecter le périmètre de l’enseignant", "Masquer les notes non publiées aux familles", "Afficher les absences"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Données disponibles dans school_grades et school_assessments."
+  },
+  {
+    code: "PED-06",
+    title: "Relevé de notes par matière/classe",
+    family: "PED",
+    objective: "Produire la situation des notes d’une classe pour une matière.",
+    routes: ["/app/ecole/notes"],
+    tables: ["school_grades", "school_assessments", "school_subjects", "school_classes"],
+    roles: ["Direction", "Préfet", "Enseignant"],
+    filters: ["Année", "Période", "Classe", "Matière", "Évaluation"],
+    formats: ["PDF", "CSV"],
+    columns: ["Élève", "Évaluation", "Note", "Barème", "Moyenne matière", "Statut"],
+    rules: ["Filtrer sur les évaluations de la matière", "Signaler les notes manquantes", "Trier par nom"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Utile pour les conseils de classe et les contrôles de complétude."
+  },
+  {
+    code: "PED-07",
+    title: "Grille de notes / feuille de saisie",
+    family: "PED",
+    objective: "Fournir une grille imprimable pour saisir ou contrôler les notes d’une évaluation.",
+    routes: ["/app/ecole/notes"],
+    tables: ["school_assessments", "school_grades", "school_students", "school_subjects"],
+    roles: ["Enseignant", "Préfet", "Direction"],
+    filters: ["Classe", "Matière", "Évaluation", "Période"],
+    formats: ["PDF", "CSV"],
+    columns: ["N°", "Matricule", "Élève", "Note", "Absent", "Observation"],
+    rules: ["Une ligne par élève inscrit", "Colonne note vide pour la saisie", "Afficher le barème et le coefficient"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Support papier courant pour les enseignants."
+  },
+  {
+    code: "PED-08",
+    title: "Procès-verbal de délibération",
+    family: "PED",
+    objective: "Consigner les décisions de passage, redoublement ou orientation d’une classe.",
+    routes: ["/app/ecole/bulletins"],
+    tables: ["school_report_cards", "school_report_lines", "school_students", "school_classes"],
+    roles: ["Direction", "Préfet"],
+    filters: ["Année", "Classe", "Période", "Décision"],
+    formats: ["PDF"],
+    columns: ["Élève", "Moyenne", "Rang", "Décision", "Observation", "Signatures"],
+    rules: ["Décisions réservées à la direction", "Afficher les décisions validées", "Conserver la version signée"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Les décisions existent dans school_report_cards.decision."
+  },
+  {
+    code: "PED-09",
+    title: "Attestation de réussite / décision de passage",
+    family: "PED",
+    objective: "Attester la décision pédagogique de fin d’année pour un élève.",
+    routes: ["/app/ecole/bulletins"],
+    tables: ["school_report_cards", "school_students", "school_settings"],
+    roles: ["Direction", "Secrétariat"],
+    filters: ["Élève", "Année", "Classe", "Décision"],
+    formats: ["PDF"],
+    columns: ["Identité", "Classe", "Année", "Moyenne", "Décision", "Date", "Signature"],
+    rules: ["Décision validée obligatoire", "Mentionner la décision exacte", "Ne pas générer pour un élève en cours"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Partiel",
+    existingRef: null,
+    notes: "Pas de résultats d’examen officiels dans le schéma actuel."
+  },
+  {
+    code: "PED-10",
+    title: "Synthèse des appréciations par classe",
+    family: "PED",
+    objective: "Regrouper les appréciations des enseignants par élève et par matière.",
+    routes: ["/app/ecole/appreciations"],
+    tables: ["school_appreciations", "school_students", "school_subjects"],
+    roles: ["Direction", "Préfet", "Enseignant"],
+    filters: ["Année", "Période", "Classe", "Matière", "Statut"],
+    formats: ["PDF", "CSV"],
+    columns: ["Élève", "Matière", "Enseignant", "Appréciation", "Statut", "Date"],
+    rules: ["Distinguer brouillon, soumis et validé", "Respecter le périmètre enseignant", "Signaler les appréciations manquantes"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Données disponibles dans school_appreciations."
+  },
+  {
+    code: "PED-11",
+    title: "Fiche de suivi individuel",
+    family: "PED",
+    objective: "Rassembler notes, absences, appréciations et décisions d’un élève.",
+    routes: ["/app/ecole/mes-classes", "/app/ecole/resultats"],
+    tables: ["school_grades", "school_attendance", "school_appreciations", "school_report_cards", "school_students"],
+    roles: ["Direction", "Préfet", "Enseignant"],
+    filters: ["Élève", "Année", "Période"],
+    formats: ["PDF"],
+    columns: ["Identité", "Moyennes", "Notes récentes", "Absences", "Appréciations", "Décision"],
+    rules: ["Vue synthétique non officielle", "Ne pas exposer les données financières", "Respecter le périmètre de l’enseignant"],
+    priority: "P2",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Outil de suivi pédagogique."
+  },
+  {
+    code: "PED-12",
+    title: "Statistiques pédagogiques par classe/matière",
+    family: "PED",
+    objective: "Analyser les moyennes, taux de réussite et dispersion des notes.",
+    routes: ["/app/ecole/resultats"],
+    tables: ["school_report_cards", "school_grades", "school_assessments"],
+    roles: ["Direction", "Préfet"],
+    filters: ["Année", "Période", "Classe", "Matière"],
+    formats: ["PDF", "CSV"],
+    columns: ["Classe", "Matière", "Effectif", "Moyenne", "Minimum", "Maximum", "Taux de réussite", "Écart-type"],
+    rules: ["Définir la note de passage depuis les paramètres", "Exclure les absents du calcul", "Mentionner la période"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Les calculs existent partiellement dans ResultsPage."
+  },
+  {
+    code: "VIE-01",
+    title: "Feuille de présence journalière",
+    family: "VIE",
+    objective: "Éditer la feuille d’appel d’une classe pour une date et une séance.",
+    routes: ["/app/ecole/presences"],
+    tables: ["school_attendance", "school_students", "school_classes", "school_subjects"],
+    roles: ["Enseignant", "Surveillant", "Préfet"],
+    filters: ["Date", "Classe", "Matière", "Séance"],
+    formats: ["PDF"],
+    columns: ["N°", "Matricule", "Élève", "Présent", "Absent", "Retard", "Justifié", "Observation"],
+    rules: ["Une ligne par élève inscrit", "Conserver les statuts existants", "Signer la feuille"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Données disponibles dans school_attendance."
+  },
+  {
+    code: "VIE-02",
+    title: "Liste d’appel par classe/matière",
+    family: "VIE",
+    objective: "Préparer une liste d’appel réutilisable pour une classe ou une matière.",
+    routes: ["/app/ecole/presences"],
+    tables: ["school_students", "school_enrollments", "school_classes", "school_subjects"],
+    roles: ["Enseignant", "Surveillant"],
+    filters: ["Année", "Classe", "Matière"],
+    formats: ["PDF", "CSV"],
+    columns: ["N°", "Matricule", "Élève", "Classe", "Section"],
+    rules: ["Trier par nom", "Afficher l’effectif", "Respecter le périmètre enseignant"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Peut réutiliser la liste des élèves par classe."
+  },
+  {
+    code: "VIE-03",
+    title: "Récapitulatif mensuel absences/retards",
+    family: "VIE",
+    objective: "Synthétiser les absences et retards d’une classe sur un mois.",
+    routes: ["/app/ecole/presences"],
+    tables: ["school_attendance", "school_students", "school_classes"],
+    roles: ["Surveillant", "Direction", "Préfet"],
+    filters: ["Mois", "Classe", "Statut"],
+    formats: ["PDF", "CSV"],
+    columns: ["Élève", "Présences", "Absences", "Absences justifiées", "Retards", "Taux", "Observation"],
+    rules: ["Agréger par élève", "Distinguer justifié et non justifié", "Afficher le taux de présence"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Base du suivi d’assiduité."
+  },
+  {
+    code: "VIE-04",
+    title: "Relevé d’absences par élève",
+    family: "VIE",
+    objective: "Détailler les absences et retards d’un élève sur une période.",
+    routes: ["/app/ecole/presences"],
+    tables: ["school_attendance", "school_students"],
+    roles: ["Surveillant", "Direction", "Secrétariat"],
+    filters: ["Élève", "Période", "Statut"],
+    formats: ["PDF"],
+    columns: ["Date", "Classe", "Matière", "Statut", "Motif", "Observation"],
+    rules: ["Trier par date", "Afficher le total", "Ne pas exposer aux autres élèves"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Données individuelles sensibles."
+  },
+  {
+    code: "VIE-05",
+    title: "Justificatif / attestation d’absence",
+    family: "VIE",
+    objective: "Produire un justificatif d’absence à partir d’un enregistrement vérifié.",
+    routes: ["/app/ecole/presences"],
+    tables: ["school_attendance", "school_students", "school_settings"],
+    roles: ["Surveillant", "Secrétariat", "Direction"],
+    filters: ["Élève", "Date", "Statut"],
+    formats: ["PDF"],
+    columns: ["Identité", "Classe", "Date", "Motif", "Statut", "Signature"],
+    rules: ["Utiliser un motif validé", "Mentionner la date de génération", "Journaliser"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Le motif est stocké dans school_attendance.note."
+  },
+  {
+    code: "VIE-06",
+    title: "Convocation parents / avis d’absence",
+    family: "VIE",
+    objective: "Informer les parents d’une absence répétée ou d’un retard.",
+    routes: ["/app/ecole/presences", "/app/ecole/parents"],
+    tables: ["school_attendance", "school_students", "school_parents", "school_settings"],
+    roles: ["Surveillant", "Direction", "Secrétariat"],
+    filters: ["Élève", "Période", "Type", "Parent"],
+    formats: ["PDF"],
+    columns: ["Parent", "Élève", "Classe", "Faits", "Date", "Objet", "Signature"],
+    rules: ["Choisir le parent principal", "Ne pas envoyer automatiquement", "Conserver une copie"],
+    priority: "P2",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Nécessite les coordonnées parentales à jour."
+  },
+  {
+    code: "ENS-01",
+    title: "Emploi du temps par classe",
+    family: "ENS",
+    objective: "Éditer l’emploi du temps hebdomadaire d’une classe.",
+    routes: ["/app/ecole/emploi-du-temps"],
+    tables: ["school_timetable", "school_classes", "school_subjects", "school_teachers"],
+    roles: ["Direction", "Secrétariat", "Enseignant", "Élève/parent (consultation)"],
+    filters: ["Année", "Classe", "Période"],
+    formats: ["PDF"],
+    columns: ["Jour", "Horaire", "Matière", "Enseignant", "Salle", "Statut"],
+    rules: ["Afficher les créneaux actifs", "Signaler les changements", "Trier par jour et heure"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Données disponibles dans school_timetable."
+  },
+  {
+    code: "ENS-02",
+    title: "Emploi du temps par enseignant",
+    family: "ENS",
+    objective: "Éditer l’emploi du temps d’un enseignant.",
+    routes: ["/app/ecole/emploi-du-temps"],
+    tables: ["school_timetable", "school_teachers", "school_subjects", "school_classes"],
+    roles: ["Enseignant", "Direction", "Secrétariat"],
+    filters: ["Année", "Enseignant", "Période"],
+    formats: ["PDF"],
+    columns: ["Jour", "Horaire", "Classe", "Matière", "Salle", "Statut"],
+    rules: ["Respecter le périmètre de l’enseignant", "Afficher les créneaux annulés", "Trier par jour"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Vue déjà utilisée dans l’espace enseignant."
+  },
+  {
+    code: "ENS-03",
+    title: "Emploi du temps global / occupation des salles",
+    family: "ENS",
+    objective: "Visualiser l’occupation des créneaux et des salles sur la semaine.",
+    routes: ["/app/ecole/emploi-du-temps"],
+    tables: ["school_timetable", "school_classes", "school_teachers"],
+    roles: ["Direction", "Préfet"],
+    filters: ["Année", "Jour", "Classe", "Enseignant", "Salle"],
+    formats: ["PDF"],
+    columns: ["Jour", "Horaire", "Salle", "Classe", "Matière", "Enseignant"],
+    rules: ["Détecter les conflits de salle", "Détecter les conflits d’enseignant", "Signaler les créneaux libres"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Partiel",
+    existingRef: null,
+    notes: "La salle est un texte libre, sans référentiel de salles."
+  },
+  {
+    code: "ENS-04",
+    title: "Annuaire des enseignants",
+    family: "ENS",
+    objective: "Lister les enseignants avec leurs coordonnées et spécialités.",
+    routes: ["/app/ecole/enseignants"],
+    tables: ["school_teachers", "school_assignments"],
+    roles: ["Direction", "Secrétariat"],
+    filters: ["Statut", "Spécialité", "Recherche"],
+    formats: ["PDF", "CSV"],
+    columns: ["Nom", "Postnom", "Prénom", "Spécialité", "Qualification", "Téléphone", "Email", "Statut"],
+    rules: ["Trier par nom", "Masquer les données personnelles non nécessaires", "Mentionner la date"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Données disponibles dans school_teachers."
+  },
+  {
+    code: "ENS-05",
+    title: "Affectations enseignants",
+    family: "ENS",
+    objective: "Lister les affectations enseignant/matière/classe d’une année.",
+    routes: ["/app/ecole/affectations"],
+    tables: ["school_assignments", "school_teachers", "school_subjects", "school_classes"],
+    roles: ["Direction", "Secrétariat"],
+    filters: ["Année", "Enseignant", "Classe", "Matière", "Statut"],
+    formats: ["PDF", "CSV"],
+    columns: ["Enseignant", "Matière", "Classe", "Année", "Statut"],
+    rules: ["Afficher les affectations actives", "Signaler les doublons", "Conserver l’historique"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Données disponibles dans school_assignments."
+  },
+  {
+    code: "ENS-06",
+    title: "État de service / charge horaire",
+    family: "ENS",
+    objective: "Calculer la charge horaire hebdomadaire d’un enseignant.",
+    routes: ["/app/ecole/enseignants", "/app/ecole/emploi-du-temps"],
+    tables: ["school_teachers", "school_assignments", "school_timetable", "school_subjects"],
+    roles: ["Direction", "Préfet"],
+    filters: ["Année", "Enseignant", "Période"],
+    formats: ["PDF", "CSV"],
+    columns: ["Enseignant", "Classes", "Matières", "Créneaux", "Heures/semaine", "Statut"],
+    rules: ["Additionner les créneaux actifs", "Signaler les dépassements", "Mentionner la période"],
+    priority: "P2",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Dépend de la qualité de l’emploi du temps."
+  },
+  {
+    code: "FIN-01",
+    title: "Reçu de paiement individuel",
+    family: "FIN",
+    objective: "Justifier un paiement confirmé pour un élève.",
+    routes: ["/app/ecole/paiements"],
+    tables: ["school_payments", "school_students", "school_settings"],
+    roles: ["Comptable", "Direction"],
+    filters: ["Élève", "Année", "Période", "Paiement"],
+    formats: ["PDF"],
+    columns: ["Numéro de reçu", "Élève", "Matricule", "Classe", "Montant", "Devise", "Mode", "Référence", "Date", "Statut", "Signature"],
+    rules: ["Uniquement un paiement payé", "Numéro unique", "Montant en chiffres et en lettres", "Journaliser"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Réalisable depuis school_payments, sans ventilation par facture."
+  },
+  {
+    code: "FIN-02",
+    title: "Duplicata de reçu",
+    family: "FIN",
+    objective: "Réimprimer un reçu perdu en conservant la référence d’origine.",
+    routes: ["/app/ecole/paiements"],
+    tables: ["school_payments", "school_students", "school_settings"],
+    roles: ["Comptable", "Direction"],
+    filters: ["Reçu", "Élève", "Période"],
+    formats: ["PDF"],
+    columns: ["Mention DUPLICATA", "Reçu original", "Élève", "Montant", "Date", "Signature"],
+    rules: ["Mention DUPLICATA obligatoire", "Conserver le numéro original", "Journaliser la réimpression"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Même source que FIN-01."
+  },
+  {
+    code: "FIN-03",
+    title: "Reçu groupé / bordereau",
+    family: "FIN",
+    objective: "Justifier plusieurs paiements d’un élève ou d’une période.",
+    routes: ["/app/ecole/paiements"],
+    tables: ["school_payments", "school_students", "school_settings"],
+    roles: ["Comptable", "Direction"],
+    filters: ["Élève", "Période", "Mode", "Statut"],
+    formats: ["PDF"],
+    columns: ["Élève", "Période", "Détail des paiements", "Total", "Mode", "Date", "Signature"],
+    rules: ["Totaliser uniquement les paiements confirmés", "Détailler chaque référence", "Mentionner la devise"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Utile pour les règlements échelonnés."
+  },
+  {
+    code: "FIN-04",
+    title: "Facture / appel de frais",
+    family: "FIN",
+    objective: "Produire un appel de frais à partir de l’inscription et des frais applicables.",
+    routes: ["/app/ecole/paiements"],
+    tables: ["school_payments", "school_students", "school_invoices", "school_fees"],
+    roles: ["Comptable", "Direction"],
+    filters: ["Élève", "Année", "Classe", "Période"],
+    formats: ["PDF"],
+    columns: ["Élève", "Classe", "Année", "Frais", "Montant", "Échéance", "Total", "Solde"],
+    rules: ["Nécessite un modèle de frais", "Nécessite une facture et des lignes", "Numéroter la facture"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Schéma requis",
+    existingRef: null,
+    notes: "Aucune table de frais ou de facture dans le schéma actuel."
+  },
+  {
+    code: "FIN-05",
+    title: "Échéancier de scolarité",
+    family: "FIN",
+    objective: "Présenter les échéances de paiement d’un élève.",
+    routes: ["/app/ecole/paiements"],
+    tables: ["school_students", "school_fee_schedules"],
+    roles: ["Comptable", "Direction"],
+    filters: ["Élève", "Année", "Période"],
+    formats: ["PDF"],
+    columns: ["Échéance", "Libellé", "Montant dû", "Montant payé", "Solde", "Statut"],
+    rules: ["Nécessite un modèle d’échéancier", "Mettre à jour le solde", "Signaler les retards"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Schéma requis",
+    existingRef: null,
+    notes: "Pas de table d’échéancier ni de frais attendus."
+  },
+  {
+    code: "FIN-06",
+    title: "Relevé de compte élève / solde",
+    family: "FIN",
+    objective: "Récapituler les frais, paiements et solde d’un élève.",
+    routes: ["/app/ecole/paiements"],
+    tables: ["school_payments", "school_students", "school_fees"],
+    roles: ["Comptable", "Direction"],
+    filters: ["Élève", "Année", "Période"],
+    formats: ["PDF"],
+    columns: ["Élève", "Frais attendus", "Paiements", "Solde", "Dernier paiement", "Statut"],
+    rules: ["Nécessite les montants attendus", "Ne pas exposer aux enseignants", "Journaliser la consultation"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Schéma requis",
+    existingRef: null,
+    notes: "Les paiements existent, mais pas le montant attendu par élève."
+  },
+  {
+    code: "FIN-07",
+    title: "Liste des impayés / relances",
+    family: "FIN",
+    objective: "Identifier les élèves avec un solde ou des échéances en retard.",
+    routes: ["/app/ecole/paiements"],
+    tables: ["school_payments", "school_students", "school_fees"],
+    roles: ["Comptable", "Direction"],
+    filters: ["Année", "Classe", "Période", "Statut"],
+    formats: ["PDF", "CSV"],
+    columns: ["Élève", "Classe", "Montant dû", "Payé", "Solde", "Échéance", "Contact parent"],
+    rules: ["Nécessite les montants attendus", "Trier par ancienneté", "Préparer une relance"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Schéma requis",
+    existingRef: null,
+    notes: "Le statut late existe, mais sans montant attendu le solde est incomplet."
+  },
+  {
+    code: "FIN-08",
+    title: "Journal de caisse / rapport d’encaissements",
+    family: "FIN",
+    objective: "Lister les encaissements d’une période avec leur mode et leur auteur.",
+    routes: ["/app/ecole/paiements"],
+    tables: ["school_payments", "school_students", "school_users"],
+    roles: ["Comptable", "Direction"],
+    filters: ["Période", "Mode", "Statut", "Classe"],
+    formats: ["PDF", "CSV"],
+    columns: ["Date", "Reçu", "Élève", "Classe", "Montant", "Mode", "Référence", "Statut", "Enregistré par"],
+    rules: ["Trier par date", "Totaliser par mode", "Exclure les paiements non confirmés"],
+    priority: "P0",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Réalisable avec school_payments et school_users."
+  },
+  {
+    code: "FIN-09",
+    title: "Rapport par mode de paiement",
+    family: "FIN",
+    objective: "Analyser la répartition des encaissements par mode.",
+    routes: ["/app/ecole/paiements"],
+    tables: ["school_payments", "school_users"],
+    roles: ["Comptable", "Direction"],
+    filters: ["Période", "Mode", "Classe"],
+    formats: ["PDF", "CSV"],
+    columns: ["Mode", "Nombre", "Montant", "Part", "Période"],
+    rules: ["Agréger les paiements confirmés", "Afficher le total général", "Mentionner la devise"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Complément du journal de caisse."
+  },
+  {
+    code: "FIN-10",
+    title: "Bordereau de remise en banque",
+    family: "FIN",
+    objective: "Préparer la liste des paiements bancaires à remettre.",
+    routes: ["/app/ecole/paiements"],
+    tables: ["school_payments", "school_users", "school_settings"],
+    roles: ["Comptable", "Direction"],
+    filters: ["Période", "Mode bancaire", "Référence"],
+    formats: ["PDF"],
+    columns: ["Date", "Reçu", "Élève", "Montant", "Référence", "Banque", "Total", "Signature"],
+    rules: ["Filtrer sur le mode banque", "Totaliser le bordereau", "Numéroter"],
+    priority: "P2",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Les références bancaires sont saisies dans school_payments.reference."
+  },
+  {
+    code: "FIN-11",
+    title: "Attestation de solde / quitus",
+    family: "FIN",
+    objective: "Attester qu’un élève est à jour de ses frais.",
+    routes: ["/app/ecole/paiements"],
+    tables: ["school_payments", "school_students", "school_fees"],
+    roles: ["Comptable", "Direction"],
+    filters: ["Élève", "Année"],
+    formats: ["PDF"],
+    columns: ["Élève", "Classe", "Année", "Total dû", "Total payé", "Solde", "Mention", "Signature"],
+    rules: ["Solde nul obligatoire", "Vérifier les frais attendus", "Journaliser"],
+    priority: "P2",
+    status: "À créer",
+    readiness: "Schéma requis",
+    existingRef: null,
+    notes: "Impossible de certifier un solde sans modèle de frais."
+  },
+  {
+    code: "FIN-12",
+    title: "Rapport des annulations/corrections",
+    family: "FIN",
+    objective: "Tracer les paiements annulés, corrigés ou réémis.",
+    routes: ["/app/ecole/paiements", "/app/ecole/journal"],
+    tables: ["school_payments", "school_audit_logs"],
+    roles: ["Comptable", "Direction"],
+    filters: ["Période", "Type", "Utilisateur", "Élève"],
+    formats: ["PDF", "CSV"],
+    columns: ["Date", "Utilisateur", "Action", "Reçu", "Élève", "Ancienne valeur", "Nouvelle valeur", "Motif"],
+    rules: ["S’appuyer sur le journal d’audit", "Ne jamais supprimer silencieusement", "Conserver le motif"],
+    priority: "P2",
+    status: "À créer",
+    readiness: "Partiel",
+    existingRef: null,
+    notes: "Pas de statut annulé dans school_payments, mais l’audit peut tracer les corrections."
+  },
+  {
+    code: "PIL-01",
+    title: "Rapport d’activité mensuel/annuel",
+    family: "PIL",
+    objective: "Synthétiser les activités scolaires et financières d’une période.",
+    routes: ["/app/ecole"],
+    tables: ["school_academic_years", "school_students", "school_enrollments", "school_payments", "school_report_cards"],
+    roles: ["Direction"],
+    filters: ["Année", "Période", "Classe"],
+    formats: ["PDF"],
+    columns: ["Effectifs", "Inscriptions", "Résultats", "Paiements", "Absences", "Faits marquants"],
+    rules: ["Agréger plusieurs sources", "Mentionner la période", "Réserver à la direction"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Document de pilotage transversal."
+  },
+  {
+    code: "PIL-02",
+    title: "Statistiques des effectifs",
+    family: "PIL",
+    objective: "Analyser les effectifs par classe, section, genre et statut.",
+    routes: ["/app/ecole/resultats"],
+    tables: ["school_students", "school_enrollments", "school_classes"],
+    roles: ["Direction", "Secrétariat"],
+    filters: ["Année", "Classe", "Section", "Genre", "Statut"],
+    formats: ["PDF", "CSV"],
+    columns: ["Classe", "Section", "Filles", "Garçons", "Total", "Capacité", "Taux de remplissage"],
+    rules: ["Compter les inscriptions actives", "Distinguer les statuts", "Afficher les totaux"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Données disponibles dans school_enrollments et school_classes."
+  },
+  {
+    code: "PIL-03",
+    title: "Rapport inscriptions/départs",
+    family: "PIL",
+    objective: "Suivre les entrées, sorties et transferts d’une année.",
+    routes: ["/app/ecole/inscriptions"],
+    tables: ["school_enrollments", "school_students", "school_academic_years"],
+    roles: ["Direction", "Secrétariat"],
+    filters: ["Année", "Classe", "Statut", "Période"],
+    formats: ["PDF", "CSV"],
+    columns: ["Type de mouvement", "Élève", "Classe", "Date", "Statut", "Observation"],
+    rules: ["Utiliser les statuts d’inscription", "Conserver l’historique", "Signaler les dossiers incomplets"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Pas de table dédiée aux motifs de départ."
+  },
+  {
+    code: "PIL-04",
+    title: "État des bulletins",
+    family: "PIL",
+    objective: "Suivre l’avancement des bulletins par classe et par période.",
+    routes: ["/app/ecole/bulletins"],
+    tables: ["school_report_cards", "school_students", "school_classes"],
+    roles: ["Direction", "Préfet"],
+    filters: ["Année", "Période", "Classe", "Statut"],
+    formats: ["PDF", "CSV"],
+    columns: ["Classe", "Effectif", "Brouillons", "Validés", "Publiés", "Manquants", "Taux"],
+    rules: ["Compter par statut", "Identifier les élèves sans bulletin", "Mentionner la période"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Utile avant la publication officielle."
+  },
+  {
+    code: "PIL-05",
+    title: "Journal d’audit",
+    family: "PIL",
+    objective: "Consulter et exporter les actions sensibles enregistrées.",
+    routes: ["/app/ecole/journal"],
+    tables: ["school_audit_logs", "school_users"],
+    roles: ["Direction", "Admin"],
+    filters: ["Période", "Utilisateur", "Action", "Entité"],
+    formats: ["PDF", "CSV"],
+    columns: ["Date", "Utilisateur", "Rôle", "Action", "Entité", "Ancienne valeur", "Nouvelle valeur", "Motif"],
+    rules: ["Lecture seule", "Conserver l’intégralité", "Réserver à la direction"],
+    priority: "P1",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Données disponibles dans school_audit_logs."
+  },
+  {
+    code: "PIL-06",
+    title: "Liste des utilisateurs et rôles",
+    family: "PIL",
+    objective: "Lister les comptes, rôles et enseignants associés.",
+    routes: ["/app/ecole/utilisateurs"],
+    tables: ["school_users", "school_teachers"],
+    roles: ["Direction", "Admin"],
+    filters: ["Rôle", "Statut", "Recherche"],
+    formats: ["PDF", "CSV"],
+    columns: ["Nom", "Email", "Rôle", "Enseignant lié", "Téléphone", "Actif", "Créé le"],
+    rules: ["Masquer les mots de passe", "Trier par rôle", "Réserver aux administrateurs"],
+    priority: "P2",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Données disponibles dans school_users."
+  },
+  {
+    code: "COM-01",
+    title: "Annonce / circulaire imprimable",
+    family: "COM",
+    objective: "Diffuser une annonce officielle sous forme imprimable.",
+    routes: ["/app/ecole/notifications"],
+    tables: ["school_settings", "school_notifications"],
+    roles: ["Direction", "Secrétariat"],
+    filters: ["Date", "Public", "Type"],
+    formats: ["PDF"],
+    columns: ["En-tête", "Titre", "Message", "Date", "Signature", "Public cible"],
+    rules: ["Valider le texte avant diffusion", "Conserver une copie", "Ne pas inclure de données personnelles"],
+    priority: "P2",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Réutilise le contenu des notifications."
+  },
+  {
+    code: "COM-02",
+    title: "Liste des notifications",
+    family: "COM",
+    objective: "Exporter l’historique des notifications envoyées.",
+    routes: ["/app/ecole/notifications"],
+    tables: ["school_notifications", "school_users"],
+    roles: ["Direction", "Admin"],
+    filters: ["Période", "Type", "Destinataire", "Lu/non lu"],
+    formats: ["CSV"],
+    columns: ["Date", "Titre", "Type", "Destinataire", "Rôle", "Lu", "Créé par"],
+    rules: ["Trier par date", "Ne pas exposer les messages sensibles", "UTF-8 BOM"],
+    priority: "P2",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Données disponibles dans school_notifications."
+  },
+  {
+    code: "COM-03",
+    title: "Convocation réunion parents/enseignants",
+    family: "COM",
+    objective: "Convoquer un parent ou un enseignant à une réunion.",
+    routes: ["/app/ecole/parents", "/app/ecole/notifications"],
+    tables: ["school_parents", "school_students", "school_settings"],
+    roles: ["Direction", "Secrétariat"],
+    filters: ["Destinataire", "Élève", "Date", "Objet"],
+    formats: ["PDF"],
+    columns: ["Destinataire", "Élève", "Objet", "Date", "Heure", "Lieu", "Signature"],
+    rules: ["Choisir un destinataire valide", "Mentionner l’objet", "Conserver une copie"],
+    priority: "P2",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Peut être généré depuis les coordonnées parents."
+  },
+  {
+    code: "COM-04",
+    title: "Avis de publication des résultats",
+    family: "COM",
+    objective: "Informer les familles de la disponibilité des bulletins.",
+    routes: ["/app/ecole/bulletins", "/app/ecole/notifications"],
+    tables: ["school_report_cards", "school_students", "school_settings"],
+    roles: ["Direction", "Secrétariat"],
+    filters: ["Année", "Période", "Classe", "Statut"],
+    formats: ["PDF"],
+    columns: ["En-tête", "Période", "Classe", "Date de publication", "Modalités", "Signature"],
+    rules: ["Vérifier que les bulletins sont publiés", "Mentionner les modalités d’accès", "Journaliser"],
+    priority: "P2",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "À générer après publication officielle."
+  },
+  {
+    code: "COM-05",
+    title: "Export global des données administratives",
+    family: "COM",
+    objective: "Exporter un ensemble de données administratives pour archivage ou migration.",
+    routes: ["/app/ecole"],
+    tables: ["school_students", "school_enrollments", "school_classes", "school_parents", "school_teachers", "school_assignments", "school_payments", "school_report_cards"],
+    roles: ["Admin", "Direction"],
+    filters: ["Année", "Périmètre", "Format"],
+    formats: ["CSV", "JSON"],
+    columns: ["Tables sélectionnées", "Périmètre", "Date", "Opérateur", "Empreinte"],
+    rules: ["Accès administrateur", "Journaliser l’export", "Anonymiser si nécessaire"],
+    priority: "P2",
+    status: "À créer",
+    readiness: "Prêt",
+    existingRef: null,
+    notes: "Export technique, à ne pas confondre avec les documents officiels."
+  }
+];
+
+const state = {
+  search: "",
+  family: "",
+  format: "",
+  role: "",
+  priority: "",
+  status: "",
+  readiness: ""
+};
+
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+
+function esc(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function norm(value) {
+  return String(value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+function badge(value, tone) {
+  return `<span class="badge tone-${esc(tone)}">${esc(value)}</span>`;
+}
+
+function uniqueValues(values) {
+  return Array.from(new Set(values)).sort((a, b) => a.localeCompare(b, "fr"));
+}
+
+function familyOf(item) {
+  return FAMILIES[item.family] || { label: item.family, description: "", tone: "slate" };
+}
+
+function searchText(item) {
+  const family = familyOf(item);
+  return norm([
+    item.code,
+    item.title,
+    family.label,
+    item.objective,
+    item.routes.join(" "),
+    item.tables.join(" "),
+    item.roles.join(" "),
+    item.filters.join(" "),
+    item.formats.join(" "),
+    item.columns.join(" "),
+    item.rules.join(" "),
+    item.notes,
+    item.status,
+    item.readiness,
+    item.priority
+  ].join(" "));
+}
+
+function matches(item) {
+  if (state.search && !searchText(item).includes(norm(state.search))) return false;
+  if (state.family && item.family !== state.family) return false;
+  if (state.format && !item.formats.includes(state.format)) return false;
+  if (state.role && !item.roles.includes(state.role)) return false;
+  if (state.priority && item.priority !== state.priority) return false;
+  if (state.status && item.status !== state.status) return false;
+  if (state.readiness && item.readiness !== state.readiness) return false;
+  return true;
+}
+
+function renderKpis() {
+  const total = EXTRACTIONS.length;
+  const existing = EXTRACTIONS.filter((item) => item.status === "Existant").length;
+  const p0 = EXTRACTIONS.filter((item) => item.priority === "P0").length;
+  const ready = EXTRACTIONS.filter((item) => item.readiness === "Prêt").length;
+  const schema = EXTRACTIONS.filter((item) => item.readiness === "Schéma requis").length;
+  const partial = EXTRACTIONS.filter((item) => item.readiness === "Partiel").length;
+
+  const kpis = [
+    ["Extractions", total, "catalogue complet"],
+    ["Existantes", existing, "déjà livrées"],
+    ["À créer", total - existing, "dont " + schema + " avec schéma requis"],
+    ["Priorité P0", p0, "indispensables"],
+    ["Données prêtes", ready, "implémentation directe"],
+    ["Partiel / schéma", partial + schema, "prérequis à lever"]
+  ];
+
+  $("#kpis").innerHTML = kpis.map(([label, value, hint]) => `
+    <article class="kpi">
+      <span class="kpi-label">${esc(label)}</span>
+      <span class="kpi-value">${value}</span>
+      <span class="kpi-hint">${esc(hint)}</span>
+    </article>
+  `).join("");
+
+  $("#hero-total").textContent = total;
+  $("#hero-existing").textContent = existing;
+  $("#hero-p0").textContent = p0;
+}
+
+function renderFilterOptions() {
+  $("#filter-family").innerHTML = `<option value="">Toutes</option>` + Object.entries(FAMILIES).map(([key, family]) =>
+    `<option value="${esc(key)}">${esc(family.label)}</option>`
+  ).join("");
+
+  const formats = uniqueValues(EXTRACTIONS.flatMap((item) => item.formats));
+  const roles = uniqueValues(EXTRACTIONS.flatMap((item) => item.roles));
+
+  $("#filter-format").innerHTML = `<option value="">Tous</option>` + formats.map((value) =>
+    `<option value="${esc(value)}">${esc(value)}</option>`
+  ).join("");
+
+  $("#filter-role").innerHTML = `<option value="">Tous</option>` + roles.map((value) =>
+    `<option value="${esc(value)}">${esc(value)}</option>`
+  ).join("");
+}
+
+function renderTable() {
+  $("#catalog-body").innerHTML = EXTRACTIONS.map((item) => {
+    const family = familyOf(item);
+    return `
+      <tr data-code="${esc(item.code)}">
+        <td><button class="code-link" type="button" data-target="${esc(item.code)}">${esc(item.code)}</button></td>
+        <td><span class="row-title">${esc(item.title)}</span></td>
+        <td>${badge(family.label, family.tone)}</td>
+        <td>${esc(item.roles.join(", "))}</td>
+        <td>${esc(item.formats.join(" + "))}</td>
+        <td><span class="tables-inline">${esc(item.tables.join(", "))}</span></td>
+        <td>${badge(item.priority, PRIORITY_TONES[item.priority] || "slate")}</td>
+        <td>${badge(item.status, STATUS_TONES[item.status] || "slate")}</td>
+        <td>${badge(item.readiness, READINESS_TONES[item.readiness] || "slate")}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function metaBlock(label, values, kind) {
+  return `
+    <div class="meta-block">
+      <span class="meta-label">${esc(label)}</span>
+      <div class="chips">
+        ${values.map((value) => `<span class="chip ${esc(kind)}">${esc(value)}</span>`).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderFiche(item) {
+  return `
+    <details class="fiche" id="${esc(item.code)}" data-code="${esc(item.code)}">
+      <summary>
+        <span class="fiche-code">${esc(item.code)}</span>
+        <span class="fiche-title">${esc(item.title)}</span>
+        <span class="fiche-badges">
+          ${badge(item.priority, PRIORITY_TONES[item.priority] || "slate")}
+          ${badge(item.status, STATUS_TONES[item.status] || "slate")}
+          ${badge(item.readiness, READINESS_TONES[item.readiness] || "slate")}
+        </span>
+      </summary>
+      <div class="fiche-body">
+        <p class="objective">${esc(item.objective)}</p>
+        <div class="meta-grid">
+          ${metaBlock("Routes cibles", item.routes, "route")}
+          ${metaBlock("Tables sources", item.tables, "table")}
+          ${metaBlock("Rôles autorisés", item.roles, "role")}
+          ${metaBlock("Filtres obligatoires", item.filters, "filter")}
+          ${metaBlock("Formats", item.formats, "format")}
+          ${item.existingRef ? metaBlock("Implémentation", [item.existingRef], "ref") : ""}
+        </div>
+        <div class="detail-grid">
+          <div>
+            <h4>Colonnes / sections</h4>
+            <ul>${item.columns.map((column) => `<li>${esc(column)}</li>`).join("")}</ul>
+          </div>
+          <div>
+            <h4>Règles de gestion</h4>
+            <ul>${item.rules.map((rule) => `<li>${esc(rule)}</li>`).join("")}</ul>
+          </div>
+        </div>
+        <div class="note"><strong>Note :</strong> ${esc(item.notes)}</div>
+      </div>
+    </details>
+  `;
+}
+
+function renderFiches() {
+  const families = Object.keys(FAMILIES);
+  $("#fiches-root").innerHTML = families.map((familyKey) => {
+    const family = familyOf({ family: familyKey });
+    const items = EXTRACTIONS.filter((item) => item.family === familyKey);
+    return `
+      <section class="family-section" data-family-section="${esc(familyKey)}" id="famille-${esc(familyKey)}">
+        <div class="family-head">
+          <div>
+            <span class="family-code">${esc(familyKey)}</span>
+            <h3>${esc(family.label)}</h3>
+            <p>${esc(family.description)}</p>
+          </div>
+          <span class="family-count">${items.length} extractions</span>
+        </div>
+        <div class="fiche-grid">${items.map(renderFiche).join("")}</div>
+      </section>
+    `;
+  }).join("");
+}
+
+function renderRoadmap() {
+  const priorities = ["P0", "P1", "P2"];
+  const labels = {
+    P0: "Lot 1 · Indispensable",
+    P1: "Lot 2 · Opérationnel",
+    P2: "Lot 3 · Confort"
+  };
+  $("#roadmap-root").innerHTML = priorities.map((priority) => {
+    const items = EXTRACTIONS.filter((item) => item.priority === priority);
+    return `
+      <article class="roadmap-card">
+        <header>
+          <span>${esc(labels[priority])}</span>
+          <span class="badge tone-${esc(PRIORITY_TONES[priority])}">${items.length}</span>
+        </header>
+        <ul>
+          ${items.map((item) => `
+            <li>
+              <span class="mono">${esc(item.code)}</span>
+              ${esc(item.title)}
+              ${badge(item.readiness, READINESS_TONES[item.readiness] || "slate")}
+            </li>
+          `).join("")}
+        </ul>
+      </article>
+    `;
+  }).join("");
+}
+
+function applyFilters() {
+  const visible = EXTRACTIONS.filter(matches);
+  const codes = new Set(visible.map((item) => item.code));
+
+  $$("#catalog-body tr").forEach((row) => {
+    row.hidden = !codes.has(row.dataset.code);
+  });
+
+  $$("#fiches-root details.fiche").forEach((fiche) => {
+    fiche.hidden = !codes.has(fiche.dataset.code);
+  });
+
+  $$("[data-family-section]").forEach((section) => {
+    const hasVisible = Array.from(section.querySelectorAll("details.fiche")).some((fiche) => !fiche.hidden);
+    section.hidden = !hasVisible;
+  });
+
+  const count = visible.length;
+  $("#result-count").textContent = `${count} extraction${count > 1 ? "s" : ""} affichée${count > 1 ? "s" : ""} sur ${EXTRACTIONS.length}`;
+  $("#empty-state").hidden = count !== 0;
+}
+
+function bindFilters() {
+  const bindings = [
+    ["search", "#filter-search"],
+    ["family", "#filter-family"],
+    ["format", "#filter-format"],
+    ["role", "#filter-role"],
+    ["priority", "#filter-priority"],
+    ["status", "#filter-status"],
+    ["readiness", "#filter-readiness"]
+  ];
+
+  bindings.forEach(([key, selector]) => {
+    $(selector).addEventListener("input", (event) => {
+      state[key] = event.target.value;
+      applyFilters();
+    });
+  });
+
+  $("#reset-btn").addEventListener("click", () => {
+    state.search = "";
+    state.family = "";
+    state.format = "";
+    state.role = "";
+    state.priority = "";
+    state.status = "";
+    state.readiness = "";
+    $("#filter-search").value = "";
+    $("#filter-family").value = "";
+    $("#filter-format").value = "";
+    $("#filter-role").value = "";
+    $("#filter-priority").value = "";
+    $("#filter-status").value = "";
+    $("#filter-readiness").value = "";
+    applyFilters();
+  });
+}
+
+function openFiche(code, smooth = true) {
+  const fiche = document.getElementById(code);
+  if (!fiche) return;
+  fiche.open = true;
+  fiche.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+}
+
+function bindCatalogueNavigation() {
+  $("#catalog-body").addEventListener("click", (event) => {
+    const row = event.target.closest("tr[data-code]");
+    if (!row) return;
+    const code = row.dataset.code;
+    history.replaceState(null, "", "#" + code);
+    openFiche(code);
+  });
+
+  $$("#fiches-root details.fiche").forEach((fiche) => {
+    fiche.addEventListener("toggle", () => {
+      if (fiche.open) history.replaceState(null, "", "#" + fiche.id);
+    });
+  });
+}
+
+function bindHashNavigation() {
+  const openFromHash = () => {
+    const code = location.hash.replace("#", "");
+    if (code) setTimeout(() => openFiche(code, false), 60);
+  };
+  window.addEventListener("hashchange", openFromHash);
+  if (location.hash) openFromHash();
+}
+
+function bindActions() {
+  $("#print-btn").addEventListener("click", () => window.print());
+
+  $("#expand-btn").addEventListener("click", () => {
+    $$("#fiches-root details.fiche").forEach((fiche) => {
+      if (!fiche.hidden) fiche.open = true;
+    });
+  });
+
+  $("#collapse-btn").addEventListener("click", () => {
+    $$("#fiches-root details.fiche").forEach((fiche) => {
+      fiche.open = false;
+    });
+  });
+
+  $("#csv-btn").addEventListener("click", downloadCatalogueCsv);
+
+  let printState = [];
+  window.addEventListener("beforeprint", () => {
+    printState = $$("#fiches-root details.fiche").map((fiche) => [fiche, fiche.open]);
+    $$("#fiches-root details.fiche").forEach((fiche) => {
+      if (!fiche.hidden) fiche.open = true;
+    });
+  });
+
+  window.addEventListener("afterprint", () => {
+    printState.forEach(([fiche, open]) => {
+      fiche.open = open;
+    });
+  });
+}
+
+function csvEscape(value) {
+  return `"${String(value ?? "").replace(/"/g, '""')}"`;
+}
+
+function downloadCatalogueCsv() {
+  const header = [
+    "Code",
+    "Famille",
+    "Extraction",
+    "Objectif",
+    "Statut",
+    "Faisabilité",
+    "Priorité",
+    "Formats",
+    "Rôles",
+    "Filtres",
+    "Tables sources",
+    "Colonnes",
+    "Règles",
+    "Routes",
+    "Référence existante",
+    "Note"
+  ];
+
+  const rows = EXTRACTIONS.map((item) => [
+    item.code,
+    familyOf(item).label,
+    item.title,
+    item.objective,
+    item.status,
+    item.readiness,
+    item.priority,
+    item.formats.join(" / "),
+    item.roles.join(" / "),
+    item.filters.join(" / "),
+    item.tables.join(" / "),
+    item.columns.join(" / "),
+    item.rules.join(" / "),
+    item.routes.join(" / "),
+    item.existingRef || "",
+    item.notes
+  ]);
+
+  const csv = [header, ...rows].map((row) => row.map(csvEscape).join(";")).join("\r\n");
+  const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `extractions-module-ecole-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+function setDates() {
+  const value = new Date().toLocaleDateString("fr-FR", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  });
+  $("#generated-date").textContent = value;
+  $("#footer-date").textContent = value;
+}
+
+function init() {
+  setDates();
+  renderKpis();
+  renderFilterOptions();
+  renderTable();
+  renderFiches();
+  renderRoadmap();
+  bindFilters();
+  bindCatalogueNavigation();
+  bindHashNavigation();
+  bindActions();
+  applyFilters();
+}
+
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>

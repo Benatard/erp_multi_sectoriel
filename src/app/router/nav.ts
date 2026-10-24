@@ -31,6 +31,8 @@ import {
   FiMessageSquare,
   FiEdit3,
   FiClock,
+  FiCreditCard,
+  FiBarChart2,
 } from 'react-icons/fi';
 import type { IconType } from 'react-icons';
 import type { NavGroup, Role } from '../../common/types';
@@ -92,7 +94,16 @@ export const navItems: NavGroup[] = [
       { label: 'Évaluations', path: '/app/ecole/evaluations', icon: FiClipboard, roles: rolesPer.schoolTeaching },
       { label: 'Notes', path: '/app/ecole/notes', icon: FiAward, roles: rolesPer.schoolTeaching },
       { label: 'Bulletins', path: '/app/ecole/bulletins', icon: FiFileText, roles: rolesPer.schoolBulletins },
-      { label: 'Paiements & Frais', path: '/app/ecole/paiements', icon: FiDollarSign, roles: rolesPer.schoolFinance },
+    ],
+  },
+  {
+    label: 'École — Espace comptable',
+    items: [
+      { label: 'Tableau de bord financier', path: '/app/ecole/finance', icon: FiDollarSign, roles: rolesPer.schoolFinance },
+      { label: 'Frais & échéanciers', path: '/app/ecole/finance/frais', icon: FiFileText, roles: rolesPer.schoolFinance },
+      { label: 'Factures', path: '/app/ecole/finance/factures', icon: FiFileText, roles: rolesPer.schoolFinance },
+      { label: 'Paiements & reçus', path: '/app/ecole/finance/paiements', icon: FiCreditCard, roles: rolesPer.schoolFinance },
+      { label: 'Rapports financiers', path: '/app/ecole/finance/rapports', icon: FiBarChart2, roles: rolesPer.schoolFinance },
     ],
   },
   {
@@ -206,7 +217,12 @@ export const pageTitles: Record<string, string> = {
   '/app/ecole/resultats': 'Résultats & moyennes',
   '/app/ecole/journal': 'Journal d’audit',
   '/app/ecole/utilisateurs': 'Utilisateurs',
-  '/app/ecole/paiements': 'Paiements & Frais',
+  '/app/ecole/finance': 'Tableau de bord financier',
+  '/app/ecole/finance/frais': 'Frais & échéanciers',
+  '/app/ecole/finance/factures': 'Factures scolaires',
+  '/app/ecole/finance/paiements': 'Paiements & reçus',
+  '/app/ecole/finance/rapports': 'Rapports financiers',
+  '/app/ecole/paiements': 'Paiements & reçus',
   '/app/ecole/parametres': 'Paramètres établissement',
   '/app/ferme': 'Tableau de bord Ferme',
   '/app/ferme/fermes': 'Fermes',
@@ -237,5 +253,5 @@ export const allIcons: Record<string, IconType> = {
   FiHome, FiUsers, FiBookOpen, FiCalendar, FiDollarSign, FiMap, FiLifeBuoy, FiTruck, FiAlertTriangle,
   FiSettings, FiGrid, FiTrendingUp, FiBook, FiUserCheck, FiLink, FiCheckSquare, FiClipboard, FiAward,
   FiFileText, FiUser, FiTool, FiPackage, FiRepeat, FiShoppingCart, FiShoppingBag, FiLayers, FiTrendingDown,
-  FiShield, FiBell, FiMessageSquare, FiEdit3, FiClock,
+  FiShield, FiBell, FiMessageSquare, FiEdit3, FiClock, FiCreditCard, FiBarChart2,
 };

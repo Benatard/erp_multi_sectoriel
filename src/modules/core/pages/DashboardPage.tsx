@@ -16,7 +16,7 @@ import { navItems } from '../../../app/router/nav';
 import { db } from '../../../services/db';
 import config from '../../../app/config/config';
 import useStudents from '../../school/students/hooks/useStudents';
-import usePayments from '../../school/payments/hooks/usePayments';
+import useFinanceData from '../../school/finance/hooks/useFinanceData';
 import usePlots from '../../farm/hooks/usePlots';
 import useLivestock from '../../farm/hooks/useLivestock';
 import useProduction from '../../mine/hooks/useProduction';
@@ -42,7 +42,7 @@ export default function DashboardPage() {
   const { user, hasRole } = useAuth();
 
   const students = useStudents();
-  const payments = usePayments();
+  const finance = useFinanceData();
   const plots = usePlots();
   const livestock = useLivestock();
   const production = useProduction();
@@ -50,17 +50,17 @@ export default function DashboardPage() {
   const incidents = useIncidents();
 
   const stats = useMemo(() => {
-    const paid = payments.rows.filter((p) => p.status === 'paid');
+    const confirmed = finance.receipts.filter((receipt) => receipt.status !== 'cancelled');
     return {
       students: students.rows.length,
-      collected: paid.reduce((s, p) => s + Number(p.amount || 0), 0),
+      collected: confirmed.reduce((s, receipt) => s + Number(receipt.amount || 0), 0),
       area: plots.rows.reduce((s, p) => s + Number(p.area_ha || 0), 0),
       heads: livestock.rows.reduce((s, l) => s + Number(l.quantity || 0), 0),
       tonnage: production.rows.reduce((s, p) => s + Number(p.tonnage || 0), 0),
       incidentsOpen: incidents.rows.filter((i) => i.status !== 'closed').length,
       equipmentDown: equipment.rows.filter((e) => e.status === 'breakdown').length,
     };
-  }, [students.rows, payments.rows, plots.rows, livestock.rows, production.rows, incidents.rows, equipment.rows]);
+  }, [students.rows, finance.receipts, plots.rows, livestock.rows, production.rows, incidents.rows, equipment.rows]);
 
   const sections: DashboardSection[] = [
     {

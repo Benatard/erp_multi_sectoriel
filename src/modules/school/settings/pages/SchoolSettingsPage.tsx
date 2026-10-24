@@ -28,11 +28,12 @@ export default function SchoolSettingsPage() {
       defaults={{ category: 'establishment' }}
       searchable={['key', 'value', 'category']}
       searchPlaceholder="Rechercher un paramètre…"
+      rowFilter={(row) => !String(row.key || '').startsWith('finance.')}
       emptyTitle="Aucun paramètre"
       deleteMessage={(r) => `Supprimer le paramètre « ${r.key} » ?`}
       stats={[
-        { icon: FiSettings, label: 'Paramètres', value: crud.rows.length },
-        { icon: FiSliders, label: 'Catégories', value: new Set(crud.rows.map((r) => r.category)).size },
+        { icon: FiSettings, label: 'Paramètres', value: crud.rows.filter((row) => !String(row.key || '').startsWith('finance.')).length },
+        { icon: FiSliders, label: 'Catégories', value: new Set(crud.rows.filter((row) => !String(row.key || '').startsWith('finance.')).map((r) => r.category)).size },
       ]}
       renderForm={(f, setField) => (
         <>

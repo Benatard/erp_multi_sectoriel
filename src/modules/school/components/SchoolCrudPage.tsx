@@ -28,6 +28,7 @@ interface SchoolCrudPageProps<T extends { id: string }> {
   stats?: SchoolStatItem[];
   searchable?: (keyof T & string)[];
   searchPlaceholder?: string;
+  rowFilter?: (row: T) => boolean;
   emptyTitle?: string;
   emptyDesc?: string;
   deleteMessage?: (row: T) => string;
@@ -50,6 +51,7 @@ export default function SchoolCrudPage<T extends { id: string }>({
   stats,
   searchable,
   searchPlaceholder = 'Rechercher…',
+  rowFilter,
   emptyTitle,
   emptyDesc,
   deleteMessage,
@@ -63,12 +65,13 @@ export default function SchoolCrudPage<T extends { id: string }>({
   const [search, setSearch] = useState('');
 
   const filtered = useMemo(() => {
+    const source = rowFilter ? crud.rows.filter(rowFilter) : crud.rows;
     const term = search.trim().toLowerCase();
-    if (!term || !searchable?.length) return crud.rows;
-    return crud.rows.filter((row) =>
+    if (!term || !searchable?.length) return source;
+    return source.filter((row) =>
       searchable.some((key) => String((row as any)[key] ?? '').toLowerCase().includes(term))
     );
-  }, [crud.rows, search, searchable]);
+  }, [crud.rows, search, searchable, rowFilter]);
 
   return (
     <div className="space-y-6">

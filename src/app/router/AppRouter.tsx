@@ -24,7 +24,11 @@ import ReportCardsPage from '../../modules/school/report-cards/pages/ReportCards
 import ResultsPage from '../../modules/school/results/pages/ResultsPage';
 import AuditLogsPage from '../../modules/school/audit/pages/AuditLogsPage';
 import SchoolUsersPage from '../../modules/school/users/pages/SchoolUsersPage';
-import PaymentsPage from '../../modules/school/payments/pages/PaymentsPage';
+import FinanceDashboardPage from '../../modules/school/finance/pages/FinanceDashboardPage';
+import FinanceFeesPage from '../../modules/school/finance/pages/FinanceFeesPage';
+import FinanceInvoicesPage from '../../modules/school/finance/pages/FinanceInvoicesPage';
+import FinancePaymentsPage from '../../modules/school/finance/pages/FinancePaymentsPage';
+import FinanceReportsPage from '../../modules/school/finance/pages/FinanceReportsPage';
 import SchoolSettingsPage from '../../modules/school/settings/pages/SchoolSettingsPage';
 import TeacherClassesPage from '../../modules/school/teachers/pages/TeacherClassesPage';
 import TimetablePage from '../../modules/school/timetable/pages/TimetablePage';
@@ -100,7 +104,12 @@ export default function App() {
       {schoolRoute('/app/ecole/resultats', rolesPer.schoolResults, <ResultsPage />)}
       {schoolRoute('/app/ecole/journal', rolesPer.schoolAudit, <AuditLogsPage />)}
       {schoolRoute('/app/ecole/utilisateurs', rolesPer.schoolUsers, <SchoolUsersPage />)}
-      {schoolRoute('/app/ecole/paiements', rolesPer.schoolFinance, <PaymentsPage />)}
+      {schoolRoute('/app/ecole/finance', rolesPer.schoolFinance, <FinanceDashboardPage />)}
+      {schoolRoute('/app/ecole/finance/frais', rolesPer.schoolFinance, <FinanceFeesPage />)}
+      {schoolRoute('/app/ecole/finance/factures', rolesPer.schoolFinance, <FinanceInvoicesPage />)}
+      {schoolRoute('/app/ecole/finance/paiements', rolesPer.schoolFinance, <FinancePaymentsPage />)}
+      {schoolRoute('/app/ecole/finance/rapports', rolesPer.schoolFinance, <FinanceReportsPage />)}
+      {schoolRoute('/app/ecole/paiements', rolesPer.schoolFinance, <FinancePaymentsPage />)}
       {schoolRoute('/app/ecole/parametres', rolesPer.schoolSettings, <SchoolSettingsPage />)}
 
       {schoolRoute('/app/ferme', rolesPer.farm, <FarmDashboardPage />)}

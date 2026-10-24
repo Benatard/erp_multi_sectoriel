@@ -12,7 +12,7 @@ export type GradeStatus = 'draft' | 'submitted' | 'validated' | 'published';
 export type ReportStatus = 'draft' | 'validated' | 'published';
 export type Decision = 'admis' | 'redouble' | 'exclu' | 'transfere' | 'diplome' | 'en_cours';
 export type Relation = 'father' | 'mother' | 'guardian' | 'other';
-export type PaymentMethod = 'cash' | 'mobile' | 'bank';
+export type PaymentMethod = 'cash' | 'mobile' | 'bank' | 'transfer' | 'other';
 export type PaymentStatus = 'paid' | 'pending' | 'late';
 export type TimetableStatus = 'active' | 'changed' | 'cancelled';
 export type NotificationType =
@@ -301,6 +301,134 @@ export interface Payment {
   reference?: string | null;
   paid_at?: string | null;
   status?: PaymentStatus | string;
+}
+
+export type FeeCategory = 'registration' | 'tuition' | 'exam' | 'transport' | 'documents' | 'other';
+export type StudentCategory = 'all' | 'standard' | 'staff' | 'sibling' | 'scholarship';
+
+export interface FeeType {
+  id: string;
+  name: string;
+  code?: string | null;
+  category: FeeCategory | string;
+  description?: string | null;
+  is_active?: boolean | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface FeeConfig {
+  id: string;
+  fee_type_id: string;
+  academic_year: string;
+  class_name?: string | null;
+  section?: string | null;
+  student_category?: StudentCategory | string | null;
+  amount: number;
+  due_date?: string | null;
+  period?: string | null;
+  notes?: string | null;
+  is_active?: boolean | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export type FeeAdjustmentType = 'discount' | 'exemption';
+export type FeeAdjustmentMode = 'amount' | 'percentage';
+export type FeeAdjustmentStatus = 'pending' | 'approved' | 'rejected';
+
+export interface FeeAdjustment {
+  id: string;
+  student_id: string;
+  fee_type_id: string;
+  academic_year: string;
+  type: FeeAdjustmentType | string;
+  mode: FeeAdjustmentMode | string;
+  value: number;
+  reason: string;
+  status: FeeAdjustmentStatus | string;
+  approved_by?: string | null;
+  approved_by_name?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface InvoiceLine {
+  id: string;
+  fee_type_id?: string | null;
+  fee_type_name?: string | null;
+  category?: FeeCategory | string | null;
+  description: string;
+  amount: number;
+  discount_amount?: number | null;
+  net_amount: number;
+  due_date?: string | null;
+  period?: string | null;
+}
+
+export type InvoiceStatus = 'draft' | 'issued' | 'partial' | 'paid' | 'overdue' | 'cancelled';
+
+export interface Invoice {
+  id: string;
+  invoice_number: string;
+  student_id: string;
+  enrollment_id?: string | null;
+  academic_year: string;
+  class_name?: string | null;
+  section?: string | null;
+  issue_date: string;
+  due_date?: string | null;
+  lines: InvoiceLine[];
+  total_amount: number;
+  paid_amount?: number | null;
+  balance_amount?: number | null;
+  status?: InvoiceStatus | string;
+  notes?: string | null;
+  created_by?: string | null;
+  created_by_name?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  cancelled_at?: string | null;
+  cancelled_by?: string | null;
+  cancel_reason?: string | null;
+}
+
+export type ReceiptStatus = 'confirmed' | 'cancelled' | 'corrected';
+
+export interface ReceiptCorrection {
+  at: string;
+  by?: string | null;
+  by_name?: string | null;
+  reason: string;
+  old_amount: number;
+  new_amount: number;
+  old_method?: string | null;
+  new_method?: string | null;
+}
+
+export interface Receipt {
+  id: string;
+  receipt_number: string;
+  invoice_id: string;
+  invoice_number?: string | null;
+  student_id: string;
+  student_name?: string | null;
+  class_name?: string | null;
+  academic_year: string;
+  amount: number;
+  method: PaymentMethod | string;
+  reference?: string | null;
+  paid_at: string;
+  notes?: string | null;
+  status: ReceiptStatus | string;
+  issued_by?: string | null;
+  issued_by_name?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  cancelled_at?: string | null;
+  cancelled_by?: string | null;
+  cancel_reason?: string | null;
+  corrections?: ReceiptCorrection[];
 }
 
 export interface SchoolSetting {

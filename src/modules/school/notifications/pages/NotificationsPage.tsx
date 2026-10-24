@@ -17,7 +17,7 @@ import { useAuth } from '../../../../app/providers/AuthContext';
 import useNotifications, { notificationsFor } from '../hooks/useNotifications';
 import { can } from '../../utils/permissions';
 import { logAudit } from '../../utils/audit';
-import { notifyRole } from '../../utils/schoolNotifications';
+import { notifyAll, notifyRole } from '../../utils/schoolNotifications';
 import { NOTIFICATION_TYPES } from '../../utils/constants';
 import type { Role } from '../../../../common/types';
 import type { NotificationType, SchoolNotification } from '../../types';
@@ -111,17 +111,7 @@ export default function NotificationsPage() {
       if (form.audience) {
         await notifyRole(form.audience, input);
       } else {
-        await notifications.create({
-          user_id: null,
-          role: null,
-          title: input.title,
-          message: input.message,
-          type: input.type,
-          link: null,
-          is_read: false,
-          created_by: user?.id || null,
-          created_at: new Date().toISOString(),
-        });
+        await notifyAll(input);
       }
       await logAudit({
         user,

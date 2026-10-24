@@ -6,6 +6,7 @@
     { "source": "/static/(.*)", "destination": "/static/$1" },
     { "source": "/images/(.*)", "destination": "/images/$1" },
     { "source": "/robots.txt", "destination": "/robots.txt" },
+    { "source": "/extractions-module-ecole.html", "destination": "/extractions-module-ecole.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

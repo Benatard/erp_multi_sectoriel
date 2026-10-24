@@ -31,11 +31,13 @@ const loadRecipients = async (): Promise<Recipient[]> => {
       return [];
     }
   }
-  return demoUsers.map((user) => ({
-    id: user.id,
-    role: String(user.role),
-    teacher_id: user.teacher_id || null,
-  }));
+  return demoUsers
+    .filter((user) => user.sector === 'school')
+    .map((user) => ({
+      id: user.id,
+      role: String(user.role),
+      teacher_id: user.teacher_id || null,
+    }));
 };
 
 const createFor = async (userId: string | null, role: string | null, input: NotifyInput) => {
@@ -62,6 +64,11 @@ export async function notifyUserIds(userIds: string[], input: NotifyInput): Prom
     if (input.actor?.id === id) continue;
     await createFor(id, null, input);
   }
+}
+
+export async function notifyAll(input: NotifyInput): Promise<void> {
+  const recipients = await loadRecipients();
+  await notifyUserIds(recipients.map((user) => user.id), input);
 }
 
 export async function notifyRole(role: Role, input: NotifyInput): Promise<void> {

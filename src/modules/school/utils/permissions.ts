@@ -17,6 +17,8 @@ export type SchoolCapability =
   | 'timetable.manage'
   | 'announcements.manage'
   | 'finance.manage'
+  | 'finance.cancel'
+  | 'finance.reports'
   | 'settings.manage'
   | 'audit.view';
 
@@ -25,19 +27,19 @@ const MATRIX: Partial<Record<Role, SchoolCapability[]>> = {
     'structure.manage', 'students.manage', 'assessments.manage', 'grades.enter', 'grades.submit',
     'grades.validate', 'grades.publish', 'results.viewAll', 'reports.manage', 'reports.validate',
     'reports.publish', 'attendance.record', 'attendance.correct', 'timetable.manage', 'announcements.manage',
-    'finance.manage', 'settings.manage', 'audit.view',
+    'finance.manage', 'finance.cancel', 'finance.reports', 'settings.manage', 'audit.view',
   ],
   school_manager: [
     'structure.manage', 'students.manage', 'assessments.manage', 'grades.enter', 'grades.submit',
     'grades.validate', 'grades.publish', 'results.viewAll', 'reports.manage', 'reports.validate',
     'reports.publish', 'attendance.record', 'attendance.correct', 'timetable.manage', 'announcements.manage',
-    'finance.manage', 'settings.manage', 'audit.view',
+    'finance.manage', 'finance.cancel', 'finance.reports', 'settings.manage', 'audit.view',
   ],
   director: [
     'structure.manage', 'students.manage', 'assessments.manage', 'grades.validate', 'grades.publish',
     'results.viewAll', 'reports.manage', 'reports.validate', 'reports.publish', 'attendance.record',
-    'attendance.correct', 'timetable.manage', 'announcements.manage', 'finance.manage', 'settings.manage',
-    'audit.view',
+    'attendance.correct', 'timetable.manage', 'announcements.manage', 'finance.manage', 'finance.cancel',
+    'finance.reports', 'settings.manage', 'audit.view',
   ],
   prefect: [
     'assessments.manage', 'grades.validate', 'results.viewAll', 'reports.manage', 'reports.validate',
@@ -53,7 +55,7 @@ const MATRIX: Partial<Record<Role, SchoolCapability[]>> = {
     'students.manage', 'structure.manage',
   ],
   accountant: [
-    'finance.manage',
+    'finance.manage', 'finance.cancel', 'finance.reports',
   ],
 };
 

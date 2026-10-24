@@ -18,7 +18,7 @@ import useClasses from '../classes/hooks/useClasses';
 import useTeachers from '../teachers/hooks/useTeachers';
 import useSubjects from '../subjects/hooks/useSubjects';
 import useEnrollments from '../enrollments/hooks/useEnrollments';
-import usePayments from '../payments/hooks/usePayments';
+import useFinanceData from '../finance/hooks/useFinanceData';
 import useAttendance from '../attendance/hooks/useAttendance';
 import useReportCards from '../report-cards/hooks/useReportCards';
 import useAssessments from '../assessments/hooks/useAssessments';
@@ -50,7 +50,7 @@ const QUICK_LINKS: { path: string; label: string; icon: IconType; roles: Role[] 
   { path: '/app/ecole/resultats', label: 'Résultats', icon: FiTrendingUp, roles: rolesPer.schoolResults },
   { path: '/app/ecole/journal', label: 'Journal d’audit', icon: FiShield, roles: rolesPer.schoolAudit },
   { path: '/app/ecole/annees', label: 'Années scolaires', icon: FiCalendar, roles: rolesPer.schoolStructure },
-  { path: '/app/ecole/paiements', label: 'Paiements', icon: FiDollarSign, roles: rolesPer.schoolFinance },
+  { path: '/app/ecole/finance', label: 'Espace comptable', icon: FiDollarSign, roles: rolesPer.schoolFinance },
   { path: '/app/ecole/parametres', label: 'Paramètres', icon: FiSettings, roles: rolesPer.schoolSettings },
 ];
 
@@ -61,7 +61,7 @@ export default function SchoolDashboardPage() {
   const teachers = useTeachers();
   const subjects = useSubjects();
   const enrollments = useEnrollments();
-  const payments = usePayments();
+  const finance = useFinanceData();
   const attendance = useAttendance();
   const reportCards = useReportCards();
   const assessments = useAssessments();
@@ -74,7 +74,7 @@ export default function SchoolDashboardPage() {
   const stats = useMemo(() => {
     const present = attendance.rows.filter((a) => a.status === 'present' || a.status === 'late').length;
     const attendanceRate = attendance.rows.length ? (present / attendance.rows.length) * 100 : null;
-    const collected = payments.rows.filter((p) => p.status === 'paid').reduce((s, p) => s + Number(p.amount || 0), 0);
+    const collected = finance.receipts.filter((receipt) => receipt.status !== 'cancelled').reduce((s, receipt) => s + Number(receipt.amount || 0), 0);
     const averages = reportCards.rows.map((r) => Number(r.average)).filter((n) => !Number.isNaN(n));
     return {
       studentsActive: students.rows.filter((s) => s.status === 'active').length,
@@ -88,7 +88,7 @@ export default function SchoolDashboardPage() {
       published: reportCards.rows.filter((r) => r.status === 'published').length,
       overallAverage: averages.length ? averages.reduce((s, n) => s + n, 0) / averages.length : null,
     };
-  }, [students.rows, classes.rows, teachers.rows, subjects.rows, enrollments.rows, payments.rows, attendance.rows, reportCards.rows]);
+  }, [students.rows, classes.rows, teachers.rows, subjects.rows, enrollments.rows, finance.receipts, attendance.rows, reportCards.rows]);
 
   const showManagement =
     can(user?.role, 'structure.manage') || can(user?.role, 'students.manage') || can(user?.role, 'reports.manage');

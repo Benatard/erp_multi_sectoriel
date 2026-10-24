@@ -135,12 +135,62 @@ export const PAYMENT_METHODS: Option[] = [
   { value: 'cash', label: 'Espèces' },
   { value: 'mobile', label: 'Mobile Money' },
   { value: 'bank', label: 'Banque' },
+  { value: 'transfer', label: 'Virement' },
+  { value: 'other', label: 'Autre' },
 ];
 
 export const PAYMENT_STATUSES: Option[] = [
   { value: 'paid', label: 'Payé' },
   { value: 'pending', label: 'En attente' },
   { value: 'late', label: 'En retard' },
+];
+
+export const FINANCE_FEE_CATEGORIES: Option[] = [
+  { value: 'registration', label: "Frais d'inscription" },
+  { value: 'tuition', label: 'Frais de scolarité' },
+  { value: 'exam', label: "Frais d'examen" },
+  { value: 'transport', label: 'Frais de transport' },
+  { value: 'documents', label: 'Frais de documents' },
+  { value: 'other', label: 'Autres frais' },
+];
+
+export const FINANCE_STUDENT_CATEGORIES: Option[] = [
+  { value: 'all', label: 'Toutes les catégories' },
+  { value: 'standard', label: 'Standard' },
+  { value: 'staff', label: 'Personnel' },
+  { value: 'sibling', label: 'Fratrie' },
+  { value: 'scholarship', label: 'Boursier' },
+];
+
+export const FINANCE_ADJUSTMENT_TYPES: Option[] = [
+  { value: 'discount', label: 'Réduction' },
+  { value: 'exemption', label: 'Exonération' },
+];
+
+export const FINANCE_ADJUSTMENT_MODES: Option[] = [
+  { value: 'amount', label: 'Montant fixe' },
+  { value: 'percentage', label: 'Pourcentage' },
+];
+
+export const FINANCE_ADJUSTMENT_STATUSES: Option[] = [
+  { value: 'pending', label: 'En attente' },
+  { value: 'approved', label: 'Approuvée' },
+  { value: 'rejected', label: 'Rejetée' },
+];
+
+export const INVOICE_STATUSES: Option[] = [
+  { value: 'draft', label: 'Brouillon' },
+  { value: 'issued', label: 'Émise' },
+  { value: 'partial', label: 'Partiellement payée' },
+  { value: 'paid', label: 'Payée' },
+  { value: 'overdue', label: 'En retard' },
+  { value: 'cancelled', label: 'Annulée' },
+];
+
+export const RECEIPT_STATUSES: Option[] = [
+  { value: 'confirmed', label: 'Confirmé' },
+  { value: 'cancelled', label: 'Annulé' },
+  { value: 'corrected', label: 'Corrigé' },
 ];
 
 export const PERIODS: Option[] = [
@@ -232,6 +282,13 @@ export default {
   RELATIONS,
   PAYMENT_METHODS,
   PAYMENT_STATUSES,
+  FINANCE_FEE_CATEGORIES,
+  FINANCE_STUDENT_CATEGORIES,
+  FINANCE_ADJUSTMENT_TYPES,
+  FINANCE_ADJUSTMENT_MODES,
+  FINANCE_ADJUSTMENT_STATUSES,
+  INVOICE_STATUSES,
+  RECEIPT_STATUSES,
   PERIODS,
   DAYS,
   TIMETABLE_STATUSES,
